@@ -1,0 +1,1 @@
+{"id":null,"stationId":1,"value":23.6,"timeStamp":"201607031650080310"}

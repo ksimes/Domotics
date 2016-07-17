@@ -1,0 +1,17 @@
+{"url":"http://192.168.1.8:8080/domotic/api/temperture/","exception":"Could not read document: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@1e81d840; line: 1, column: 2]; nested exception is com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@1e81d840; line: 1, column: 2]"}Ending POST
+
+{"url":"http://192.168.1.8:8080/domotic/api/temperture/","exception":"Could not read document: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@6105c665; line: 1, column: 2]; nested exception is com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@6105c665; line: 1, column: 2]"}Ending POST
+
+
+
+
+{"id":null,"stationId":1,"value":23.6,"timeStamp":"201607032218076930"}
+
+{"url":"http://192.168.1.8:8080/domotic/api/temperture/","exception":"Could not read document: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@4f95e4cf; line: 1, column: 2]; nested exception is com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.stronans.domotics.model.Measurement]: can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)\n at [Source: java.io.PushbackInputStream@4f95e4cf; line: 1, column: 2]"}Ending POST
+
+
+{"url":"http://192.168.1.8:8080/domotic/api/temperture/","exception":"Could not read document: Can not instantiate value of type [simple type, class com.stronans.domotics.utilities.DateInfo] from String value ('201607031750080310'); no single-String constructor/factory method\n at [Source: java.io.PushbackInputStream@48ca8f7d; line: 1, column: 29] (through reference chain: com.stronans.domotics.model.Measurement[\"timeStamp\"]); nested exception is com.fasterxml.jackson.databind.JsonMappingException: Can not instantiate value of type [simple type, class com.stronans.domotics.utilities.DateInfo] from String value ('201607031750080310'); no single-String constructor/factory method\n at [Source: java.io.PushbackInputStream@48ca8f7d; line: 1, column: 29] (through reference chain: com.stronans.domotics.model.Measurement[\"timeStamp\"])"}Ending POST
+
+
+
+
