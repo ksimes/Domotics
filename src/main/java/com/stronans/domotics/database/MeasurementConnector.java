@@ -1,6 +1,7 @@
 package com.stronans.domotics.database;
 
 import com.stronans.domotics.model.Measurement;
+import com.stronans.domotics.model.Station;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 
@@ -117,25 +118,27 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
         }
 
         logger.debug("Query : " + preparedQuery);
-        try {
-            Statement queryStatement = connection.createStatement();
-            ResultSet rs = queryStatement.executeQuery(preparedQuery);
-            resultSet = getResultsAsList(rs);
-        } catch (SQLException ex) {
-            logger.error("Problem executing Query all statement ", ex);
-        }
+
+        resultSet = getResultsAsList(preparedQuery);
 
         return resultSet;
     }
 
-    private List<Measurement> getResultsAsList(ResultSet rs) throws SQLException {
+    private List<Measurement> getResultsAsList(String query) {
         List<Measurement> resultSet = new ArrayList<>();
-        if (rs != null) {
-            while (rs.next()) {
-                DateInfo timeStamp = DateInfo.fromLong(rs.getTimestamp(4).getTime());
-                Measurement measurement = new Measurement(rs.getLong(1), rs.getLong(2), rs.getDouble(3), timeStamp);
-                resultSet.add(measurement);
+
+        try {
+            Statement queryStatement = connection.createStatement();
+            ResultSet rs = queryStatement.executeQuery(query);
+            if (rs != null) {
+                while (rs.next()) {
+                    DateInfo timeStamp = DateInfo.fromLong(rs.getTimestamp(4).getTime());
+                    Measurement measurement = new Measurement(rs.getLong(1), rs.getLong(2), rs.getDouble(3), timeStamp);
+                    resultSet.add(measurement);
+                }
             }
+        } catch (SQLException ex) {
+            logger.error("Problem executing Query all statement ", ex);
         }
         return resultSet;
     }

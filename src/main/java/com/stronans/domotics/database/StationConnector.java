@@ -1,11 +1,12 @@
 package com.stronans.domotics.database;
 
-import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.model.Station;
-import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,30 +32,31 @@ public class StationConnector {
 
         String preparedQuery = query;
 
-        if(stationId > 0 )
-        {
+        if (stationId > 0) {
             preparedQuery += " WHERE id = " + stationId;
         }
 
         logger.debug("Query : " + preparedQuery);
-        try {
-            Statement queryStatement = connection.createStatement();
-            ResultSet rs = queryStatement.executeQuery(preparedQuery);
-            resultSet = getResultsAsList(rs);
-        } catch (SQLException ex) {
-            logger.error("Problem executing Query all statement ", ex);
-        }
+
+        resultSet = getResultsAsList(preparedQuery);
 
         return resultSet;
     }
 
-    private List<Station> getResultsAsList(ResultSet rs) throws SQLException {
+    private List<Station> getResultsAsList(String query) {
         List<Station> resultSet = new ArrayList<>();
-        if (rs != null) {
-            while (rs.next()) {
-                Station station = new Station(rs.getLong(1), rs.getString(2), rs.getString(3));
-                resultSet.add(station);
+
+        try {
+            Statement queryStatement = connection.createStatement();
+            ResultSet rs = queryStatement.executeQuery(query);
+            if (rs != null) {
+                while (rs.next()) {
+                    Station station = new Station(rs.getLong(1), rs.getString(2), rs.getString(3));
+                    resultSet.add(station);
+                }
             }
+        } catch (SQLException ex) {
+            logger.error("Problem executing Query all statement ", ex);
         }
         return resultSet;
     }
