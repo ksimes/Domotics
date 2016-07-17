@@ -5,6 +5,7 @@ import "rxjs/add/operator/catch";
 import {Observable} from "rxjs/Observable";
 import {Measurement} from "../models/Measurement.ts";
 import {Configuration} from "./app.constants";
+import {Utilities} from "./app.utilities";
 
 @Injectable()
 export class DataTemperatureService {
@@ -24,7 +25,7 @@ export class DataTemperatureService {
   }
 
   public GetAllTemperatures = ():Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Temperature)
+    return this._http.get(this.actionUrl + this.configuration.Temperature, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
@@ -36,22 +37,10 @@ export class DataTemperatureService {
   };
 
   public GetStationTemperaturesToday = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Temperature + station + this.configuration.Range + DataTemperatureService.getFormattedTodayDate() + this.configuration.ForOneDay)
+    return this._http.get(this.actionUrl + this.configuration.Temperature + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
-
-  private static pad(num:number):string {
-    return '' + (num <= 9 ? '0' + num : num);
-  }
-
-  private static getFormattedTodayDate():string {
-    var d = new Date();
-    var m = d.getMonth();
-    m++;
-    var day = d.getDate();
-    return ('' + d.getFullYear() + DataTemperatureService.pad(m) + DataTemperatureService.pad(day) + DataTemperatureService.pad(d.getHours()) + DataTemperatureService.pad(d.getMinutes()) + DataTemperatureService.pad(d.getSeconds()));
-  }
 
   /**
    public GetSingle = (id: number): Observable<MyTypedItem> => {

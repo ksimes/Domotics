@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from '@angular/common';
-import {CHART_DIRECTIVES} from 'ng2-charts';
-
-import {DataStationService} from './app.station.services';
-import {DataTemperatureService} from './app.Temperature.services';
-import {Measurement} from '../models/Measurement.ts';
-import {Station} from '../models/Station.ts';
-import {Configuration} from './app.constants';
+import {Component, OnInit} from "@angular/core";
+import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from "@angular/common";
+import {CHART_DIRECTIVES} from "ng2-charts";
+import {DataStationService} from "./app.station.services";
+import {DataTemperatureService} from "./app.temperature.services";
+import {DataHumidityService} from "./app.humidity.services";
+import {Measurement} from "../models/Measurement.ts";
+import {Station} from "../models/Station.ts";
+import {Configuration} from "./app.constants";
 
 @Component({
   selector: 'display-chart-component',
-  providers: [DataStationService, DataTemperatureService, Configuration],
+  providers: [DataStationService, DataTemperatureService, DataHumidityService, Configuration],
   styles: [`
     .chart {
       display: block;
@@ -24,14 +24,13 @@ export class DisplayChartComponent implements OnInit {
   station:number = 1;
   stationData:Station;
 
-  constructor(private _dataStationService:DataStationService, private _dataTemperatureService:DataTemperatureService) {
+  constructor(private _dataStationService:DataStationService, private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
   }
 
   // lineChart
-  public lineChartData:Array<any> = [
-    {data: [20], label: 'Station'}
-  ];
-  public lineChartLabels:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartData:Array<any> = [ { data: [20], label: 'temp' } ];
+  public lineChartLabels:Array<any> = ['any'];
+
   public lineChartOptions:any = {
     animation: false,
     responsive: true
@@ -67,15 +66,26 @@ export class DisplayChartComponent implements OnInit {
 
   ngOnInit() {
     this.getStationInformation(this.station);
-    this.getTemperaturesToday(this.station);
+    this.getTemperaturesToday(this.station, false);
+    this.getHumidityToday(this.station, true);
   }
 
   //...
 
-  private getTemperaturesToday(station:number):void {
+  private getTemperaturesToday(station:number, add:boolean):void {
     this._dataTemperatureService
         .GetStationTemperaturesToday(station)
-        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Temperature'),
+        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Temperature', add),
+            error => console.log(error),
+            () => {
+            }
+        );
+  }
+
+  private getHumidityToday(station:number, add:boolean):void {
+    this._dataHumidityService
+        .GetStationHumiditiesToday(station)
+        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
             error => console.log(error),
             () => {
             }
@@ -94,26 +104,29 @@ export class DisplayChartComponent implements OnInit {
   }
 
   private static showTime(timeStamp:string):string {
-    return  timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ":" + timeStamp.substr(12, 2);
+    return timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ":" + timeStamp.substr(12, 2);
   }
 
-  private updateChartData(chartData:Measurement[], description : string):void {
+  private updateChartData(chartData:Measurement[], description:string, add:boolean):void {
     let _lineChartLabels:Array<any> = new Array(chartData.length);
-    let _lineChartData:Array<any> = new Array(this.lineChartData.length);
+    let _lineChartData: any = {
+      data: new Array(chartData.length),
+      label: ' ' + description + ' report for Station ' + this.stationData.id + ' : ' + this.stationData.name
+    };
 
-    for (let i = 0; i < this.lineChartData.length; i++) {
-      _lineChartData[i] = {
-        data: new Array(chartData.length),
-        label: ' ' + description + ' report for Station ' + this.stationData.id + ' : ' + this.stationData.name
-      };
-      for (let j = 0; j < chartData.length; j++) {
-        _lineChartData[i].data[j] = chartData[j].value;
-        _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
-      }
+    for (let j = 0; j < chartData.length; j++) {
+      _lineChartData.data[j] = chartData[j].value;
+      _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
     }
 
     this.lineChartLabels = _lineChartLabels;
-    this.lineChartData = _lineChartData;
+
+    if(add) {
+      this.lineChartData.push(_lineChartData);
+    }
+    else {
+      this.lineChartData[0] = _lineChartData;
+    }
   }
 
   // events
