@@ -37,11 +37,17 @@ public class HeatIndexDAO implements MeasurementDAOInterface {
 
     @Override
     public List<Measurement> getList(long stationId, DateInfo startDate, DateInfo endDate) {
-        return null;
+        return connector.getList(stationId, startDate, endDate, false);
     }
 
     @Override
     public Measurement getLatest(long stationId) {
-        return null;
+        List<Measurement> list = connector.getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
+        if(list.isEmpty()) {
+            return null;
+        }
+        else {
+            return list.get(0);
+        }
     }
 }

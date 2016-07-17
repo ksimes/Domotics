@@ -1,4 +1,4 @@
-name := "Domotics"
+name := "Domotics "
 
 version := "1.0"
 

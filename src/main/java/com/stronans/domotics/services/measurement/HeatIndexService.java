@@ -33,27 +33,27 @@ public class HeatIndexService implements MeasurementServiceInterface {
 
     @Override
     public List<Measurement> find() {
-        return null;
+        return heatIndexDAO.getList();
     }
 
     @Override
     public List<Measurement> find(long stationId) {
-        return null;
+        return heatIndexDAO.getList(stationId);
     }
 
     @Override
     public List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate) {
-        return null;
+        return heatIndexDAO.getList(stationId, startDate, endDate);
     }
 
     @Override
     public List<Measurement> find(DateInfo startDate, DateInfo endDate) {
-        return null;
+        return heatIndexDAO.getList(0, startDate, endDate);
     }
 
     @Override
     public Measurement findLatest(long stationId) {
-        return null;
+        return heatIndexDAO.getLatest(stationId);
     }
 
     @Override
