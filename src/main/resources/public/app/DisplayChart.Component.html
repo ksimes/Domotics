@@ -1,6 +1,9 @@
 <p style="color:red">{{error}}</p>
 
-<div style="width:95%;height:95%;">
+<div style="margin-top: 10px;">
+    <button (click)="ngOnInit()">CLICK</button>
+</div>
+<div style="width:95%;height:90%;">
     <div>
         <base-chart class="chart"
                     [datasets]="lineChartData"
@@ -11,9 +14,5 @@
                     [chartType]="lineChartType"
                     (chartHover)="chartHovered($event)"
                     (chartClick)="chartClicked($event)"></base-chart>
-    </div>
-
-    <div style="margin-top: 10px;">
-        <button (click)="ngOnInit()">CLICK</button>
     </div>
 </div>

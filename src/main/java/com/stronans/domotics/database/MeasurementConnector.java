@@ -137,9 +137,11 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
                     resultSet.add(measurement);
                 }
             }
+            queryStatement.close();
         } catch (SQLException ex) {
             logger.error("Problem executing Query all statement ", ex);
         }
+
         return resultSet;
     }
 }

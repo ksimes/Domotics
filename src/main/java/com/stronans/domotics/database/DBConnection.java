@@ -1,23 +1,31 @@
 package com.stronans.domotics.database;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
+ * Creates and serves out JDBC connection to MySQL DB.
+ *
  * Created by S.King on 09/07/2016.
  */
 final class DBConnection {
     private static final Logger logger = Logger.getLogger(DBConnection.class);
 
     static private Connection connection = null;
-    static private String host = "localhost";
-    static private String port = "3306";
-    static private String dbName = "domotics";
-    static private String userName = "measure";
-    static private String userPassword = "measure";
+    @Value("${com.stronans.domotics.host}")
+    static private String host="localhost";
+    @Value("${com.stronans.domotics.port}")
+    static private String port="3306";
+    @Value("${com.stronans.domotics.dbName}")
+    static private String dbName="domotics";
+    @Value("${com.stronans.domotics.userName}")
+    static private String userName="measure";
+    @Value("${com.stronans.domotics.userPassword}")
+    static private String userPassword="measure";
 
     static {
 //        try {
