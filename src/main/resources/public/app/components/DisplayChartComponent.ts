@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, Input, OnChanges, SimpleChange  } from "@angular/core";
 import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from "@angular/common";
 import {CHART_DIRECTIVES} from "ng2-charts";
 
@@ -9,6 +9,7 @@ import {DataHumidityService} from "../services/humidity.services";
 import {Measurement} from "../models/Measurement.ts";
 import {Station} from "../models/Station.ts";
 import {Configuration} from "../configuration";
+import {DisplayOptions} from "../models/DisplayOptions";
 
 @Component({
   selector: 'display-chart-component',
@@ -22,14 +23,47 @@ import {Configuration} from "../configuration";
   directives: [CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 
-export class DisplayChartComponent {
+export class DisplayChartComponent implements OnChanges {
+  @Input("config")
+  config:DisplayOptions;
+
   station:number = 1;
   stationData:Station;
 
-  constructor(private _dataStationService:DataStationService, private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
+  constructor(private _dataStationService:DataStationService,
+              private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
+    console.log('Configured');
+  }
+
+  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    let log: string[] = [];
+    for (let propName in changes) {
+      let changedProp = changes[propName];
+      let from = JSON.stringify(changedProp.previousValue);
+      let to =   JSON.stringify(changedProp.currentValue);
+      log.push( `${propName} changed from ${from} to ${to}`);
+    }
+    console.log(log.join(', '));
+    this.refresh(this.config);
+  }
+
+  public refresh(config:DisplayOptions)
+  {
+    this.station = config.stationId
+
     this.getStationInformation(this.station);
-    this.getTemperaturesToday(this.station, false);
-    this.getHumidityToday(this.station, true);
+
+    if(config.showTemp) {
+      this.getTemperaturesToday(this.station, false);
+    }
+
+    if(config.showHumidity) {
+      this.getHumidityToday(this.station, true);
+    }
+
+    if(config.showHeatIndex) {
+      // this.getHumidityToday(this.station, true);
+    }
   }
 
   // lineChart
@@ -110,7 +144,7 @@ export class DisplayChartComponent {
     let _lineChartLabels:Array<any> = new Array(chartData.length);
     let _lineChartData: any = {
       data: new Array(chartData.length),
-      label: ' ' + description + ' report for Station ' + this.stationData.id + ' : ' + this.stationData.name
+      label: ' ' + description
     };
 
     for (let j = 0; j < chartData.length; j++) {

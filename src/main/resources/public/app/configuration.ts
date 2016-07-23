@@ -26,7 +26,7 @@ export class Configuration {
   { id: 7, name: '1 week' }
   ];
 
-  public initialState: DisplayOptions = {
+  public currentState: DisplayOptions = {
     displayId: 1,
     stationId: 1,
     showTemp: true,

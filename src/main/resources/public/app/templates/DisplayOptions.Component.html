@@ -1,34 +1,38 @@
 <h2>{{_configuration.applicationName}} at St Ronans</h2>
-<h3>{{title}}</h3>
 <div>
-    <select title="Station" [(ngModel)]="currentState.stationId">
-        <option *ngFor="let station of stationData" value= {{currentState.stationId}}>
-            {{station.name}}
-        </option>
-    </select>
+    <label>
+        Station
+        <select title="Station" [(ngModel)]="config.stationId">
+            <option *ngFor="let station of stationData" value= {{config.stationId}}>
+                {{station.name}}
+            </option>
+        </select>
+    </label>
 
-    <select title="Display values for last" [(ngModel)]="currentState.displayId">
-        <option *ngFor="let option of options" value= {{currentState.displayId}}>
-            {{option.name}}
-        </option>
-    </select>
+    <label>
+        Display values for last
+        <select title="Display values for last" [(ngModel)]="config.displayId">
+            <option *ngFor="let option of options" value= {{config.displayId}}>
+                {{option.name}}
+            </option>
+        </select>
+    </label>
 
     <span>Show</span>
     <label>
-        <input type="checkbox" [(ngModel)]="currentState.showTemp" aria-label="Checkbox 1" value="{{currentState.showTemp}}"/>
-        Temperature: {{ currentState.showTemp}}
+        <input type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1" value="{{config.showTemp}}"/>
+        Temperature
     </label>
 
     <label>
-        <input type="checkbox"  [(ngModel)]="currentState.showHumidity" aria-label="Checkbox 2" value="{{currentState.showHumidity}}"/>
-        Humidity: {{ currentState.showHumidity}}
+        <input type="checkbox"  [(ngModel)]="config.showHumidity" aria-label="Checkbox 2" value="{{config.showHumidity}}"/>
+        Humidity
     </label>
 
     <label>
-        <input type="checkbox"  [(ngModel)]="currentState.showHeatIndex" aria-label="Checkbox 3" value="{{currentState.showHeatIndex}}"/>
-        Heat Index: {{ currentState.showHeatIndex}}
+        <input type="checkbox"  [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3" value="{{config.showHeatIndex}}"/>
+        Heat Index
     </label>
 
-    <display-chart-component>Loading...</display-chart-component>
-
+    <display-chart-component [config]="config" >Loading...</display-chart-component>
 </div>
