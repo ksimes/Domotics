@@ -22,7 +22,7 @@ public class HumidityService implements MeasurementServiceInterface {
 
     @Override
     public Measurement saveMeasurement(Measurement humidity) {
-        logger.info("Save to DB - Station: " +
+        logger.debug("Save to DB - Station: " +
                 humidity.stationId() + " humidity: " +
                 humidity.value() + " at " +
                 humidity.timeStamp());

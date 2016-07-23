@@ -22,7 +22,7 @@ public class TemperatureService implements MeasurementServiceInterface {
 
     @Override
     public Measurement saveMeasurement(Measurement temperature) {
-        logger.info("Save to DB - Station: " +
+        logger.debug("Save to DB - Station: " +
                 temperature.stationId() + " temp: " +
                 temperature.value() + " at " +
                 temperature.timeStamp());

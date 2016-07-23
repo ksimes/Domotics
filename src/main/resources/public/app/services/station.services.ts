@@ -3,8 +3,8 @@ import {Http, Response, Headers} from "@angular/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import {Observable} from "rxjs/Observable";
-import {Station} from "../../models/Station.ts";
-import {Configuration} from "../app.constants";
+import {Station} from "../models/Station.ts";
+import {Configuration} from "../configuration";
 
 @Injectable()
 export class DataStationService {

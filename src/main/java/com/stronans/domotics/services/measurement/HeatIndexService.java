@@ -22,7 +22,7 @@ public class HeatIndexService implements MeasurementServiceInterface {
 
     @Override
     public Measurement saveMeasurement(Measurement heatIndex) {
-        logger.info("Save to DB - Station: " +
+        logger.debug("Save to DB - Station: " +
                 heatIndex.stationId() + " HeatIndex: " +
                 heatIndex.value() + " at " +
                 heatIndex.timeStamp());

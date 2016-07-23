@@ -395,6 +395,6 @@ public class DateInfo {
     public String toString() {
         DateTime current = DateTime.forInstant(calendar.getTimeInMillis(), TimeZone.getDefault());
 
-        return "DateInfo [notDefined=" + notDefined + ",  calendar=" + current.format("YYYY-MM-DD hh:mm:ss") + "]";
+        return "DateInfo [notDefined=" + notDefined + ", date=" + current.format("YYYY-MM-DD hh:mm:ss") + "]";
     }
 }

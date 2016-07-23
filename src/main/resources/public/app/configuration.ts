@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Option} from "../models/Option.ts";
+import {Option} from "./models/Option.ts";
+import {DisplayOptions} from "./models/DisplayOptions.ts";
 
 @Injectable()
 export class Configuration {
+  public applicationName:string = "Domotics";
   public Server:string = "http://localhost:8080";
   public BaseApiUrl:string = "/domotic/api";
   public Temperature:string = "/temperature/";
@@ -21,6 +23,15 @@ export class Configuration {
   { id: 4, name: '6 hours' },
   { id: 5, name: '12 hours' },
   { id: 6, name: '24 hours' },
-  { id: 7, name: 'last week' }
-];
+  { id: 7, name: '1 week' }
+  ];
+
+  public initialState: DisplayOptions = {
+    displayId: 1,
+    stationId: 1,
+    showTemp: true,
+    showHumidity: false,
+    showHeatIndex: false
+  };
+
 }

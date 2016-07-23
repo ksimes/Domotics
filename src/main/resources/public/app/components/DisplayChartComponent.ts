@@ -1,16 +1,14 @@
-import {Component, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from "@angular/common";
 import {CHART_DIRECTIVES} from "ng2-charts";
 
-import {DataStationService} from "./services/app.station.services";
-import {DataTemperatureService} from "./services/app.temperature.services";
-import {DataHumidityService} from "./services/app.humidity.services";
-
-import {DisplayOptionsComponent} from "./DisplayOptions.Component";
+import {DataStationService} from "../services/station.services";
+import {DataTemperatureService} from "../services/temperature.services";
+import {DataHumidityService} from "../services/humidity.services";
 
 import {Measurement} from "../models/Measurement.ts";
 import {Station} from "../models/Station.ts";
-import {Configuration} from "./app.constants";
+import {Configuration} from "../configuration";
 
 @Component({
   selector: 'display-chart-component',
@@ -21,14 +19,17 @@ import {Configuration} from "./app.constants";
     }`
   ],
   templateUrl: 'app/templates/DisplayChart.Component.html',
-  directives: [DisplayOptionsComponent, CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
+  directives: [CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 
-export class DisplayChartComponent implements OnInit {
+export class DisplayChartComponent {
   station:number = 1;
   stationData:Station;
 
   constructor(private _dataStationService:DataStationService, private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
+    this.getStationInformation(this.station);
+    this.getTemperaturesToday(this.station, false);
+    this.getHumidityToday(this.station, true);
   }
 
   // lineChart
@@ -67,12 +68,6 @@ export class DisplayChartComponent implements OnInit {
   ];
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
-
-  ngOnInit() {
-    this.getStationInformation(this.station);
-    this.getTemperaturesToday(this.station, false);
-    this.getHumidityToday(this.station, true);
-  }
 
   //...
 

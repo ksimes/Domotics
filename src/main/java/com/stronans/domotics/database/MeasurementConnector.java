@@ -102,9 +102,10 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
             whereStarted = true;
         }
 
+        // If both dates are defined then they should be fully defined with date and time.
         if (startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) >= " + quote(startDate) +
-                    " AND Date(timestamp) <= " + quote(startDate) + " ";
+            preparedQuery += clauseConnector(whereStarted) + " timestamp >= " + quote(startDate) +
+                    " AND timestamp <= " + quote(startDate) + " ";
 
         } else if (startDate.isDefined() && !endDate.isDefined()) {
             preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quote(startDate) + " ";

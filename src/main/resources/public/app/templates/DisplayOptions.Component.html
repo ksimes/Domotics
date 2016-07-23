@@ -1,9 +1,34 @@
-<h2>{{title}}</h2>
+<h2>{{_configuration.applicationName}} at St Ronans</h2>
+<h3>{{title}}</h3>
 <div>
-    <div>Display values for last </div>
-    <select [(ngModel)]="currentState.id">
+    <select title="Station" [(ngModel)]="currentState.stationId">
+        <option *ngFor="let station of stationData" value= {{currentState.stationId}}>
+            {{station.name}}
+        </option>
+    </select>
+
+    <select title="Display values for last" [(ngModel)]="currentState.displayId">
         <option *ngFor="let option of options" value= {{currentState.displayId}}>
             {{option.name}}
         </option>
     </select>
+
+    <span>Show</span>
+    <label>
+        <input type="checkbox" [(ngModel)]="currentState.showTemp" aria-label="Checkbox 1" value="{{currentState.showTemp}}"/>
+        Temperature: {{ currentState.showTemp}}
+    </label>
+
+    <label>
+        <input type="checkbox"  [(ngModel)]="currentState.showHumidity" aria-label="Checkbox 2" value="{{currentState.showHumidity}}"/>
+        Humidity: {{ currentState.showHumidity}}
+    </label>
+
+    <label>
+        <input type="checkbox"  [(ngModel)]="currentState.showHeatIndex" aria-label="Checkbox 3" value="{{currentState.showHeatIndex}}"/>
+        Heat Index: {{ currentState.showHeatIndex}}
+    </label>
+
+    <display-chart-component>Loading...</display-chart-component>
+
 </div>
