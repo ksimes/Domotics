@@ -3,7 +3,7 @@ Domotics
 
 Domestic Robotics is an intersting way of merging hobby electronics and programming. This project contains both Arduino projects for small sensor stations and a backend REST server to capture these readings into a MySQL database and an Angular2 front end to display charts of the readings capture.
 
-This is an early cut of this project.
+This is an early cut of this project. Started on 3rd July 2016.
 
 To run
 ======
@@ -14,7 +14,11 @@ npm start
 
 The start script is setup to run tsc -w so that any changes to .ts files will be recompiled to JS
 
-Run Java project from inside IntelliJ IDE
+Run Java project from inside IntelliJ IDE to start REST interface.
+
+Use browser to connect to localhost:8080/
+
+to see inital chart.
 
 To rebuild 
 ==========

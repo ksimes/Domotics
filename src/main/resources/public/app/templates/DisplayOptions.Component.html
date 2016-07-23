@@ -1,0 +1,9 @@
+<h2>{{title}}</h2>
+<div>
+    <div>Display values for last </div>
+    <select [(ngModel)]="currentState.id">
+        <option *ngFor="let option of options" value= {{currentState.displayId}}>
+            {{option.name}}
+        </option>
+    </select>
+</div>

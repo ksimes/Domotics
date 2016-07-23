@@ -1,9 +1,13 @@
 import {Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from "@angular/common";
 import {CHART_DIRECTIVES} from "ng2-charts";
-import {DataStationService} from "./app.station.services";
-import {DataTemperatureService} from "./app.temperature.services";
-import {DataHumidityService} from "./app.humidity.services";
+
+import {DataStationService} from "./services/app.station.services";
+import {DataTemperatureService} from "./services/app.temperature.services";
+import {DataHumidityService} from "./services/app.humidity.services";
+
+import {DisplayOptionsComponent} from "./DisplayOptions.Component";
+
 import {Measurement} from "../models/Measurement.ts";
 import {Station} from "../models/Station.ts";
 import {Configuration} from "./app.constants";
@@ -16,8 +20,8 @@ import {Configuration} from "./app.constants";
       display: block;
     }`
   ],
-  templateUrl: 'app/DisplayChart.Component.html',
-  directives: [CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
+  templateUrl: 'app/templates/DisplayChart.Component.html',
+  directives: [DisplayOptionsComponent, CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 
 export class DisplayChartComponent implements OnInit {
@@ -28,7 +32,7 @@ export class DisplayChartComponent implements OnInit {
   }
 
   // lineChart
-  public lineChartData:Array<any> = [ { data: [20], label: 'temp' } ];
+  public lineChartData:Array<any> = [ { data: [0], label: 'temp' } ];
   public lineChartLabels:Array<any> = ['any'];
 
   public lineChartOptions:any = {
@@ -125,7 +129,7 @@ export class DisplayChartComponent implements OnInit {
       this.lineChartData.push(_lineChartData);
     }
     else {
-      this.lineChartData[0] = _lineChartData;
+      this.lineChartData = [ _lineChartData ];
     }
   }
 

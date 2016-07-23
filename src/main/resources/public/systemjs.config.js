@@ -6,6 +6,9 @@
   // map tells the System loader where to look for things
   var map = {
     'app':                        'app',
+    'templates':                  'app/templates',
+    'models':                     'models',
+    'services':                   'app/services',
     '@angular':                   'node_modules/@angular',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
     'ng2-charts':                 'node_modules/ng2-charts',
@@ -16,7 +19,7 @@
     'app':                        { main: 'main.js',  defaultExtension: 'js' },
     'ng2-charts':                 { main: 'ng2-charts', defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' }
   };
   var ngPackageNames = [
     'common',

@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Option} from "../models/Option.ts";
 
 @Injectable()
 export class Configuration {
@@ -12,4 +13,14 @@ export class Configuration {
   public ForOneDay:string = "/0/";
   
   public ServerWithApiUrl = this.Server + this.BaseApiUrl;
+
+  public display: Option[] = [
+  { id: 1, name: 'hour' },
+  { id: 2, name: '2 hours' },
+  { id: 3, name: '4 hours' },
+  { id: 4, name: '6 hours' },
+  { id: 5, name: '12 hours' },
+  { id: 6, name: '24 hours' },
+  { id: 7, name: 'last week' }
+];
 }
