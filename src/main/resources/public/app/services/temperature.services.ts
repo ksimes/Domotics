@@ -10,14 +10,13 @@ import {Utilities} from "../utilities";
 @Injectable()
 export class DataTemperatureService {
 
-  private actionUrl:string;
+  private temperatureUrl:string;
   private configuration:Configuration;
   private headers:Headers;
 
   constructor(private _http:Http, private _configuration:Configuration) {
-
-    this.actionUrl = _configuration.ServerWithApiUrl;
     this.configuration = _configuration;
+    this.temperatureUrl = this.configuration.ServerWithApiUrl + this.configuration.Temperature;
 
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/json');
@@ -25,21 +24,36 @@ export class DataTemperatureService {
   }
 
   public GetAllTemperatures = ():Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Temperature, this.headers)
+    return this._http.get(this.temperatureUrl, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStationTemperatures = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Temperature + station)
+    return this._http.get(this.temperatureUrl + station)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStationTemperaturesToday = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Temperature + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay)
+    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
+  };
+
+  public GetStationTemperaturesInLastHour = (station:number):Observable<Measurement[]> => {
+    return this.GetStationTemperaturesInLastXHours(station, 1)
+  };
+
+  public GetStationTemperaturesInLastXHours = (station:number, hours : number):Observable<Measurement[]> => {
+    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow())
+        .map((response:Response) => <Measurement[]>response.json())
+        .catch(this.handleError);
+  };
+
+  public GetStationTemperaturesInLastDays = (station:number, days : number):Observable<Measurement[]> => {
+    let hours = days * 24;
+    return this.GetStationTemperaturesInLastXHours(station, hours)
   };
 
   /**
@@ -70,7 +84,7 @@ export class DataTemperatureService {
    **/
 
   private handleError(error:Response) {
-    console.error(error);
+    console.log(error);
     return Observable.throw(error.json().error || 'Server error');
   }
 }

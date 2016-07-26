@@ -9,9 +9,28 @@ export class Utilities {
 
   public static getFormattedTodayDate():string {
     var d = new Date();
-    var m = d.getMonth();
+    return (Utilities.getFormattedDate(d));
+  }
+
+  public static getFormattedDateNow():string {
+    var d = new Date();
+    return (Utilities.getFormattedDate(d));
+  }
+
+  public static getFormattedHourAgo():string {
+    return (Utilities.getFormattedHoursAgo(1));
+  }
+
+  public static getFormattedHoursAgo(back:number):string {
+    var d = new Date();
+    d.setHours(d.getHours() - back);
+    return (Utilities.getFormattedDate(d));
+  }
+
+  public static getFormattedDate(date:Date):string {
+    var m = date.getMonth();
     m++;
-    var day = d.getDate();
-    return ('' + d.getFullYear() + Utilities.pad(m) + Utilities.pad(day) + Utilities.pad(d.getHours()) + Utilities.pad(d.getMinutes()) + Utilities.pad(d.getSeconds()));
+    var day = date.getDate();
+    return ('' + date.getFullYear() + Utilities.pad(m) + Utilities.pad(day) + Utilities.pad(date.getHours()) + Utilities.pad(date.getMinutes()) + Utilities.pad(date.getSeconds()));
   }
 }

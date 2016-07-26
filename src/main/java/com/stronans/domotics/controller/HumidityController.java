@@ -41,16 +41,24 @@ public class HumidityController extends MeasurementController {
 
     //------------------- Retrieve Humidities for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
                                                                   @PathVariable("startDate") String startDateString,
                                                                   @PathVariable("endDate") String endDateString) {
 
         return getValuesByRange(humidityService, stationId, startDateString, endDateString);
     }
 
+    //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
+    @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
+                                                                  @PathVariable("startDate") String startDateString) {
+
+        return getValuesByRange(humidityService, stationId, startDateString, "0");
+    }
+
     //------------------- Retrieve latest Humidity for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/latest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Measurement> getTempValueLatest(@PathVariable("station") long stationId) {
+    public ResponseEntity<Measurement> getHumidityValueLatest(@PathVariable("station") long stationId) {
         return getTempValueLatest(humidityService, stationId);
     }
 }

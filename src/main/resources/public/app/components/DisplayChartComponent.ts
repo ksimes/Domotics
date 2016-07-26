@@ -1,11 +1,9 @@
-import {Component, Input, OnChanges, SimpleChange  } from "@angular/core";
+import {Component, Input, OnChanges, SimpleChange} from "@angular/core";
 import {CORE_DIRECTIVES, NgClass, FORM_DIRECTIVES} from "@angular/common";
 import {CHART_DIRECTIVES} from "ng2-charts";
-
 import {DataStationService} from "../services/station.services";
 import {DataTemperatureService} from "../services/temperature.services";
 import {DataHumidityService} from "../services/humidity.services";
-
 import {Measurement} from "../models/Measurement.ts";
 import {Station} from "../models/Station.ts";
 import {Configuration} from "../configuration";
@@ -14,11 +12,6 @@ import {DisplayOptions} from "../models/DisplayOptions";
 @Component({
   selector: 'display-chart-component',
   providers: [DataStationService, DataTemperatureService, DataHumidityService, Configuration],
-  styles: [`
-    .chart {
-      display: block;
-    }`
-  ],
   templateUrl: 'app/templates/DisplayChart.Component.html',
   directives: [CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
@@ -29,45 +22,45 @@ export class DisplayChartComponent implements OnChanges {
 
   station:number = 1;
   stationData:Station;
+  errorMsg:string = "";
 
   constructor(private _dataStationService:DataStationService,
               private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
     console.log('Configured');
   }
 
-  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-    let log: string[] = [];
-    for (let propName in changes) {
-      let changedProp = changes[propName];
-      let from = JSON.stringify(changedProp.previousValue);
-      let to =   JSON.stringify(changedProp.currentValue);
-      log.push( `${propName} changed from ${from} to ${to}`);
-    }
-    console.log(log.join(', '));
+  ngOnChanges(changes:{[propKey:string]:SimpleChange}) {
+    // let log:string[] = [];
+    // for (let propName in changes) {
+    //   let changedProp = changes[propName];
+    //   let from = JSON.stringify(changedProp.previousValue);
+    //   let to = JSON.stringify(changedProp.currentValue);
+    //   log.push(`${propName} changed from ${from} to ${to}`);
+    // }
+    // console.log(log.join(', '));
     this.refresh(this.config);
   }
 
-  public refresh(config:DisplayOptions)
-  {
-    this.station = config.stationId
+  public refresh(config:DisplayOptions) {
+    this.station = config.stationId;
 
     this.getStationInformation(this.station);
 
-    if(config.showTemp) {
-      this.getTemperaturesToday(this.station, false);
+    if (config.showTemp) {
+      this.getTemperaturesToday(this.station, false, config.displayId);
     }
 
-    if(config.showHumidity) {
-      this.getHumidityToday(this.station, true);
+    if (config.showHumidity) {
+      this.getHumidityToday(this.station, true, config.displayId);
     }
 
-    if(config.showHeatIndex) {
-      // this.getHumidityToday(this.station, true);
+    if (config.showHeatIndex) {
+      // this.getHeatIndexToday(this.station, true);
     }
   }
 
   // lineChart
-  public lineChartData:Array<any> = [ { data: [0], label: 'temp' } ];
+  public lineChartData:Array<any> = [{data: [0], label: 'temp'}];
   public lineChartLabels:Array<any> = ['any'];
 
   public lineChartOptions:any = {
@@ -105,21 +98,75 @@ export class DisplayChartComponent implements OnChanges {
 
   //...
 
-  private getTemperaturesToday(station:number, add:boolean):void {
-    this._dataTemperatureService
-        .GetStationTemperaturesToday(station)
-        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Temperature', add),
-            error => console.log(error),
+  private getTemperaturesToday(station:number, add:boolean, option:number):void {
+    var func:any;
+
+    option = +option;
+
+    switch (option) {
+      case 1:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastHour(station);
+        break;
+
+      case 2:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastXHours(station, 2);
+        break;
+
+      case 3:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastXHours(station, 4);
+        break;
+
+      case 4:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastXHours(station, 6);
+        break;
+
+      case 5:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastXHours(station, 12);
+        break;
+
+      case 6:
+        func = this._dataTemperatureService.GetStationTemperaturesToday(station);
+        break;
+
+      case 7:
+        func = this._dataTemperatureService.GetStationTemperaturesInLastDays(station, 7);
+        break;
+
+      default:
+        func = this._dataTemperatureService.GetStationTemperaturesToday(station);
+    }
+
+    func.subscribe((data:Measurement[]) => this.updateChartData(data, 'Temperature', add),
+        error => {
+          console.log(error);
+          this.errorMsg = error;
+        },
+        () => {
+        }
+    );
+  }
+
+  private getHumidityToday(station:number, add:boolean, option:number):void {
+    this._dataHumidityService
+        .GetStationHumiditiesToday(station)
+        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
+            error => {
+              console.log(error);
+              this.errorMsg = error;
+            },
             () => {
             }
         );
   }
 
-  private getHumidityToday(station:number, add:boolean):void {
+  private getHeatIndexToday(station:number, add:boolean, option:number):void {
     this._dataHumidityService
         .GetStationHumiditiesToday(station)
-        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
-            error => console.log(error),
+        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Heat Index', add),
+            error => {
+              console.log(error);
+              this.errorMsg = error;
+            },
             () => {
             }
         );
@@ -142,7 +189,7 @@ export class DisplayChartComponent implements OnChanges {
 
   private updateChartData(chartData:Measurement[], description:string, add:boolean):void {
     let _lineChartLabels:Array<any> = new Array(chartData.length);
-    let _lineChartData: any = {
+    let _lineChartData:any = {
       data: new Array(chartData.length),
       label: ' ' + description
     };
@@ -154,11 +201,11 @@ export class DisplayChartComponent implements OnChanges {
 
     this.lineChartLabels = _lineChartLabels;
 
-    if(add) {
+    if (add) {
       this.lineChartData.push(_lineChartData);
     }
     else {
-      this.lineChartData = [ _lineChartData ];
+      this.lineChartData = [_lineChartData];
     }
   }
 

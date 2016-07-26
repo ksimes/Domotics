@@ -2,6 +2,7 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
+import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -42,9 +44,18 @@ public class TemperatureController extends MeasurementController {
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
                                                                   @PathVariable("startDate") String startDateString,
-                                                                  @PathVariable("endDate") String endDateString) {
+                                                                  @PathVariable("endDate") String endDateString, HttpServletRequest request) {
+        logger.info("In range : " + request.getRequestURI());
 
         return getValuesByRange(temperatureService, stationId, startDateString, endDateString);
+    }
+
+    //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
+    @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
+                                                                  @PathVariable("startDate") String startDateString) {
+
+        return getValuesByRange(temperatureService, stationId, startDateString, "0");
     }
 
     //------------------- Retrieve latest temperature for a given Station --------------------------------------------------------

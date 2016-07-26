@@ -15,7 +15,6 @@ public interface MeasurementServiceInterface {
     List<Measurement> find(long stationId);     // Find all temperature values by station
     List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate);
     List<Measurement> find(DateInfo startDate, DateInfo endDate);
-    List<Measurement> findAllToday(long stationId);
     Measurement findLatest(long stationId);
     Measurement saveMeasurement(Measurement t);
 }

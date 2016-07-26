@@ -12,6 +12,7 @@ export class Configuration {
   public HeatIndex:string = "/heatindex/";
   public Station:string = "/station/";
   public Range:string = "/range/";
+  public Date:string = "/date/";
   public ForOneDay:string = "/0/";
   
   public ServerWithApiUrl = this.Server + this.BaseApiUrl;
@@ -33,5 +34,4 @@ export class Configuration {
     showHumidity: false,
     showHeatIndex: false
   };
-
 }

@@ -55,9 +55,4 @@ public class HumidityService implements MeasurementServiceInterface {
     public Measurement findLatest(long stationId) {
         return humidityDAO.getLatest(stationId);
     }
-
-    @Override
-    public List<Measurement> findAllToday(long stationId) {
-        return humidityDAO.getList(stationId, DateInfo.getNow().addToDate(-1), DateInfo.getUndefined());
-    }
 }

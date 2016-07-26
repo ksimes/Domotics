@@ -55,9 +55,4 @@ public class TemperatureService implements MeasurementServiceInterface {
     public Measurement findLatest(long stationId) {
         return temperatureDAO.getLatest(stationId);
     }
-
-    @Override
-    public List<Measurement> findAllToday(long stationId) {
-        return temperatureDAO.getList(stationId, DateInfo.getNow().addToDate(-1), DateInfo.getUndefined());
-    }
 }

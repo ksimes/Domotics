@@ -1,7 +1,6 @@
 package com.stronans.domotics.database;
 
 import com.stronans.domotics.model.Measurement;
-import com.stronans.domotics.model.Station;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 
@@ -18,7 +17,8 @@ import java.util.List;
  */
 public class MeasurementConnector implements MeasurementConnectorInterface {
     private static final Logger logger = Logger.getLogger(MeasurementConnector.class);
-    private static final String ANSI_DATE_FORMAT = "";
+    private static final String ANSI_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String ANSI_DATE_FORMAT = "yyyy-MM-dd";
 
     private static final int STATION_ID = 1;
     private static final int VALUE = 2;
@@ -82,11 +82,12 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
         return result;
     }
 
-    private String quote(DateInfo dateToQuote)
-    {
-        final String FORMAT = "yyyy-MM-dd";
+    private String quote(DateInfo dateToQuote) {
+        return "\"" + dateToQuote.format(ANSI_TIMESTAMP_FORMAT) + "\"";
+    }
 
-        return "\"" + dateToQuote.format(FORMAT) + "\"";
+    private String quoteDay(DateInfo dateToQuote) {
+        return "\"" + dateToQuote.format(ANSI_DATE_FORMAT) + "\"";
     }
 
     @Override
@@ -105,12 +106,12 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
         // If both dates are defined then they should be fully defined with date and time.
         if (startDate.isDefined() && endDate.isDefined()) {
             preparedQuery += clauseConnector(whereStarted) + " timestamp >= " + quote(startDate) +
-                    " AND timestamp <= " + quote(startDate) + " ";
+                    " AND timestamp <= " + quote(endDate) + " ";
 
         } else if (startDate.isDefined() && !endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quote(startDate) + " ";
+            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quoteDay(startDate) + " ";
         } else if (!startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) < " + quote(endDate) + " ";
+            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) < " + quoteDay(endDate) + " ";
         }
 
         // Get the latest value sampled (with station Id gives current value for that room.
@@ -118,7 +119,7 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
             preparedQuery += " ORDER BY timestamp DESC Limit 1";
         }
 
-        logger.debug("Query : " + preparedQuery);
+        logger.info("Query : " + preparedQuery);
 
         resultSet = getResultsAsList(preparedQuery);
 

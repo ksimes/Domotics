@@ -11,8 +11,8 @@
 
     <label>
         Display values for last
-        <select title="Display values for last" [(ngModel)]="config.displayId">
-            <option *ngFor="let option of options" value= {{config.displayId}}>
+        <select id="displaySelect" [(ngModel)]="config.displayId" (change)="onSelectDisplay()" value= {{config.displayId}} >
+            <option *ngFor="let option of options" value="{{option.id}}">
                 {{option.name}}
             </option>
         </select>
@@ -20,17 +20,17 @@
 
     <span>Show</span>
     <label>
-        <input type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1" value="{{config.showTemp}}"/>
+        <input (click)="onSelectTemp()" type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1" value="{{config.showTemp}}"/>
         Temperature
     </label>
 
     <label>
-        <input type="checkbox"  [(ngModel)]="config.showHumidity" aria-label="Checkbox 2" value="{{config.showHumidity}}"/>
+        <input (click)="onSelectHumidity" type="checkbox"  [(ngModel)]="config.showHumidity" aria-label="Checkbox 2" value="{{config.showHumidity}}"/>
         Humidity
     </label>
 
     <label>
-        <input type="checkbox"  [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3" value="{{config.showHeatIndex}}"/>
+        <input (click)="onSelectHeatIndex()" type="checkbox"  [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3" value="{{config.showHeatIndex}}"/>
         Heat Index
     </label>
 

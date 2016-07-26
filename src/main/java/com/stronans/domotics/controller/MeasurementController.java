@@ -44,12 +44,13 @@ abstract class MeasurementController {
         logger.debug("StartDateString:" + startDateString);
         if (DateInfo.isUniversalString(startDateString)) {
             startDate = DateInfo.fromUniversalString(startDateString);
-            logger.debug("Converted " + startDate);
+            logger.debug("StartDate Converted " + startDate);
         }
 
         logger.debug("EndDateString:" + endDateString);
         if (DateInfo.isUniversalString(endDateString)) {
             endDate = DateInfo.fromUniversalString(endDateString);
+            logger.debug("EndDate Converted " + endDate);
         }
 
         List<Measurement> measurements = service.find(stationId, startDate, endDate);

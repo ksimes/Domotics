@@ -55,9 +55,4 @@ public class HeatIndexService implements MeasurementServiceInterface {
     public Measurement findLatest(long stationId) {
         return heatIndexDAO.getLatest(stationId);
     }
-
-    @Override
-    public List<Measurement> findAllToday(long stationId) {
-        return heatIndexDAO.getList(stationId, DateInfo.getNow().addToDate(-1), DateInfo.getUndefined());
-    }
 }
