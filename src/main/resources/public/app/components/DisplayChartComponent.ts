@@ -64,9 +64,10 @@ export class DisplayChartComponent implements OnChanges {
   public lineChartLabels:Array<any> = ['any'];
 
   public lineChartOptions:any = {
-    animation: false,
-    responsive: true
-  };
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false
+    };
   public lineChartColours:Array<any> = [
     { // grey
       backgroundColor: 'rgba(148,159,177,0.2)',
@@ -147,9 +148,44 @@ export class DisplayChartComponent implements OnChanges {
   }
 
   private getHumidityToday(station:number, add:boolean, option:number):void {
-    this._dataHumidityService
-        .GetStationHumiditiesToday(station)
-        .subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
+    var func:any;
+
+    option = +option;
+
+    switch (option) {
+      case 1:
+        func = this._dataHumidityService.GetStationHumiditiesInLastHour(station);
+        break;
+
+      case 2:
+        func = this._dataHumidityService.GetStationHumiditiesInLastXHours(station, 2);
+        break;
+
+      case 3:
+        func = this._dataHumidityService.GetStationHumiditiesInLastXHours(station, 4);
+        break;
+
+      case 4:
+        func = this._dataHumidityService.GetStationHumiditiesInLastXHours(station, 6);
+        break;
+
+      case 5:
+        func = this._dataHumidityService.GetStationHumiditiesInLastXHours(station, 12);
+        break;
+
+      case 6:
+        func = this._dataHumidityService.GetStationHumiditiesToday(station);
+        break;
+
+      case 7:
+        func = this._dataHumidityService.GetStationHumiditiesInLastDays(station, 7);
+        break;
+
+      default:
+        func = this._dataHumidityService.GetStationHumiditiesToday(station);
+    }
+
+    func.subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
             error => {
               console.log(error);
               this.errorMsg = error;

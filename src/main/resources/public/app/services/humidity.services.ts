@@ -10,14 +10,14 @@ import {Utilities} from "../utilities";
 @Injectable()
 export class DataHumidityService {
 
-  private actionUrl:string;
+  private humidityUrl:string;
   private configuration:Configuration;
   private headers:Headers;
 
   constructor(private _http:Http, private _configuration:Configuration) {
 
-    this.actionUrl = _configuration.ServerWithApiUrl;
     this.configuration = _configuration;
+    this.humidityUrl = _configuration.ServerWithApiUrl +  _configuration.Humidity;
 
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/json');
@@ -25,21 +25,36 @@ export class DataHumidityService {
   }
 
   public GetAllHumidities = ():Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Humidity)
+    return this._http.get(this.humidityUrl, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStationHumidities = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Humidity + station)
+    return this._http.get(this.humidityUrl + station, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStationHumiditiesToday = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Humidity + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay)
+    return this._http.get(this.humidityUrl + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
+  };
+
+  public GetStationHumiditiesInLastHour = (station:number):Observable<Measurement[]> => {
+    return this.GetStationHumiditiesInLastXHours(station, 1)
+  };
+
+  public GetStationHumiditiesInLastXHours = (station:number, hours : number):Observable<Measurement[]> => {
+    return this._http.get(this.humidityUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow(), this.headers)
+        .map((response:Response) => <Measurement[]>response.json())
+        .catch(this.handleError);
+  };
+
+  public GetStationHumiditiesInLastDays = (station:number, days : number):Observable<Measurement[]> => {
+    let hours = days * 24;
+    return this.GetStationHumiditiesInLastXHours(station, hours)
   };
 
   private handleError(error:Response) {

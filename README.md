@@ -16,7 +16,7 @@ The start script is setup to run tsc -w so that any changes to .ts files will be
 
 Run Java project from inside IntelliJ IDE to start REST interface.
 
-Use browser to connect to localhost:8080/
+Use browser to connect to http://localhost:8080/
 
 to see inital chart.
 
@@ -43,4 +43,15 @@ Add ng2-charts for TypeScript
 
 npm install ng2-charts --save
 
-Note: Must include a style for the chart to get it to show onscrteen.
+Note: Must include a style for the chart to get it to show on screen.
+
+Notes
+=====
+
+Spring Boot v1.3.5.RELEASE,
+
+Spring v4.2.6.RELEASE
+
+Angular 2.0 RC4 Using TypeScript
+
+Apache Tomcat/8.0.33

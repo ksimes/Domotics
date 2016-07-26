@@ -14,7 +14,7 @@ import java.util.List;
  * Created by S.King on 03/07/2016.
  */
 @Service("TemperatureService")
-public class TemperatureService implements MeasurementServiceInterface {
+public class TemperatureService implements MeasurementServiceInterface{
     private static final Logger logger = Logger.getLogger(TemperatureService.class);
 
     @Autowired
