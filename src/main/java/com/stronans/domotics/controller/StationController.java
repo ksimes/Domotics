@@ -31,7 +31,12 @@ public class StationController {
     @RequestMapping(value = "/{stationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Station> getStationName(@PathVariable("stationId") long stationId) {
         Station station = stationService.find(stationId);
-        return new ResponseEntity<Station>(station, HttpStatus.OK);
+        if(station == null) {
+            return new ResponseEntity<Station>(station, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+        }
+        else {
+            return new ResponseEntity<Station>(station, HttpStatus.OK);
+        }
     }
 
     //------------------- Retrieve the details for all Stations --------------------------------------------------------

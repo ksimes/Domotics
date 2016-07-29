@@ -34,7 +34,11 @@ final class DBConnection {
 //            logger.error("MySQL JDBC Driver has not been found");
 //            return;
 //        }
+        establishConnection();
+    }
 
+    static public void establishConnection()
+    {
         try {
             String connectionString = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
 

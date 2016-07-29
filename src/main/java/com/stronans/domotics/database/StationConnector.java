@@ -21,6 +21,11 @@ public class StationConnector {
     private String query;
 
     public StationConnector() {
+        setup();
+    }
+
+    private void setup()
+    {
         connection = DBConnection.getConnection();
         String workingTable = DBConnection.getFullTableName(tableName);
 

@@ -55,7 +55,7 @@ abstract class MeasurementController {
 
         List<Measurement> measurements = service.find(stationId, startDate, endDate);
         if (measurements.isEmpty()) {
-            return new ResponseEntity<>(measurements, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+            return new ResponseEntity<>(measurements, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
         }
         return new ResponseEntity<>(measurements, HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ abstract class MeasurementController {
         Measurement measurement = service.findLatest(stationId);
 
         if (measurement == null) {
-            return new ResponseEntity<>(measurement, HttpStatus.NO_CONTENT);        //You many decide to return HttpStatus.NOT_FOUND
+            return new ResponseEntity<>(measurement, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
         }
 
         return new ResponseEntity<>(measurement, HttpStatus.OK);

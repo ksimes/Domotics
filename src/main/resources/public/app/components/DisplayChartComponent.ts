@@ -22,7 +22,7 @@ export class DisplayChartComponent implements OnChanges {
 
   station:number = 1;
   stationData:Station;
-  errorMsg:string = "";
+  errorMsg:string = '';
 
   constructor(private _dataStationService:DataStationService,
               private _dataTemperatureService:DataTemperatureService, private _dataHumidityService:DataHumidityService) {
@@ -42,6 +42,8 @@ export class DisplayChartComponent implements OnChanges {
   }
 
   public refresh(config:DisplayOptions) {
+    this.errorMsg = '';
+
     this.station = config.stationId;
 
     this.getStationInformation(this.station);
@@ -141,6 +143,8 @@ export class DisplayChartComponent implements OnChanges {
         error => {
           console.log(error);
           this.errorMsg = error;
+          this.lineChartData = [{data: [0], label: 'temp'}];
+          this.lineChartLabels = ['any'];
         },
         () => {
         }
@@ -185,10 +189,13 @@ export class DisplayChartComponent implements OnChanges {
         func = this._dataHumidityService.GetStationHumiditiesToday(station);
     }
 
+    console.log("Adding Humidity")
     func.subscribe((data:Measurement[]) => this.updateChartData(data, 'Humidity', add),
             error => {
               console.log(error);
               this.errorMsg = error;
+              this.lineChartData = [{data: [0], label: 'temp'}];
+              this.lineChartLabels = ['any'];
             },
             () => {
             }
@@ -202,6 +209,8 @@ export class DisplayChartComponent implements OnChanges {
             error => {
               console.log(error);
               this.errorMsg = error;
+              this.lineChartData = [{data: [0], label: 'temp'}];
+              this.lineChartLabels = ['any'];
             },
             () => {
             }
@@ -212,7 +221,12 @@ export class DisplayChartComponent implements OnChanges {
     this._dataStationService
         .GetStation(station)
         .subscribe((data:Station) => this.stationData = data,
-            error => console.log(error),
+            error => {
+              console.log(error)
+              this.errorMsg = error;
+              this.lineChartData = [{data: [0], label: 'temp'}];
+              this.lineChartLabels = ['any'];
+            },
             () => {
               console.log('Get station data complete');
             }

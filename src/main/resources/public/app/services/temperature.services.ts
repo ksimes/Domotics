@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Http, Response, Headers} from "@angular/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
+import 'rxjs/add/observable/throw';
 import {Observable} from "rxjs/Observable";
 import {Measurement} from "../models/Measurement.ts";
 import {Configuration} from "../configuration";
@@ -30,13 +31,13 @@ export class DataTemperatureService {
   };
 
   public GetStationTemperatures = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.temperatureUrl + station)
+    return this._http.get(this.temperatureUrl + station, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStationTemperaturesToday = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay)
+    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay, this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
@@ -46,7 +47,7 @@ export class DataTemperatureService {
   };
 
   public GetStationTemperaturesInLastXHours = (station:number, hours : number):Observable<Measurement[]> => {
-    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow())
+    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow(), this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
@@ -57,11 +58,6 @@ export class DataTemperatureService {
   };
 
   /**
-   public GetSingle = (id: number): Observable<MyTypedItem> => {
-        return this._http.get(this.actionUrl + id)
-            .map((response: Response) => <MyTypedItem>response.json())
-            .error(this.handleError);
-    }
 
    public Add = (itemName: string): Observable<MyTypedItem> => {
         let toAdd = JSON.stringify({ ItemName: itemName });
@@ -83,8 +79,13 @@ export class DataTemperatureService {
     }
    **/
 
-  private handleError(error:Response) {
-    console.log(error);
-    return Observable.throw(error.json().error || 'Server error');
+  private handleError(error:any) {
+    let errMsg = "No data available for this period";
+    if(error.status != 416) {
+      let errMsg = (error.message) ? error.message :
+          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+      console.log(' ' + error.status + ' : ' + errMsg);     // log to console
+    }
+    return Observable.throw(errMsg);
   }
 }

@@ -57,8 +57,13 @@ export class DataHumidityService {
     return this.GetStationHumiditiesInLastXHours(station, hours)
   };
 
-  private handleError(error:Response) {
-    console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+  private handleError(error:any) {
+    let errMsg = "No data available for this period";
+    if(error.status != 416) {
+      let errMsg = (error.message) ? error.message :
+          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+      console.log(' ' + error.status + ' : ' + errMsg);     // log to console
+    }
+    return Observable.throw(errMsg);
   }
 }
