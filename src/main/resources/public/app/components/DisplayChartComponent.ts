@@ -4,8 +4,8 @@ import {CHART_DIRECTIVES} from "ng2-charts";
 import {DataStationService} from "../services/station.services";
 import {DataTemperatureService} from "../services/temperature.services";
 import {DataHumidityService} from "../services/humidity.services";
-import {Measurement} from "../models/Measurement.ts";
-import {Station} from "../models/Station.ts";
+import {Measurement} from "../models/Measurement";
+import {Station} from "../models/Station";
 import {Configuration} from "../configuration";
 import {DisplayOptions} from "../models/DisplayOptions";
 

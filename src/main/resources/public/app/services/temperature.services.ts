@@ -36,8 +36,14 @@ export class DataTemperatureService {
         .catch(this.handleError);
   };
 
+  public GetLatestStationTemperature = (station:number):Observable<Measurement> => {
+    return this._http.get(this.temperatureUrl + station + this.configuration.Latest, this.headers)
+        .map((response:Response) => <Measurement>response.json())
+        .catch(this.handleError);
+  };
+
   public GetStationTemperaturesToday = (station:number):Observable<Measurement[]> => {
-    return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedTodayDate() + this.configuration.ForOneDay, this.headers)
+    return this._http.get(this.temperatureUrl + station + this.configuration.Date + Utilities.getFormattedTodayDate(), this.headers)
         .map((response:Response) => <Measurement[]>response.json())
         .catch(this.handleError);
   };
@@ -48,7 +54,7 @@ export class DataTemperatureService {
 
   public GetStationTemperaturesInLastXHours = (station:number, hours : number):Observable<Measurement[]> => {
     return this._http.get(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow(), this.headers)
-        .map((response:Response) => <Measurement[]>response.json())
+        .map((response:Response) => <Measurement[]>response.json() )
         .catch(this.handleError);
   };
 

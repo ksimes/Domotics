@@ -3,7 +3,7 @@
     <label>
         Station
         <select title="Station" [(ngModel)]="config.stationId">
-            <option *ngFor="let station of stationData" value= {{config.stationId}}>
+            <option *ngFor="let station of stationData" value={{config.stationId}}>
                 {{station.name}}
             </option>
         </select>
@@ -11,7 +11,8 @@
 
     <label>
         Display values for last
-        <select id="displaySelect" [(ngModel)]="config.displayId" (change)="onSelectDisplay()" value= {{config.displayId}} >
+        <select id="displaySelect" [(ngModel)]="config.displayId" (change)="onSelectDisplay()"
+                value={{config.displayId}}>
             <option *ngFor="let option of options" value="{{option.id}}">
                 {{option.name}}
             </option>
@@ -20,19 +21,28 @@
 
     <span>Show</span>
     <label>
-        <input (click)="onSelectTemp()" type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1" value="{{config.showTemp}}"/>
+        <input (click)="onSelectTemp()" type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1"
+               value="{{config.showTemp}}"/>
         Temperature
     </label>
 
     <label>
-        <input (click)="onSelectHumidity()" type="checkbox"  [(ngModel)]="config.showHumidity" aria-label="Checkbox 2" value="{{config.showHumidity}}"/>
+        <input (click)="onSelectHumidity()" type="checkbox" [(ngModel)]="config.showHumidity" aria-label="Checkbox 2"
+               value="{{config.showHumidity}}"/>
         Humidity
     </label>
 
     <label>
-        <input (click)="onSelectHeatIndex()" type="checkbox"  [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3" value="{{config.showHeatIndex}}"/>
+        <input (click)="onSelectHeatIndex()" type="checkbox" [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3"
+               value="{{config.showHeatIndex}}"/>
         Heat Index
     </label>
 
-    <display-chart-component [config]="config" >Loading...</display-chart-component>
+    <display-chart-component [config]="config">Loading...</display-chart-component>
+
+    <ul>
+        <li *ngFor="let station of stationData">
+            <display-station-component [station]="station">Loading...</display-station-component>
+        </li>
+    </ul>
 </div>

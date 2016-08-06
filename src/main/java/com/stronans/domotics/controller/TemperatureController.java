@@ -59,7 +59,7 @@ public class TemperatureController extends MeasurementController {
     }
 
     //------------------- Retrieve latest temperature for a given Station --------------------------------------------------------
-    @RequestMapping(value = "/{station}/latest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Measurement> getTempValueLatest(@PathVariable("station") long stationId) {
         return getTempValueLatest(temperatureService, stationId);
     }

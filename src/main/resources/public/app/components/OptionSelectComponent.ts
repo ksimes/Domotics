@@ -7,17 +7,18 @@ import {Component, Input, OnChanges, SimpleChange} from "@angular/core";
 import {DataStationService} from "../services/station.services";
 
 import {DisplayChartComponent} from "./DisplayChartComponent";
+import {DisplayStationComponent} from "./DisplayStationComponent";
 
 import {Configuration} from "../configuration";
-import {Station} from "../models/Station.ts";
-import {Option} from "../models/Option.ts";
+import {Station} from "../models/Station";
+import {Option} from "../models/Option";
 import {DisplayOptions} from "../models/DisplayOptions";
 
 @Component({
   selector: 'options-component',
   providers: [Configuration, DataStationService],
   templateUrl: 'app/templates/DisplayOptions.Component.html',
-  directives: [DisplayChartComponent]
+  directives: [DisplayChartComponent, DisplayStationComponent]
 })
 export class DisplayOptionsComponent {
   title = 'display options';

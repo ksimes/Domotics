@@ -41,7 +41,7 @@ public class StationConnector {
             preparedQuery += " WHERE id = " + stationId;
         }
 
-        logger.debug("Query : " + preparedQuery);
+        logger.info("Query : " + preparedQuery);
 
         resultSet = getResultsAsList(preparedQuery);
 

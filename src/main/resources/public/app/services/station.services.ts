@@ -24,13 +24,13 @@ export class DataStationService {
   }
 
   public GetAllStations = ():Observable<Station[]> => {
-    return this._http.get(this.actionUrl + this.configuration.Station)
+    return this._http.get(this.actionUrl + this.configuration.Station, this.headers)
         .map((response:Response) => <Station[]>response.json())
         .catch(this.handleError);
   };
 
   public GetStation = (station:number):Observable<Station> => {
-    return this._http.get(this.actionUrl + this.configuration.Station + station)
+    return this._http.get(this.actionUrl + this.configuration.Station + station, this.headers)
         .map((response:Response) => <Station>response.json())
         .catch(this.handleError);
   };

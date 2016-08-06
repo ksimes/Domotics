@@ -57,7 +57,7 @@ public class HumidityController extends MeasurementController {
     }
 
     //------------------- Retrieve latest Humidity for a given Station --------------------------------------------------------
-    @RequestMapping(value = "/{station}/latest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Measurement> getHumidityValueLatest(@PathVariable("station") long stationId) {
         return getTempValueLatest(humidityService, stationId);
     }

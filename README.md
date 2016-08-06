@@ -45,6 +45,10 @@ npm install ng2-charts --save
 
 Note: Must include a style for the chart to get it to show on screen.
 
+Add moment library for formattinmg dates
+
+npm install moment --save
+
 Notes
 =====
 
