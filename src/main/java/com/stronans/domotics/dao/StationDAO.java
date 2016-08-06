@@ -2,17 +2,17 @@ package com.stronans.domotics.dao;
 
 import com.stronans.domotics.database.StationConnector;
 import com.stronans.domotics.model.Station;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
+ * Handles the connection to the Station connector to draw back station data from the DB.
  * Created by S.King on 14/07/2016.
  */
 @Repository
 public class StationDAO {
-    private static final Logger logger = Logger.getLogger(StationDAO.class);
+//    private static final Logger logger = Logger.getLogger(StationDAO.class);
 
     private StationConnector connector = new StationConnector();
 

@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("TemperatureDAO")
 public class TemperatureDAO implements MeasurementDAOInterface {
-    private static final Logger logger = Logger.getLogger(TemperatureDAO.class);
+//    private static final Logger logger = Logger.getLogger(TemperatureDAO.class);
 
     private MeasurementConnectorInterface connector;
 
