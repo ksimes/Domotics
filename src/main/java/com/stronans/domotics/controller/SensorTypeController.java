@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/domotic/api/sensortype")
 public class SensorTypeController {
-    private static final Logger logger = Logger.getLogger(SensorTypeController.class);
+//    private static final Logger logger = Logger.getLogger(SensorTypeController.class);
 
     @Autowired
     SensorTypeService sensorTypeService;  //Service which will do all data retrieval/manipulation work
@@ -32,9 +32,9 @@ public class SensorTypeController {
     public ResponseEntity<SensorType> getSensorTypeName(@PathVariable("sensorTypeId") long sensorTypeId) {
         SensorType sensorType = sensorTypeService.find(sensorTypeId);
         if (sensorType == null) {
-            return new ResponseEntity<SensorType>(sensorType, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+            return new ResponseEntity<>(sensorType, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
         } else {
-            return new ResponseEntity<SensorType>(sensorType, HttpStatus.OK);
+            return new ResponseEntity<>(sensorType, HttpStatus.OK);
         }
     }
 

@@ -35,33 +35,39 @@ export class DisplayOptionsComponent {
 
   private onSelectTemp():void {
     if (this.config.showTemp) {
-      this.config = new DisplayOptions(this.config.displayId, 1, false, this.config.showHumidity, this.config.showHeatIndex);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, false, this.config.showHumidity, this.config.showHeatIndex);
     }
     else {
-      this.config = new DisplayOptions(this.config.displayId, 1, true, this.config.showHumidity, this.config.showHeatIndex);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, true, this.config.showHumidity, this.config.showHeatIndex);
     }
   }
 
   private onSelectHumidity():void {
     if (this.config.showHumidity) {
-      this.config = new DisplayOptions(this.config.displayId, 1, this.config.showTemp, false, this.config.showHeatIndex);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, this.config.showTemp, false, this.config.showHeatIndex);
     }
     else {
-      this.config = new DisplayOptions(this.config.displayId, 1, this.config.showTemp, true, this.config.showHeatIndex);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, this.config.showTemp, true, this.config.showHeatIndex);
     }
   }
 
   private onSelectHeatIndex():void {
     if (this.config.showHeatIndex) {
-      this.config = new DisplayOptions(this.config.displayId, 1, this.config.showTemp, this.config.showHumidity, false);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, this.config.showTemp, this.config.showHumidity, false);
     }
     else {
-      this.config = new DisplayOptions(this.config.displayId, 1, this.config.showTemp, this.config.showHumidity, true);
+      this.config = new DisplayOptions(this.config.displayId, this.config.stationId, this.config.showTemp, this.config.showHumidity, true);
     }
   }
 
-  private onSelectDisplay():void {
-    this.config = new DisplayOptions(this.config.displayId, 1, this.config.showTemp, this.config.showHumidity, this.config.showHeatIndex);
+  private onSelectDisplay(newValue):void {
+    console.log('onSelectDisplay ' + newValue);
+    this.config = new DisplayOptions(newValue, this.config.stationId, this.config.showTemp, this.config.showHumidity, this.config.showHeatIndex);
+  }
+
+  private onSelectStation(newValue):void {
+    console.log('onSelectStation ' + newValue);
+    this.config = new DisplayOptions(this.config.displayId, newValue, this.config.showTemp, this.config.showHumidity, this.config.showHeatIndex);
   }
 
   private getStationInformation():void {

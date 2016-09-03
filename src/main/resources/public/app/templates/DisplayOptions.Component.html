@@ -2,8 +2,9 @@
 <div>
     <label>
         Station
-        <select title="Station" [(ngModel)]="config.stationId">
-            <option *ngFor="let station of stationData" value={{config.stationId}}>
+        <select id="stationSelect" [ngModel]="config.stationId" (ngModelChange)="onSelectStation($event)"
+                value={{config.stationId}}>
+            <option *ngFor="let station of stationData" value={{station.id}}>
                 {{station.name}}
             </option>
         </select>
@@ -11,7 +12,7 @@
 
     <label>
         Display values for last
-        <select id="displaySelect" [(ngModel)]="config.displayId" (change)="onSelectDisplay()"
+        <select id="displaySelect" [ngModel]="config.displayId" (ngModelChange)="onSelectDisplay($event)"
                 value={{config.displayId}}>
             <option *ngFor="let option of options" value="{{option.id}}">
                 {{option.name}}

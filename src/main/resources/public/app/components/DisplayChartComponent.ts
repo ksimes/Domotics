@@ -228,7 +228,7 @@ export class DisplayChartComponent implements OnChanges {
               this.lineChartLabels = ['any'];
             },
             () => {
-              console.log('Get station data complete');
+              console.log('Get data complete for station ' + station);
             }
         );
   }

@@ -2,7 +2,6 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
-import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/domotic/api/humidity")
 public class HumidityController extends MeasurementController {
-    private static final Logger logger = Logger.getLogger(HumidityController.class);
+//    private static final Logger logger = Logger.getLogger(HumidityController.class);
 
     @Resource(name = "HumidityService")
     MeasurementServiceInterface humidityService;        //Service which will do all data retrieval/manipulation work
@@ -42,8 +41,8 @@ public class HumidityController extends MeasurementController {
     //------------------- Retrieve Humidities for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
-                                                                  @PathVariable("startDate") String startDateString,
-                                                                  @PathVariable("endDate") String endDateString) {
+                                                                      @PathVariable("startDate") String startDateString,
+                                                                      @PathVariable("endDate") String endDateString) {
 
         return getValuesByRange(humidityService, stationId, startDateString, endDateString);
     }
@@ -51,7 +50,7 @@ public class HumidityController extends MeasurementController {
     //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
     @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
-                                                                  @PathVariable("startDate") String startDateString) {
+                                                                      @PathVariable("startDate") String startDateString) {
 
         return getValuesByRange(humidityService, stationId, startDateString, "0");
     }

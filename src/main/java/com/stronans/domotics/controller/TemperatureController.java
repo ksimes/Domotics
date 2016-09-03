@@ -2,7 +2,6 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
-import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

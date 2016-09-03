@@ -19,6 +19,7 @@ int read_humidity_sensor() {
   digitalWrite(humidity_sensor_vcc, HIGH);
   delay(500);
   int value = analogRead(humidity_sensor_pin);
+  Serial.println(" direct " + String(value));
   int val = map(1023 - value, 0.0, 1023.0, 0.0, 100.0);
 
   digitalWrite(humidity_sensor_vcc, LOW);

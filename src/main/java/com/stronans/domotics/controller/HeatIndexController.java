@@ -2,7 +2,6 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
-import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/domotic/api/heatindex")
 public class HeatIndexController extends MeasurementController {
-    private static final Logger logger = Logger.getLogger(HeatIndexController.class);
+//    private static final Logger logger = Logger.getLogger(HeatIndexController.class);
 
     @Resource(name = "HeatIndexService")
     MeasurementServiceInterface heatIndexService;      //Service which will do all data retrieval/manipulation work
