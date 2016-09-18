@@ -61,6 +61,8 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
             addStatement.setTimestamp(TIMESTAMP, timeStamp);
             addStatement.executeUpdate();
 
+            logger.debug("Query : " + addStatement.toString());
+
             ResultSet rs = addStatement.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 measurement = measurement.setId(rs.getLong(1));
@@ -119,7 +121,7 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
             preparedQuery += " ORDER BY timestamp DESC Limit 1";
         }
 
-        logger.info("Query : " + preparedQuery);
+        logger.debug("Query : " + preparedQuery);
 
         resultSet = getResultsAsList(preparedQuery);
 

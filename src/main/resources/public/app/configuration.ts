@@ -7,7 +7,7 @@ export class Configuration {
   public applicationName:string = "Domotics";
 
   public Host:string = "localhost";
-  public Port:string = "8080";
+  public Port:string = "31000";
   public Server:string = "http://" + this.Host + ":" + this.Port;
 
   public BaseApiUrl:string = "/domotic/api";

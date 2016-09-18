@@ -29,10 +29,13 @@ export class DisplayOptionsComponent {
   constructor(private _dataStationService:DataStationService, private _configuration:Configuration) {
     this.options = _configuration.display;
     this.config = _configuration.currentState;
-    console.log('Set this.config');
-    this.getStationInformation();
+    this.refresh();
   }
 
+  private refresh():void {
+    this.getStationInformation();
+  }
+  
   private onSelectTemp():void {
     if (this.config.showTemp) {
       this.config = new DisplayOptions(this.config.displayId, this.config.stationId, false, this.config.showHumidity, this.config.showHeatIndex);

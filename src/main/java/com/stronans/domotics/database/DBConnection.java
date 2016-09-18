@@ -2,6 +2,7 @@ package com.stronans.domotics.database;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,19 +13,15 @@ import java.sql.SQLException;
  *
  * Created by S.King on 09/07/2016.
  */
-final class DBConnection {
+@ConfigurationProperties("com.stronans.domotics")
+public final class DBConnection {
     private static final Logger logger = Logger.getLogger(DBConnection.class);
 
     static private Connection connection = null;
-    @Value("${com.stronans.domotics.host}")
     static private String host="localhost";
-    @Value("${com.stronans.domotics.port}")
-    static private String port="3306";
-    @Value("${com.stronans.domotics.dbName}")
+    static private int port= 3306;
     static private String dbName="domotics";
-    @Value("${com.stronans.domotics.userName}")
     static private String userName="measure";
-    @Value("${com.stronans.domotics.userPassword}")
     static private String userPassword="measure";
 
     static {
@@ -61,5 +58,29 @@ final class DBConnection {
     static public String getFullTableName(String tableName)
     {
         return dbName + "." + tableName;
+    }
+
+    public static void setConnection(Connection connection) {
+        DBConnection.connection = connection;
+    }
+
+    public static void setHost(String host) {
+        DBConnection.host = host;
+    }
+
+    public static void setPort(int port) {
+        DBConnection.port = port;
+    }
+
+    public static void setDbName(String dbName) {
+        DBConnection.dbName = dbName;
+    }
+
+    public static void setUserName(String userName) {
+        DBConnection.userName = userName;
+    }
+
+    public static void setUserPassword(String userPassword) {
+        DBConnection.userPassword = userPassword;
     }
 }

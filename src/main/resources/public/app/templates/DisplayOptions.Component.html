@@ -2,7 +2,8 @@
 <div>
     <label>
         Station
-        <select id="stationSelect" [ngModel]="config.stationId" (ngModelChange)="onSelectStation($event)"
+        <!--        <select id="stationSelect" [ngModel]="config.stationId" (ngModelChange)="onSelectStation($event)"  -->
+        <select id="stationSelect" [ngModel]="config.stationId" (change)="onChange($event.target.value)"
                 value={{config.stationId}}>
             <option *ngFor="let station of stationData" value={{station.id}}>
                 {{station.name}}
@@ -37,6 +38,11 @@
         <input (click)="onSelectHeatIndex()" type="checkbox" [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3"
                value="{{config.showHeatIndex}}"/>
         Heat Index
+    </label>
+
+    <label>
+        Refresh display
+        <input (click)="refresh()" type="botton" aria-label="Refresh button"/>
     </label>
 
     <display-chart-component [config]="config">Loading...</display-chart-component>
