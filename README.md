@@ -5,6 +5,11 @@ Domestic Robotics is an intersting way of merging hobby electronics and programm
 
 This is an early cut of this project. Started on 3rd July 2016.
 
+To Build final
+==============
+
+sbt assembly
+
 To run
 ======
 
@@ -52,10 +57,18 @@ npm install moment --save
 Notes
 =====
 
-Spring Boot v1.3.5.RELEASE,
+Java 1.7.0_51,
+
+Spring Boot v1.4.0.RELEASE,
+
+Spring Boot Actuator v1.4.0.RELEASE,
+
+Spring Boot Auto Configure v1.4.0.RELEASE,
 
 Spring v4.2.6.RELEASE
 
 Angular 2.0 RC4 Using TypeScript
 
 Apache Tomcat/8.0.33
+
+MySQL driver 5.1.39
