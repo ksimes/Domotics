@@ -41,16 +41,16 @@ abstract class MeasurementController {
         DateInfo startDate = DateInfo.getUndefined();
         DateInfo endDate = DateInfo.getUndefined();
 
-        logger.debug("StartDateString:" + startDateString);
+        logger.trace("StartDateString:" + startDateString);
         if (DateInfo.isUniversalString(startDateString)) {
             startDate = DateInfo.fromUniversalString(startDateString);
-            logger.debug("StartDate Converted " + startDate);
+            logger.trace("StartDate Converted " + startDate);
         }
 
-        logger.debug("EndDateString:" + endDateString);
+        logger.trace("EndDateString:" + endDateString);
         if (DateInfo.isUniversalString(endDateString)) {
             endDate = DateInfo.fromUniversalString(endDateString);
-            logger.debug("EndDate Converted " + endDate);
+            logger.trace("EndDate Converted " + endDate);
         }
 
         List<Measurement> measurements = service.find(stationId, startDate, endDate);

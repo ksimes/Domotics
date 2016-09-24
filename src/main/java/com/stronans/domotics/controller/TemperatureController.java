@@ -2,7 +2,6 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
-import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/domotic/api/temperature")
 public class TemperatureController extends MeasurementController {
-    private static final Logger logger = Logger.getLogger(TemperatureController.class);
+//    private static final Logger logger = Logger.getLogger(TemperatureController.class);
 
     @Resource(name = "TemperatureService")
     MeasurementServiceInterface temperatureService;  //Service which will do all data retrieval/manipulation work
@@ -43,8 +41,7 @@ public class TemperatureController extends MeasurementController {
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
                                                                   @PathVariable("startDate") String startDateString,
-                                                                  @PathVariable("endDate") String endDateString, HttpServletRequest request) {
-        logger.info("In range : " + request.getRequestURI());
+                                                                  @PathVariable("endDate") String endDateString) {
 
         return getValuesByRange(temperatureService, stationId, startDateString, endDateString);
     }
