@@ -6,8 +6,8 @@ import {DisplayOptions} from "./models/DisplayOptions.ts";
 export class Configuration {
   public applicationName:string = "Domotics";
 
-  public Host:string = "localhost";
-  public Port:string = "31000";
+  public Host:string = window.location.hostname;
+  public Port:string = window.location.port;
   public Server:string = "http://" + this.Host + ":" + this.Port;
 
   public BaseApiUrl:string = "/domotic/api";
