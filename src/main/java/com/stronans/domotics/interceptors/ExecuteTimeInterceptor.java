@@ -1,6 +1,8 @@
 package com.stronans.domotics.interceptors;
 
 /**
+ * Intercepts http requests and records execution times for each request.
+ *
  * Created by S.King on 24/09/2016.
  */
 
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Component
 public class ExecuteTimeInterceptor implements HandlerInterceptor {
@@ -23,10 +26,12 @@ public class ExecuteTimeInterceptor implements HandlerInterceptor {
             throws Exception {
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Request: " + request.getRequestURL());
+            UUID uuid = UUID.randomUUID();
+            logger.debug("Request: " + request.getRequestURL() + "  id: " + uuid);
 
             long startTime = System.currentTimeMillis();
             request.setAttribute("startTime", startTime);
+            request.setAttribute("RequestUuid", uuid.toString());
         }
 
         return true;
@@ -45,8 +50,9 @@ public class ExecuteTimeInterceptor implements HandlerInterceptor {
             long startTime = (Long) request.getAttribute("startTime");
             long endTime = System.currentTimeMillis();
             long executeTime = endTime - startTime;
+            String uuid = (String)request.getAttribute("RequestUuid");
 
-            logger.debug("ExecuteTime: " + executeTime + "ms  [" + handler + "]");
+            logger.debug("ExecuteTime: " + executeTime + "ms  id:" + uuid + "  [" + handler + "]");
         }
     }
 }
