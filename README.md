@@ -1,14 +1,14 @@
 Domotics
 ========
 
-Domestic Robotics is an intersting way of merging hobby electronics and programming. This project contains both Arduino projects for small sensor stations and a backend REST server to capture these readings into a MySQL database and an Angular2 front end to display charts of the readings capture.
+Domestic Robotics is an interesting way of merging hobby electronics and programming. This project contains both Arduino projects for small sensor stations and a backend REST server to capture these readings into a MySQL database and an Angular2 front end to display charts of the readings capture.
 
 This is an early cut of this project. Started on 3rd July 2016.
 
 To Build final
 ==============
 
-sbt assembly
+Mvn package
 
 To run
 ======
@@ -21,14 +21,23 @@ The start script is setup to run tsc -w so that any changes to .ts files will be
 
 Run Java project from inside IntelliJ IDE to start REST interface.
 
-Use browser to connect to http://localhost:8080/
+Use browser to connect to http://localhost:31000/
 
 to see inital chart.
+
+http://localhost:31000/api/health
+
+For all Actuator REST endpoints.
+
+can also build final combined jar using Build final instructions above and then:
+ 
+ java -jar demotics-1.0-SNAPSHOT.jar
+
 
 To rebuild 
 ==========
 
-Uses SBT to define dependancies for Java project
+Uses Maven to define dependencies and build process for project
 
 For Front end:
 
@@ -57,7 +66,7 @@ npm install moment --save
 Notes
 =====
 
-Java 1.7.0_51,
+Java 1.8.0,
 
 Spring Boot v1.4.0.RELEASE,
 
