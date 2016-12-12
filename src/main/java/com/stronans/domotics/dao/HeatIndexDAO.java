@@ -1,48 +1,57 @@
 package com.stronans.domotics.dao;
 
+import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.database.MeasurementConnector;
 import com.stronans.domotics.database.MeasurementConnectorInterface;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
  * Created by S.King on 09/07/2016.
  */
 @Repository("HeatIndexDAO")
-public class HeatIndexDAO implements MeasurementDAOInterface {
-    private MeasurementConnectorInterface connector;
+public class HeatIndexDAO extends MeasurementConnector {
+    private static final Logger logger = Logger.getLogger(HeatIndexDAO.class);
 
-    public HeatIndexDAO() {
+    @Autowired
+    public HeatIndexDAO(DBConnection dbConnection) {
         String TABLE_NAME = "heatindex";
-        connector = MeasurementConnector.create(TABLE_NAME);
+        connection = dbConnection.getConnection();
+        String workingTable = dbConnection.getFullTableName(TABLE_NAME);
+
+        try {
+            addStatement = connection.prepareStatement(
+                    "INSERT INTO " + workingTable +
+                            " (stationId, value, timestamp)" +
+                            " VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        } catch (SQLException e) {
+            logger.error("Problem creating add prepared statement.", e);
+        }
+
+        query = "SELECT * FROM " + workingTable;
     }
 
-    @Override
-    public Measurement add(Measurement measurement) {
-        return connector.add(measurement);
-    }
-
-    @Override
     public List<Measurement> getList() {
-        return connector.getList(0, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
+        return getList(0, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
     }
 
-    @Override
     public List<Measurement> getList(long stationId) {
-        return connector.getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
+        return getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
     }
 
-    @Override
     public List<Measurement> getList(long stationId, DateInfo startDate, DateInfo endDate) {
-        return connector.getList(stationId, startDate, endDate, false);
+        return getList(stationId, startDate, endDate, false);
     }
 
-    @Override
     public Measurement getLatest(long stationId) {
-        List<Measurement> list = connector.getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
+        List<Measurement> list = getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
         if(list.isEmpty()) {
             return null;
         }

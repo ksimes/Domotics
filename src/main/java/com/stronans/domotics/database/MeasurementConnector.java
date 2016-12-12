@@ -3,6 +3,8 @@ package com.stronans.domotics.database;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +17,8 @@ import java.util.List;
  * <p>
  * Created by S.King on 07/07/2016.
  */
-public class MeasurementConnector implements MeasurementConnectorInterface {
+@Component
+public abstract class MeasurementConnector implements MeasurementConnectorInterface {
     private static final Logger logger = Logger.getLogger(MeasurementConnector.class);
     private static final String ANSI_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String ANSI_DATE_FORMAT = "yyyy-MM-dd";
@@ -24,29 +27,11 @@ public class MeasurementConnector implements MeasurementConnectorInterface {
     private static final int VALUE = 2;
     private static final int TIMESTAMP = 3;
 
-    private Connection connection = null;
-    private PreparedStatement addStatement;
-    private String query;
+    protected Connection connection = null;
+    protected PreparedStatement addStatement;
+    protected String query;
 
-    private MeasurementConnector(String tableName) {
-
-        connection = DBConnection.getConnection();
-        String workingTable = DBConnection.getFullTableName(tableName);
-
-        try {
-            addStatement = connection.prepareStatement(
-                    "INSERT INTO " + workingTable +
-                            " (stationId, value, timestamp)" +
-                            " VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        } catch (SQLException e) {
-            logger.error("Problem creating add prepared statement.", e);
-        }
-
-        query = "SELECT * FROM " + workingTable;
-    }
-
-    static public MeasurementConnectorInterface create(String tableName) {
-        return new MeasurementConnector(tableName);
+    public MeasurementConnector() {
     }
 
     @Override

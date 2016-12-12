@@ -1,9 +1,16 @@
 package com.stronans.domotics.dao;
 
-import com.stronans.domotics.database.StationConnector;
+import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.model.Station;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,16 +19,56 @@ import java.util.List;
  */
 @Repository
 public class StationDAO {
-//    private static final Logger logger = Logger.getLogger(StationDAO.class);
+    private static final Logger logger = Logger.getLogger(StationDAO.class);
 
-    private StationConnector connector = new StationConnector();
+    private static final String tableName = "stations";
 
+    private Connection connection = null;
+    private String query;
+
+    @Autowired
+    private void StationDAO(DBConnection dbConnection) {
+        connection = dbConnection.getConnection();
+        String workingTable = dbConnection.getFullTableName(tableName);
+
+        query = "SELECT * FROM " + workingTable;
+    }
+
+    public List<Station> getList(long stationId) {
+        String preparedQuery = query;
+
+        if (stationId > 0) {
+            preparedQuery += " WHERE id = " + stationId;
+        }
+
+        logger.debug("Query : " + preparedQuery);
+
+        return getResultsAsList(preparedQuery);
+    }
+
+    private List<Station> getResultsAsList(String query) {
+        List<Station> resultSet = new ArrayList<>();
+
+        try {
+            Statement queryStatement = connection.createStatement();
+            ResultSet rs = queryStatement.executeQuery(query);
+            if (rs != null) {
+                while (rs.next()) {
+                    Station station = new Station(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+                    resultSet.add(station);
+                }
+            }
+        } catch (SQLException ex) {
+            logger.error("Problem executing Query all statement ", ex);
+        }
+        return resultSet;
+    }
     public List<Station> getList() {
-        return connector.getList(0);
+        return getList(0);
     }
 
     public Station getStation(long stationId) {
-        List<Station> list = connector.getList(stationId);
+        List<Station> list = getList(stationId);
         if (list.isEmpty()) {
             return null;
         } else {

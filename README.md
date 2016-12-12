@@ -68,11 +68,11 @@ Notes
 
 Java 1.8.0,
 
-Spring Boot v1.4.0.RELEASE,
+Spring Boot v1.4.2.RELEASE,
 
-Spring Boot Actuator v1.4.0.RELEASE,
+Spring Boot Actuator v1.4.2.RELEASE,
 
-Spring Boot Auto Configure v1.4.0.RELEASE,
+Spring Boot Auto Configure v1.4.2.RELEASE,
 
 Spring v4.2.6.RELEASE
 
