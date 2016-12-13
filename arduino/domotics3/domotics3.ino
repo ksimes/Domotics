@@ -1,5 +1,6 @@
 /*
- *  Simple HTTP get webclient test
+ *  Simple HTTP get webclient test version ecapsulating all of the connecting
+ *  and sending of data in the loop rather than connecting in the setup
  */
 
 #include <ESP8266WiFi.h>
@@ -41,6 +42,9 @@ const long serialSpeed = 115000;
 
 const int station = 1;    // Which monitoring station is this.
 
+// Time to sleep (in seconds):
+const int sleepTimeS = 30;
+
 boolean connect()
 {
   Serial.println();
@@ -62,12 +66,8 @@ boolean connect()
 
 void setup() {
   Serial.begin(serialSpeed);
-  delay(500);
-
-  // We start by connecting to a WiFi network
-  connect();
-
-  // Initialise the temp sensor as well.
+  
+  // Initialise the temp sensor.
   dht.begin();
   
   pinMode(BLUE_LED, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
@@ -80,6 +80,9 @@ void loop() {
   Serial.print("connecting to ");
   Serial.println(HOST);
   
+  // We start by connecting to a WiFi network
+  connect();
+
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
@@ -93,6 +96,7 @@ void loop() {
     delay(500);                      // Wait for a half second 
     digitalWrite(RED_LED, HIGH);     // Turn the LED off by making the voltage HIGH 
     delay(DELAY); // once every 5 minutes (eventually)
+    WiFi.disconnect();
     return;
   }
 
@@ -127,6 +131,10 @@ void loop() {
 
   Serial.println();
   Serial.println("closing connection");
+  WiFi.disconnect();
 
   delay(DELAY); // once every 5 minutes (eventually)
+
+  // deepSleep time is defined in microseconds. Multiply seconds by 1e6 
+//  ESP.deepSleep(sleepTimeS * 1000000);
 }

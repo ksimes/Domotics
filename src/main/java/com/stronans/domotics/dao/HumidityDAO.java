@@ -2,7 +2,6 @@ package com.stronans.domotics.dao;
 
 import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.database.MeasurementConnector;
-import com.stronans.domotics.database.MeasurementConnectorInterface;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
@@ -22,8 +21,9 @@ public class HumidityDAO extends MeasurementConnector {
 
     @Autowired
     public HumidityDAO(DBConnection dbConnection) {
-        String TABLE_NAME = "humidity";
         connection = dbConnection.getConnection();
+
+        String TABLE_NAME = "humidity";
         String workingTable = dbConnection.getFullTableName(TABLE_NAME);
 
         try {
@@ -52,10 +52,9 @@ public class HumidityDAO extends MeasurementConnector {
 
     public Measurement getLatest(long stationId) {
         List<Measurement> list = getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
-        if(list.isEmpty()) {
+        if (list.isEmpty()) {
             return null;
-        }
-        else {
+        } else {
             return list.get(0);
         }
     }

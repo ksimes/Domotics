@@ -2,7 +2,6 @@ package com.stronans.domotics.dao;
 
 import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.database.MeasurementConnector;
-import com.stronans.domotics.database.MeasurementConnectorInterface;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
@@ -14,7 +13,6 @@ import java.sql.Statement;
 import java.util.List;
 
 /**
- *
  * Created by S.King on 06/07/2016.
  */
 @Repository("TemperatureDAO")
@@ -23,8 +21,9 @@ public class TemperatureDAO extends MeasurementConnector {
 
     @Autowired
     public TemperatureDAO(DBConnection dbConnection) {
-        String TABLE_NAME = "temperature";
         connection = dbConnection.getConnection();
+
+        String TABLE_NAME = "temperature";
         String workingTable = dbConnection.getFullTableName(TABLE_NAME);
 
         try {
@@ -53,10 +52,9 @@ public class TemperatureDAO extends MeasurementConnector {
 
     public Measurement getLatest(long stationId) {
         List<Measurement> list = getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
-        if(list.isEmpty()) {
+        if (list.isEmpty()) {
             return null;
-        }
-        else {
+        } else {
             return list.get(0);
         }
     }

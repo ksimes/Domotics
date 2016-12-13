@@ -21,14 +21,14 @@ import java.util.List;
 public class SensorTypeDAO {
     private final Logger logger = Logger.getLogger(SensorTypeDAO.class);
 
-    private static final String tableName = "sensortype";
-
-    protected Connection connection = null;
-    protected String query;
+    private Connection connection = null;
+    private String query;
 
     @Autowired
     public SensorTypeDAO(DBConnection dbConnection) {
         connection = dbConnection.getConnection();
+
+        String tableName = "sensortype";
         String workingTable = dbConnection.getFullTableName(tableName);
 
         query = "SELECT * FROM " + workingTable;

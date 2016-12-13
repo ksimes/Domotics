@@ -6,6 +6,8 @@ import com.stronans.domotics.utilities.DateInfo;
 import java.util.List;
 
 /**
+ * General interface which is used to access all data measurement values.
+ *
  * Created by S.King on 06/07/2016.
  */
 public interface MeasurementDAOInterface {

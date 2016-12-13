@@ -1,7 +1,6 @@
 package com.stronans.domotics.database;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 
 /**
  * Creates and serves out JDBC connection to MySQL DB.
- *
+ * <p>
  * Created by S.King on 09/07/2016.
  */
 @Component
@@ -21,17 +20,12 @@ public final class DBConnection {
 
     private Connection connection = null;
     private String host;
-    private int port= 3306;
+    private int port = 3306;
     private String dbName;
     private String userName;
     private String userPassword;
 
-    public DBConnection()
-    {
-    }
-
-    public void establishConnection()
-    {
+    private void establishConnection() {
         String connectionString = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
 
         try {
@@ -45,8 +39,7 @@ public final class DBConnection {
         }
     }
 
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         if (connection == null) {
             establishConnection();
         }
@@ -54,8 +47,7 @@ public final class DBConnection {
         return connection;
     }
 
-    public String getFullTableName(String tableName)
-    {
+    public String getFullTableName(String tableName) {
         return dbName + "." + tableName;
     }
 

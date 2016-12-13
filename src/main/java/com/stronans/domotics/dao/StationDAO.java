@@ -19,9 +19,7 @@ import java.util.List;
  */
 @Repository
 public class StationDAO {
-    private static final Logger logger = Logger.getLogger(StationDAO.class);
-
-    private static final String tableName = "stations";
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     private Connection connection = null;
     private String query;
@@ -29,6 +27,8 @@ public class StationDAO {
     @Autowired
     private void StationDAO(DBConnection dbConnection) {
         connection = dbConnection.getConnection();
+
+        String tableName = "stations";
         String workingTable = dbConnection.getFullTableName(tableName);
 
         query = "SELECT * FROM " + workingTable;
@@ -63,6 +63,7 @@ public class StationDAO {
         }
         return resultSet;
     }
+
     public List<Station> getList() {
         return getList(0);
     }

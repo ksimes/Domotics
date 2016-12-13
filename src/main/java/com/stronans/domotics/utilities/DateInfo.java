@@ -7,15 +7,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * Immutable DateTime object which wraps the hirondelle.date4j.DateTime and android.text.format objects.
+ * Immutable DateTime object which wraps the hirondelle.date4j.DateTime object.
  */
 public class DateInfo {
-    static final long DAYLENGTH = 86400000; // days (1000*60*60*24) mill * secs * mins * hours
-
     private static final String UNIVERSAL_FORMAT = "yyyyMMddHHmmssSSSS";
     private static final String SHORT_UNIVERSAL_FORMAT = "yyyyMMddHHmmss";
 
@@ -321,13 +318,11 @@ public class DateInfo {
         try {
             SimpleDateFormat dt = new SimpleDateFormat(UNIVERSAL_FORMAT);
             date = dt.parse(dateTimeInfo);
-        }
-        catch (ParseException pe) {
+        } catch (ParseException pe) {
             try {
                 SimpleDateFormat dt = new SimpleDateFormat(SHORT_UNIVERSAL_FORMAT);
                 date = dt.parse(dateTimeInfo);
-            }
-            catch (ParseException pe2) {
+            } catch (ParseException pe2) {
                 date = null;
             }
         }
@@ -369,21 +364,6 @@ public class DateInfo {
 
     static public String getShortWeekdayString(DateInfo timeInfo) {
         return timeInfo.format("WWW");
-    }
-
-
-    static public int getDayOfYear(DateInfo timeInfo) {
-//        Time selected = new Time();
-//        selected.set(timeInfo.getMilliseconds());
-//        return selected.yearDay + 1;
-        return 1;
-    }
-
-    static public int getWeekOfYear(DateInfo timeInfo) {
-//        Time selected = new Time();
-//        selected.set(timeInfo.getMilliseconds());
-//        return selected.getWeekNumber();
-        return 1;
     }
 
     /*
