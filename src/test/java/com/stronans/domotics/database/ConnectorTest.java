@@ -15,14 +15,21 @@ public class ConnectorTest {
 
     @Before
     public void setUp() throws Exception {
-//        connector = new TemperatureDAO(new DBConnection());
+        DBConnection dbConnection = new DBConnection();
+
+        dbConnection.setHost("192.168.1.50");
+        dbConnection.setPort(3306);
+        dbConnection.setUserName("measure");
+        dbConnection.setUserPassword("measure");
+        dbConnection.setDbName("domotics");
+        connector = new TemperatureDAO(dbConnection);
     }
 
     @Test
     public void add() throws Exception {
-//        Measurement measurement = new Measurement(10, 24.635, "20160707205620");
-//        measurement = connector.add(measurement);
-//
-//        assertNotNull(measurement.id());
+        Measurement measurement = new Measurement(10, 24.635, "20160707205620");
+        measurement = connector.add(measurement);
+
+        assertNotNull(measurement.id());
     }
 }

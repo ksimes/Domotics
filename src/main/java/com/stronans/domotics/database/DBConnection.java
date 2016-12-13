@@ -37,6 +37,8 @@ public final class DBConnection {
         try {
             connection = DriverManager.getConnection(connectionString, userName, userPassword);
 
+            logger.info("Made connection to database with url [" + connectionString + "]");
+
         } catch (SQLException e) {
             logger.error("Connection to database [" + connectionString +
                     "] using credentials - " + userName + "/" + userPassword + " failed.", e);
