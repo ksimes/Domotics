@@ -1,8 +1,9 @@
 <div>
     <h3>{{station.name}}</h3>
     <h4>{{station.description}}</h4>
+    <p>Last result at {{timeStamp}}</p>
     <p>Temperature : {{temperature.value}}&deg;</p>
     <p>Humidity : {{humidity.value}}%</p>
     <p>Heat Index : {{heatIndex.value}}</p>
-    <p>On {{timeStamp}}</p>
+    <input (click)="details()" type="button" aria-label="Details button" value="More details"/>
 </div>

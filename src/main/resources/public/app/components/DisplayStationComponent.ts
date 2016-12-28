@@ -42,6 +42,15 @@ export class DisplayStationComponent implements OnChanges {
     this.getLatestHeatIndex(station.id);
   }
 
+  public details() {
+    let station:Station = this.station;
+    this.errorMsg = '';
+
+    this.getLatestTemperature(station.id);
+    this.getLatestHumidity(station.id);
+    this.getLatestHeatIndex(station.id);
+  }
+
   //...
 
   private getLatestTemperature(station:number):void {
