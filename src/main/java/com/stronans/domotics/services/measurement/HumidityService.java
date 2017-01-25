@@ -55,4 +55,24 @@ public class HumidityService implements MeasurementServiceInterface {
     public Measurement findLatest(long stationId) {
         return humidityDAO.getLatest(stationId);
     }
+
+    @Override
+    public Long count() {
+        return null;
+    }
+
+    @Override
+    public Long count(long stationId) {
+        return null;
+    }
+
+    @Override
+    public Long count(long stationId, DateInfo startDate, DateInfo endDate) {
+        return null;
+    }
+
+    @Override
+    public Long count(DateInfo startDate, DateInfo endDate) {
+        return null;
+    }
 }

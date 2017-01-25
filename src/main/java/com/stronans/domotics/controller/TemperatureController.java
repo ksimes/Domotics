@@ -59,4 +59,33 @@ public class TemperatureController extends MeasurementController {
     public ResponseEntity<Measurement> getTempValueLatest(@PathVariable("station") long stationId) {
         return getTempValueLatest(temperatureService, stationId);
     }
+
+    //------------------- Retrieve Count of All Temperatures in DB --------------------------------------------------------
+    @RequestMapping(value = "/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> countAllTempValues() {
+        return countAllValues(temperatureService);
+    }
+
+    //------------------- Retrieve count of all Temperatures for a given Station --------------------------------------------------------
+    @RequestMapping(value = "/{station}/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> countTempValuesByStation(@PathVariable("station") long stationId) {
+        return getCountByStation(temperatureService, stationId);
+    }
+
+    //------------------- Retrieve count of Temperatures for a given Station by date range --------------------------------------------------------
+    @RequestMapping(value = "/{station}/count/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") long stationId,
+                                                                  @PathVariable("startDate") String startDateString,
+                                                                  @PathVariable("endDate") String endDateString) {
+
+        return getCountByRange(temperatureService, stationId, startDateString, endDateString);
+    }
+
+    //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
+    @RequestMapping(value = "/{station}/count/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") long stationId,
+                                                                  @PathVariable("startDate") String startDateString) {
+
+        return getCountByRange(temperatureService, stationId, startDateString, "0");
+    }
 }

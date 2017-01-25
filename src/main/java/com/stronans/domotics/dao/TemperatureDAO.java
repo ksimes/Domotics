@@ -36,6 +36,7 @@ public class TemperatureDAO extends MeasurementConnector {
         }
 
         query = "SELECT * FROM " + workingTable;
+        countQuery = "SELECT count(*) FROM " + workingTable;
     }
 
     public List<Measurement> getList() {
@@ -57,5 +58,17 @@ public class TemperatureDAO extends MeasurementConnector {
         } else {
             return list.get(0);
         }
+    }
+
+    public Long getItemCount() {
+        return getCount(0, DateInfo.getUndefined(), DateInfo.getUndefined());
+    }
+
+    public Long getItemCount(long stationId) {
+        return getCount(stationId, DateInfo.getUndefined(), DateInfo.getUndefined());
+    }
+
+    public Long getItemCount(long stationId, DateInfo startDate, DateInfo endDate) {
+        return getCount(stationId, startDate, endDate);
     }
 }

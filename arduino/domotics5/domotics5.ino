@@ -14,6 +14,8 @@ extern "C" {
 // Upstairs Study access point
 const char* ssid     = "TALKTALK-66430C";
 const char* password = "WHBQTGAQ";
+// const char* ssid     = "TheHouse";
+// const char* password = "Tablo1234";
 
 // Main data server ADAB
 const String host = "192.168.1.50";
@@ -36,7 +38,7 @@ const int port = 31000;
 ** 14  "Front porch"
 ** 15  "Utility Room"
 **/
-const int station = 2;    // Which monitoring station is this.
+const int station = 1;    // Which monitoring station is this.
 
 const String api = "/domotic/api/reading/";
 const long serialSpeed = 115200;

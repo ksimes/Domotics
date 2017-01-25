@@ -265,6 +265,7 @@ export class DisplayChartComponent implements OnChanges {
   }
 
   public chartHovered(e:any):void {
+    console.log("Hover");
     console.log(e);
   }
 }

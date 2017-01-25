@@ -3,7 +3,6 @@ package com.stronans.domotics.database;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -30,6 +29,7 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
     protected Connection connection = null;
     protected PreparedStatement addStatement;
     protected String query;
+    protected String countQuery;
 
     public MeasurementConnector() {
     }
@@ -77,6 +77,21 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
         return "\"" + dateToQuote.format(ANSI_DATE_FORMAT) + "\"";
     }
 
+    private String addDates(String preparedQuery, DateInfo startDate, DateInfo endDate, boolean whereStarted) {
+        // If both dates are defined then they should be fully defined with date and time.
+        if (startDate.isDefined() && endDate.isDefined()) {
+            preparedQuery += clauseConnector(whereStarted) + " timestamp >= " + quote(startDate) +
+                    " AND timestamp <= " + quote(endDate) + " ";
+
+        } else if (startDate.isDefined() && !endDate.isDefined()) {
+            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quoteDay(startDate) + " ";
+        } else if (!startDate.isDefined() && endDate.isDefined()) {
+            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) < " + quoteDay(endDate) + " ";
+        }
+
+        return preparedQuery;
+    }
+
     @Override
     public List<Measurement> getList(long stationId, DateInfo startDate, DateInfo endDate, boolean latest) {
 
@@ -90,16 +105,7 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
             whereStarted = true;
         }
 
-        // If both dates are defined then they should be fully defined with date and time.
-        if (startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " timestamp >= " + quote(startDate) +
-                    " AND timestamp <= " + quote(endDate) + " ";
-
-        } else if (startDate.isDefined() && !endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quoteDay(startDate) + " ";
-        } else if (!startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) < " + quoteDay(endDate) + " ";
-        }
+        preparedQuery = addDates(preparedQuery, startDate, endDate, whereStarted);
 
         // Get the latest value sampled (with station Id gives current value for that room.
         if (latest) {
@@ -132,5 +138,46 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
         }
 
         return resultSet;
+    }
+
+    @Override
+    public Long getCount(long stationId, DateInfo startDate, DateInfo endDate) {
+
+        Long result;
+        boolean whereStarted = false;
+
+        String preparedQuery = countQuery;
+
+        if (stationId > 0) {
+            preparedQuery += clauseConnector(whereStarted) + " StationId = " + stationId;
+            whereStarted = true;
+        }
+
+        preparedQuery = addDates(preparedQuery, startDate, endDate, whereStarted);
+
+        logger.debug("Query : " + preparedQuery);
+
+        result = getCountResult(preparedQuery);
+
+        return result;
+    }
+
+    private Long getCountResult(String query) {
+        Long result = new Long(0);
+
+        try {
+            Statement queryStatement = connection.createStatement();
+            ResultSet rs = queryStatement.executeQuery(query);
+            if (rs != null) {
+                if (rs.next()) {
+                    result = rs.getLong(1);
+                }
+            }
+            queryStatement.close();
+        } catch (SQLException ex) {
+            logger.error("Problem executing Query all statement ", ex);
+        }
+
+        return result;
     }
 }

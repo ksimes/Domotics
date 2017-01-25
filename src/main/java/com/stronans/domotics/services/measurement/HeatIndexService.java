@@ -55,4 +55,24 @@ public class HeatIndexService implements MeasurementServiceInterface {
     public Measurement findLatest(long stationId) {
         return heatIndexDAO.getLatest(stationId);
     }
+
+    @Override
+    public Long count() {
+        return null;
+    }
+
+    @Override
+    public Long count(long stationId) {
+        return null;
+    }
+
+    @Override
+    public Long count(long stationId, DateInfo startDate, DateInfo endDate) {
+        return null;
+    }
+
+    @Override
+    public Long count(DateInfo startDate, DateInfo endDate) {
+        return null;
+    }
 }

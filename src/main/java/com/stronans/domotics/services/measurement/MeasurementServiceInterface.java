@@ -7,14 +7,38 @@ import java.util.List;
 
 /**
  * Interface used by all services which send measurements to the Database and pull them back out.
- *
+ * <p>
  * Created by S.King on 03/07/2016.
  */
 public interface MeasurementServiceInterface {
-    List<Measurement> find();                   // Find all temperature values
-    List<Measurement> find(long stationId);     // Find all temperature values by station
-    List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate);
-    List<Measurement> find(DateInfo startDate, DateInfo endDate);
-    Measurement findLatest(long stationId);
+
+    // Saves off a value coming in from an environment station
     Measurement saveMeasurement(Measurement t);
+
+    // Find all values in DB
+    List<Measurement> find();
+
+    // Find all values by station
+    List<Measurement> find(long stationId);
+
+    // Find all values by station, start date stamp and end datestamp
+    List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate);
+
+    // Find all values in DB by start date stamp and end datestamp
+    List<Measurement> find(DateInfo startDate, DateInfo endDate);
+
+    // Find the latest value in DB by station
+    Measurement findLatest(long stationId);
+
+    // Count all values in DB
+    Long count();
+
+    // Count all values in DB by station
+    Long count(long stationId);
+
+    // Count all values by station, start date stamp and end datestamp
+    Long count(long stationId, DateInfo startDate, DateInfo endDate);
+
+    // Count all values by start date stamp and end datestamp in DB
+    Long count(DateInfo startDate, DateInfo endDate);
 }

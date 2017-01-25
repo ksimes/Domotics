@@ -27,12 +27,24 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurements, responseHeaders, HttpStatus.OK);
     }
 
+    ResponseEntity<Long> countAllValues(MeasurementServiceInterface service) {
+        Long measurementCount = service.count();
+        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("Access-Control-Allow-Origin", "http://localhost:3000");
+        return new ResponseEntity<>(measurementCount, responseHeaders, HttpStatus.OK);
+    }
+
     ResponseEntity<List<Measurement>> getValuesByStation(MeasurementServiceInterface service, long stationId) {
         List<Measurement> measurements = service.find(stationId);
         if (measurements.isEmpty()) {
             return new ResponseEntity<>(measurements, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
         }
         return new ResponseEntity<>(measurements, HttpStatus.OK);
+    }
+
+    ResponseEntity<Long> getCountByStation(MeasurementServiceInterface service, long stationId) {
+        Long measurementCount = service.count(stationId);
+        return new ResponseEntity<>(measurementCount, HttpStatus.OK);
     }
 
     ResponseEntity<List<Measurement>> getValuesByRange(MeasurementServiceInterface service, long stationId,
@@ -58,6 +70,28 @@ abstract class MeasurementController {
             return new ResponseEntity<>(measurements, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
         }
         return new ResponseEntity<>(measurements, HttpStatus.OK);
+    }
+
+    ResponseEntity<Long> getCountByRange(MeasurementServiceInterface service, long stationId,
+                                                       String startDateString,
+                                                       String endDateString) {
+        DateInfo startDate = DateInfo.getUndefined();
+        DateInfo endDate = DateInfo.getUndefined();
+
+        logger.trace("StartDateString:" + startDateString);
+        if (DateInfo.isUniversalString(startDateString)) {
+            startDate = DateInfo.fromUniversalString(startDateString);
+            logger.trace("StartDate Converted " + startDate);
+        }
+
+        logger.trace("EndDateString:" + endDateString);
+        if (DateInfo.isUniversalString(endDateString)) {
+            endDate = DateInfo.fromUniversalString(endDateString);
+            logger.trace("EndDate Converted " + endDate);
+        }
+
+        Long measurementCount = service.count(stationId, startDate, endDate);
+        return new ResponseEntity<>(measurementCount, HttpStatus.OK);
     }
 
     ResponseEntity<Measurement> getTempValueLatest(MeasurementServiceInterface service, long stationId) {
