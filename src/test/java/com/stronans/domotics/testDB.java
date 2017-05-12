@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * Test that database is in place and has the default measure user and password.
  * Taken from website http://www.mkyong.com/jdbc/how-to-connect-to-mysql-with-jdbc-driver-java/
@@ -30,16 +33,14 @@ public class testDB {
         Connection connection = null;
 
         try {
-//            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/domotics", "measure", "measure");
             connection = DriverManager.getConnection("jdbc:mysql://192.168.1.50:3306/domotics", "measure", "measure");
 
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
-            return;
         }
 
-//        assert(connection == null);
+        assertFalse(connection == null);
 
         if (connection != null) {
             System.out.println("You made it, take control your database now!");

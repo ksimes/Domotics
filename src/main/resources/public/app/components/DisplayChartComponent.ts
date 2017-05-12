@@ -71,29 +71,29 @@ export class DisplayChartComponent implements OnChanges {
       maintainAspectRatio: false
     };
   public lineChartColours:Array<any> = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { // RegalRed(0xcc3366) 204, 51, 102
+      backgroundColor: 'rgba(204,51,102,0.2)',
+      borderColor: 'rgba(204,51,102,1)',
+      pointBackgroundColor: 'rgba(204,51,102,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(204,51,102,1)'
     },
-    { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
+    { // LightBlue(0x009cce) 00, 156, 206
+      backgroundColor: 'rgba(0,159,206,0.2)',
+      borderColor: 'rgba(0,159,206,1)',
+      pointBackgroundColor: 'rgba(0,159,206,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
+      pointHoverBorderColor: 'rgba(0,159,206,0.8)'
     },
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { // MossGreen(0x008000) 0, 128, 0
+      backgroundColor: 'rgba(0,128,0,0.2)',
+      borderColor: 'rgba(0,128,0,1)',
+      pointBackgroundColor: 'rgba(0,128,0,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(0,128,0,0.8)'
     }
   ];
   public lineChartLegend:boolean = true;
@@ -233,8 +233,24 @@ export class DisplayChartComponent implements OnChanges {
         );
   }
 
+  // Show the hours minutes and seconds formatted in the label, but when you cross a day then also
+  // show the century, year, month and day.
   private static showTime(timeStamp:string):string {
-    return timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ":" + timeStamp.substr(12, 2);
+    let result = "";
+    let hrs = +timeStamp.substr(8, 2);
+    let mins = timeStamp.substr(10, 2);
+    let secs = timeStamp.substr(12, 2);
+
+    // Is this near midnight, i.e. within 9 minutes of midnight.
+    if((hrs == 0) &&(mins.startsWith("0"))) {
+      result = timeStamp.substr(0, 4) + '-' + timeStamp.substr(4, 2) + "-" + timeStamp.substr(6, 2) +
+          "  " + timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ":" + timeStamp.substr(12, 2);
+    }
+    else {
+      result = timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ":" + timeStamp.substr(12, 2);
+    }
+
+    return result;
   }
 
   private updateChartData(chartData:Measurement[], description:string, add:boolean):void {
@@ -261,11 +277,11 @@ export class DisplayChartComponent implements OnChanges {
 
   // events
   public chartClicked(e:any):void {
-    console.log(e);
+    // console.log(e);
   }
 
   public chartHovered(e:any):void {
     console.log("Hover");
-    console.log(e);
+    console.log(e.active[0]._index);
   }
 }

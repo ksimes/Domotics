@@ -2,16 +2,24 @@ application:
   title: Domotics
   version: 1.0.0
 
+# Log4j2 configuration
 logging:
+  file: logs/logging.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     com.stronans.domotics: DEBUG
 
+# Spring actuator endpoints
 management:
   context-path: /domotic/api/
 
+# Tomcat public facing port for all uri
 server:
   port: 31000
 
+# Application specific properties
 com:
   stronans:
     domotics:
@@ -19,4 +27,8 @@ com:
       port: 3306
       dbName: domotics
       userName: measure
-      userPassword: measure
+      userPassword:
+
+build:
+  version: \@pom.version\@
+  date: \@timestamp\@

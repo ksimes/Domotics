@@ -15,8 +15,8 @@ server:
 com:
   stronans:
     domotics:
-      host: 192.168.1.50
+      host: localhost
       port: 3306
       dbName: domotics
       userName: measure
-      userPassword: measure
+      userPassword:
