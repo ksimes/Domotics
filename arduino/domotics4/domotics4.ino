@@ -6,13 +6,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include "DHT.h"
+#include "access.h"
 
 #define STATION "1"
-
-const char* ssid     = "TALKTALK-66430C";
-const char* password = "WHBQTGAQ";
-
-#define HOST "192.168.1.8"
 
 #define DHTPIN 12     // what digital pin we're reading the values from.
 #define DHTPINVCC 13     // what pin is supplying the power
@@ -41,7 +37,6 @@ DHT dht(DHTPIN, DHTTYPE);
 // 5 minute delay
 #define DELAY 300
 
-const int port = 8080;
 const String api = "/domotic/api/reading/";
 const long serialSpeed = 115000;
 
@@ -76,12 +71,12 @@ static void sendData(float temp, float humidity, float heatIndex)
   postData = postData + String(heatIndex, 3) + "}";
 
   Serial.print("POSTing to ");
-  Serial.println(String(HOST) + ":" + port + api);
+  Serial.println(String(host) + ":" + port + api);
   
   Serial.println(postData);
 
   HTTPClient http;
-  http.begin(HOST, port, api);
+  http.begin(host, port, api);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Content-Length", String(postData.length()));
   int result = http.POST(postData);
@@ -104,7 +99,7 @@ void setup() {
   digitalWrite(DHTPINVCC, LOW);
 
   Serial.print("connecting to ");
-  Serial.println(HOST);
+  Serial.println(host);
   
   // We start by connecting to a WiFi network
   connect();

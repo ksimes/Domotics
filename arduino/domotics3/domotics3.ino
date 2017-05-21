@@ -6,6 +6,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include "DHT.h"
+#include "access.h"
 
 #define DHTPIN 5     // what digital pin we're connected to
 
@@ -27,16 +28,11 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
-const char* ssid     = "TALKTALK-66430C";
-const char* password = "WHBQTGAQ";
-
-#define HOST "192.168.1.8"
 #define STATION "1"
 #define RED_LED LED_BUILTIN
 #define BLUE_LED 2
 #define DELAY 300000
 
-const int port = 8080;
 const String api = "/domotic/api/reading/";
 const long serialSpeed = 115000;
 
@@ -78,7 +74,7 @@ void loop() {
   digitalWrite(BLUE_LED, HIGH);  // Turn the LED off 
   digitalWrite(RED_LED, HIGH);   // Turn the LED off 
   Serial.print("connecting to ");
-  Serial.println(HOST);
+  Serial.println(host);
   
   // We start by connecting to a WiFi network
   connect();
@@ -114,10 +110,10 @@ void loop() {
                                     // but actually the LED is on; this is because  
                                     // it is active low on the ESP-13) 
   Serial.print("POSTing to ");
-  Serial.println(String(HOST) + ":" + port + api);
+  Serial.println(String(host) + ":" + port + api);
   
   HTTPClient http;
-  http.begin(HOST, port, api);
+  http.begin(host, port, api);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Content-Length", String(postData.length()));
   int result = http.POST(postData);

@@ -6,20 +6,11 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include "DHT.h"
+#include "access.h"
 
 extern "C" {
   #include <user_interface.h>
 }
-
-// Upstairs Study access point
-const char* ssid     = "TALKTALK-66430C";
-const char* password = "WHBQTGAQ";
-// const char* ssid     = "TheHouse";
-// const char* password = "Tablo1234";
-
-// Main data server ADAB
-const String host = "192.168.1.50";
-const int port = 31000;
 
 /**
 **  1  Study "Upstairs box room - Study"
