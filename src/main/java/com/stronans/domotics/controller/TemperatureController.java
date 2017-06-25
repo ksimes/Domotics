@@ -23,7 +23,7 @@ public class TemperatureController extends MeasurementController {
 //    private static final Logger logger = Logger.getLogger(TemperatureController.class);
 
     @Resource(name = "TemperatureService")
-    MeasurementServiceInterface temperatureService;  //Service which will do all data retrieval/manipulation work
+    private MeasurementServiceInterface temperatureService;  //Service which will do all data retrieval/manipulation work
 
     //------------------- Retrieve All Temperatures in DB --------------------------------------------------------
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

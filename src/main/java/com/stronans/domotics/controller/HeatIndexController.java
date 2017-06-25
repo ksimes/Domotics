@@ -23,7 +23,7 @@ public class HeatIndexController extends MeasurementController {
 //    private static final Logger logger = Logger.getLogger(HeatIndexController.class);
 
     @Resource(name = "HeatIndexService")
-    MeasurementServiceInterface heatIndexService;      //Service which will do all data retrieval/manipulation work
+    private MeasurementServiceInterface heatIndexService;      //Service which will do all data retrieval/manipulation work
 
     //------------------- Retrieve All HeatIndices in DB --------------------------------------------------------
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

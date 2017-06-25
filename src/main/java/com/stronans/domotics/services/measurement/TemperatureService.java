@@ -17,8 +17,12 @@ import java.util.List;
 public class TemperatureService implements MeasurementServiceInterface {
     private static final Logger logger = Logger.getLogger(TemperatureService.class);
 
-    @Autowired
     private TemperatureDAO temperatureDAO;
+
+    @Autowired
+    public TemperatureService(TemperatureDAO temperatureDAO) {
+        this.temperatureDAO = temperatureDAO;
+    }
 
     @Override
     public Measurement saveMeasurement(Measurement temperature) {

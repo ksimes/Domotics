@@ -33,7 +33,7 @@ public class testDB {
         Connection connection = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://192.168.1.50:3306/domotics", "measure", "measure");
+            connection = DriverManager.getConnection("jdbc:mysql://192.168.1.50:3101/domotics", "measure", "measure");
 
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");

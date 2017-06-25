@@ -25,7 +25,7 @@ public class SensorTypeController {
 //    private static final Logger logger = Logger.getLogger(SensorTypeController.class);
 
     @Autowired
-    SensorTypeService sensorTypeService;  //Service which will do all data retrieval/manipulation work
+    private SensorTypeService sensorTypeService;  //Service which will do all data retrieval/manipulation work
 
     //------------------- Retrieve the details for a given SensorType --------------------------------------------------------
     @RequestMapping(value = "/{sensorTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

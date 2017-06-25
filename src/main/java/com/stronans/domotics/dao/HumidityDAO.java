@@ -29,8 +29,8 @@ public class HumidityDAO extends MeasurementConnector {
         try {
             addStatement = connection.prepareStatement(
                     "INSERT INTO " + workingTable +
-                            " (stationId, value, timestamp)" +
-                            " VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                            " (stationId, value, timestamp, sampleRate, sensortype)" +
+                            " VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException e) {
             logger.error("Problem creating add prepared statement.", e);
         }

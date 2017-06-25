@@ -14,35 +14,39 @@ public final class Measurement {
     private final long stationId;
     private final double value;
     private final DateInfo timeStamp;
+    private final int sampleRate;
+    private final boolean status;
+    private final int sensorType;
 
-    public Measurement(long stationId, double value, String timeStamp) {
-        this.id = null;
-        this.stationId = stationId;
-        this.timeStamp = DateInfo.fromUniversalString(timeStamp);
-        this.value = value;
-    }
-
-    @JsonCreator
-    public Measurement(Long id, long stationId, double value, String timeStamp) {
-        this.id = id;
-        this.stationId = stationId;
-        this.timeStamp = DateInfo.fromUniversalString(timeStamp);
-        this.value = value;
-    }
-
-    public Measurement(Long id, long stationId, double value, DateInfo timeStamp) {
+    public Measurement(Long id, long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType, boolean status) {
         this.id = id;
         this.stationId = stationId;
         this.timeStamp = timeStamp;
         this.value = value;
+        this.sampleRate = sampleRate;
+        this.status = status;
+        this.sensorType = sensorType;
     }
 
-    public Measurement(long stationId, double value, DateInfo timeStamp) {
-        this(null, stationId, value, timeStamp);
+    @JsonCreator
+    public Measurement(Long id, long stationId, double value, String timeStamp, int sampleRate, int sensorType) {
+        this(id, stationId, value, DateInfo.fromUniversalString(timeStamp), sampleRate, sensorType, true);
+    }
+
+    public Measurement(Long id, long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType) {
+        this(id, stationId, value, timeStamp, sampleRate, sensorType, true);
+    }
+
+    public Measurement(long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType) {
+        this(null, stationId, value, timeStamp, sampleRate, sensorType);
     }
 
     public Measurement setId(Long id) {
-        return new Measurement(id, this.stationId, this.value, this.timeStamp);
+        return new Measurement(id, this.stationId, this.value, this.timeStamp, this.sampleRate, this.sensorType);
+    }
+
+    public Measurement setDummy(long stationId, DateInfo timeStamp) {
+        return new Measurement(null, stationId, 0.0, timeStamp, 0, 0, false);
     }
 
     @JsonProperty("id")
@@ -67,5 +71,20 @@ public final class Measurement {
     @JsonProperty("stationId")
     public long stationId() {
         return stationId;
+    }
+
+    @JsonProperty("sampleRate")
+    public int sampleRate() {
+        return sampleRate;
+    }
+
+    @JsonProperty("status")
+    public boolean status() {
+        return status;
+    }
+
+    @JsonProperty("sensorType")
+    public int sensorType() {
+        return sensorType;
     }
 }

@@ -23,7 +23,7 @@ public class HumidityController extends MeasurementController {
 //    private static final Logger logger = Logger.getLogger(HumidityController.class);
 
     @Resource(name = "HumidityService")
-    MeasurementServiceInterface humidityService;        //Service which will do all data retrieval/manipulation work
+    private MeasurementServiceInterface humidityService;        //Service which will do all data retrieval/manipulation work
 
     //------------------- Retrieve All Humidities in DB --------------------------------------------------------
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

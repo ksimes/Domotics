@@ -25,7 +25,7 @@ public class StationController {
     private static final Logger logger = Logger.getLogger(StationController.class);
 
     @Autowired
-    StationService stationService;  //Service which will do all data retrieval/manipulation work
+    private StationService stationService;  //Service which will do all data retrieval/manipulation work
 
     //------------------- Retrieve the details for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{stationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
