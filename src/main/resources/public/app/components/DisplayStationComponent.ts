@@ -9,13 +9,13 @@ import {Station} from "../models/Station";
 import * as moment from 'moment/moment';
 
 @Component({
-  selector: 'display-station-component',
+  selector: '[display-station-component]',
   providers: [DataStationService, DataHeatIndexService, DataTemperatureService, DataHumidityService],
   templateUrl: 'app/templates/DisplayStation.Component.html',
   directives: [NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 
-export class DisplayStationComponent implements OnChanges {
+export class DisplayStationComponent {
   @Input("station")
   station:Station;
 

@@ -1,9 +1,6 @@
-<div>
-    <h3>{{station.name}}</h3>
-    <h4>{{station.description}}</h4>
-    <p>Last result at {{timeStamp}}</p>
-    <p>Temperature : {{temperature.value}}&deg;</p>
-    <p>Humidity : {{humidity.value}}%</p>
-    <p>Heat Index : {{heatIndex.value}}</p>
-    <input (click)="details()" type="button" aria-label="Details button" value="More details"/>
-</div>
+<td><b><a href="/station.html?station={{station.name}}" aria-label="Station details" >{{station.name}}</a></b></td>
+<td>{{station.description}}</td>
+<td>{{timeStamp}}</td>
+<td>{{temperature.value}}&deg;</td>
+<td>{{humidity.value}}%</td>
+<td>{{heatIndex.value}}</td>

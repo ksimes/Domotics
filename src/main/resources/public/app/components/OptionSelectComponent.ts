@@ -20,6 +20,7 @@ import {DisplayOptions} from "../models/DisplayOptions";
   templateUrl: 'app/templates/DisplayOptions.Component.html',
   directives: [DisplayChartComponent, DisplayStationComponent]
 })
+
 export class DisplayOptionsComponent {
   title = 'display options';
   options:Option[];

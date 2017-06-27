@@ -2,51 +2,44 @@
 <div>
     <label>
         Station
-        <!--        <select id="stationSelect" [ngModel]="config.stationId" (change)="onChange($event.target.value)"  -->
         <select id="stationSelect" [ngModel]="config.stationId" (ngModelChange)="onSelectStation($event)"
-                    value={{config.stationId}}>
-                <option *ngFor="let station of stationData" value={{station.id}}>
-                    {{station.name}}
-                </option>
-            </select>
-        </label>
+                value={{config.stationId}}>
+            <option *ngFor="let station of stationData" value={{station.id}}>
+                {{station.name}}
+            </option>
+        </select>
+    </label>
 
-        <label>
-            Display values for last
-            <select id="displaySelect" [ngModel]="config.displayId" (ngModelChange)="onSelectDisplay($event)"
-                    value={{config.displayId}}>
-                <option *ngFor="let option of options" value="{{option.id}}">
-                    {{option.name}}
-                </option>
-            </select>
-        </label>
+    <label>
+        Display values for last
+        <select id="displaySelect" [ngModel]="config.displayId" (ngModelChange)="onSelectDisplay($event)"
+                value={{config.displayId}}>
+            <option *ngFor="let option of options" value="{{option.id}}">
+                {{option.name}}
+            </option>
+        </select>
+    </label>
 
-        <span>Show</span>
-        <label>
-            <input (click)="onSelectTemp()" type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1"
-                   value="{{config.showTemp}}"/>
-            Temperature
-        </label>
+    <span>Show</span>
+    <label>
+        <input (click)="onSelectTemp()" type="checkbox" [(ngModel)]="config.showTemp" aria-label="Checkbox 1"
+               value="{{config.showTemp}}"/>
+        Temperature
+    </label>
 
-        <label>
-            <input (click)="onSelectHumidity()" type="checkbox" [(ngModel)]="config.showHumidity" aria-label="Checkbox 2"
-                   value="{{config.showHumidity}}"/>
-            Humidity
-        </label>
+    <label>
+        <input (click)="onSelectHumidity()" type="checkbox" [(ngModel)]="config.showHumidity" aria-label="Checkbox 2"
+               value="{{config.showHumidity}}"/>
+        Humidity
+    </label>
 
-        <label>
-            <input (click)="onSelectHeatIndex()" type="checkbox" [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3"
-                   value="{{config.showHeatIndex}}"/>
-            Heat Index
-        </label>
+    <label>
+        <input (click)="onSelectHeatIndex()" type="checkbox" [(ngModel)]="config.showHeatIndex" aria-label="Checkbox 3"
+               value="{{config.showHeatIndex}}"/>
+        Heat Index
+    </label>
 
-        <input (click)="refresh()" type="button" aria-label="Refresh button" value = "Refresh display"/>
+    <input (click)="refresh()" type="button" aria-label="Refresh button" value="Refresh display"/>
 
-        <display-chart-component [config]="config">Loading...</display-chart-component>
-
-        <ul>
-            <li *ngFor="let station of stationData">
-                <display-station-component [station]="station">Loading...</display-station-component>
-            </li>
-        </ul>
-    </div>
+    <DisplayChartComponent.ts>Loading...</DisplayChartComponent.ts>
+</div>

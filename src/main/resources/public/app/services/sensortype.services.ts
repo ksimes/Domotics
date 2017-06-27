@@ -23,7 +23,7 @@ export class DataSensorTypeService {
     this.headers.append('Accept', 'application/json');
   }
 
-  public GetAllSensorType = ():Observable<SensorType[]> => {
+  public GetAllSensorTypes = ():Observable<SensorType[]> => {
     return this._http.get(this.actionUrl + this.configuration.SensorType, this.headers)
         .map((response:Response) => <SensorType[]>response.json())
         .catch(this.handleError);
