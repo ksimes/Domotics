@@ -3,8 +3,8 @@ package com.stronans.domotics.controller;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
 import com.stronans.domotics.utilities.DateInfo;
+import com.stronans.domotics.utilities.WebUtilities;
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,29 +22,26 @@ abstract class MeasurementController {
         if (measurements.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);        //You many decide to return HttpStatus.NOT_FOUND
         }
-        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set("Access-Control-Allow-Origin", "http://localhost:3000");
-        return new ResponseEntity<>(measurements, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<Long> countAllValues(MeasurementServiceInterface service) {
         Long measurementCount = service.count();
-        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set("Access-Control-Allow-Origin", "http://localhost:3000");
-        return new ResponseEntity<>(measurementCount, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<List<Measurement>> getValuesByStation(MeasurementServiceInterface service, long stationId) {
         List<Measurement> measurements = service.find(stationId);
+
         if (measurements.isEmpty()) {
-            return new ResponseEntity<>(measurements, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+            return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
         }
-        return new ResponseEntity<>(measurements, HttpStatus.OK);
+        return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<Long> getCountByStation(MeasurementServiceInterface service, long stationId) {
         Long measurementCount = service.count(stationId);
-        return new ResponseEntity<>(measurementCount, HttpStatus.OK);
+        return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<List<Measurement>> getValuesByRange(MeasurementServiceInterface service, long stationId,
@@ -67,14 +64,14 @@ abstract class MeasurementController {
 
         List<Measurement> measurements = service.find(stationId, startDate, endDate);
         if (measurements.isEmpty()) {
-            return new ResponseEntity<>(measurements, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+            return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
         }
-        return new ResponseEntity<>(measurements, HttpStatus.OK);
+        return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<Long> getCountByRange(MeasurementServiceInterface service, long stationId,
-                                                       String startDateString,
-                                                       String endDateString) {
+                                         String startDateString,
+                                         String endDateString) {
         DateInfo startDate = DateInfo.getUndefined();
         DateInfo endDate = DateInfo.getUndefined();
 
@@ -91,7 +88,7 @@ abstract class MeasurementController {
         }
 
         Long measurementCount = service.count(stationId, startDate, endDate);
-        return new ResponseEntity<>(measurementCount, HttpStatus.OK);
+        return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
     ResponseEntity<Measurement> getTempValueLatest(MeasurementServiceInterface service, long stationId) {
@@ -99,9 +96,9 @@ abstract class MeasurementController {
         Measurement measurement = service.findLatest(stationId);
 
         if (measurement == null) {
-            return new ResponseEntity<>(measurement, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+            return new ResponseEntity<>(measurement, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
         }
 
-        return new ResponseEntity<>(measurement, HttpStatus.OK);
+        return new ResponseEntity<>(measurement, WebUtilities.header(), HttpStatus.OK);
     }
 }

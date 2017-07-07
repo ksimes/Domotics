@@ -4,6 +4,7 @@ import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.model.SensorReading;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
 import com.stronans.domotics.utilities.DateInfo;
+import com.stronans.domotics.utilities.WebUtilities;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,6 @@ public class DomoticRestController {
         heatIndexService.saveMeasurement(new Measurement(sensorReading.getStationId(), sensorReading.getValue3(), current,
                 sensorReading.getSampleRate(), sensorReading.getSensorType()));
 
-        HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(WebUtilities.header(), HttpStatus.CREATED);
     }
 }

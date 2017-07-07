@@ -2,8 +2,9 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.SensorType;
 import com.stronans.domotics.services.sensortype.SensorTypeService;
-import org.apache.log4j.Logger;
+import com.stronans.domotics.utilities.WebUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,21 @@ import java.util.List;
 public class SensorTypeController {
 //    private static final Logger logger = Logger.getLogger(SensorTypeController.class);
 
+    private final SensorTypeService sensorTypeService;  //Service which will do all data retrieval/manipulation work
+
     @Autowired
-    private SensorTypeService sensorTypeService;  //Service which will do all data retrieval/manipulation work
+    public SensorTypeController(final SensorTypeService sensorTypeService) {
+        this.sensorTypeService = sensorTypeService;
+    }
 
     //------------------- Retrieve the details for a given SensorType --------------------------------------------------------
     @RequestMapping(value = "/{sensorTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SensorType> getSensorTypeName(@PathVariable("sensorTypeId") long sensorTypeId) {
         SensorType sensorType = sensorTypeService.find(sensorTypeId);
         if (sensorType == null) {
-            return new ResponseEntity<>(sensorType, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
         } else {
-            return new ResponseEntity<>(sensorType, HttpStatus.OK);
+            return new ResponseEntity<>(sensorType, WebUtilities.header(), HttpStatus.OK);
         }
     }
 
@@ -42,6 +47,6 @@ public class SensorTypeController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<SensorType>> getAllSensorTypes() {
         List<SensorType> sensorTypes = sensorTypeService.find();
-        return new ResponseEntity<List<SensorType>>(sensorTypes, HttpStatus.OK);
+        return new ResponseEntity<>(sensorTypes, WebUtilities.header(), HttpStatus.OK);
     }
 }

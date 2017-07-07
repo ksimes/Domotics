@@ -2,8 +2,9 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Station;
 import com.stronans.domotics.services.station.StationService;
-import org.apache.log4j.Logger;
+import com.stronans.domotics.utilities.WebUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +23,23 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/domotic/api/station")
 public class StationController {
-    private static final Logger logger = Logger.getLogger(StationController.class);
+//    private static final Logger logger = Logger.getLogger(StationController.class);
+
+    private final StationService stationService;  //Service which will do all data retrieval/manipulation work
 
     @Autowired
-    private StationService stationService;  //Service which will do all data retrieval/manipulation work
+    public StationController(final StationService stationService) {
+        this.stationService = stationService;
+    }
 
     //------------------- Retrieve the details for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{stationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Station> getStationName(@PathVariable("stationId") long stationId) {
         Station station = stationService.find(stationId);
-        if(station == null) {
-            return new ResponseEntity<Station>(station, HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
-        }
-        else {
-            return new ResponseEntity<Station>(station, HttpStatus.OK);
+        if (station == null) {
+            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+        } else {
+            return new ResponseEntity<>(station, WebUtilities.header(), HttpStatus.OK);
         }
     }
 
@@ -43,6 +47,6 @@ public class StationController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Station>> getAllStations() {
         List<Station> stations = stationService.find();
-        return new ResponseEntity<List<Station>>(stations, HttpStatus.OK);
+        return new ResponseEntity<>(stations, WebUtilities.header(), HttpStatus.OK);
     }
 }
