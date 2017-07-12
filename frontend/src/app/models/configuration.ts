@@ -1,5 +1,5 @@
-import {Option} from "../models/Option";
-import {DisplayOptions} from "../models/DisplayOptions";
+import {Option} from "./Option";
+import {DisplayOptions} from "./DisplayOptions";
 
 export class Configuration {
   public applicationName:string = "Domotics";

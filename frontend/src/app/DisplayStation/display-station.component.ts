@@ -95,7 +95,7 @@ export class DisplayStationComponent {
 
     let date: Date = new Date(year, month - 1, day, hour, minute, second);
 
-    console.log('date   ' + date);
+    // console.log('date   ' + date);
 
     return moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a')
   }

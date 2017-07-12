@@ -4,8 +4,9 @@ import {DataTemperatureService} from '../services/temperature.services';
 import {DataHumidityService} from '../services/humidity.services';
 import {Measurement} from '../models/Measurement';
 import {Station} from '../models/Station';
-import {Configuration} from '../configuration';
+import {Configuration} from '../models/configuration';
 import {DisplayOptions} from '../models/DisplayOptions';
+import {OnInit} from '@angular/core';
 
 @Component({
   selector: 'display-chart',
@@ -13,7 +14,7 @@ import {DisplayOptions} from '../models/DisplayOptions';
   templateUrl: './DisplayChart.Component.html',
 })
 
-export class DisplayChartComponent implements OnChanges {
+export class DisplayChartComponent implements OnChanges, OnInit {
   @Input('config')
   config: DisplayOptions;
 
@@ -21,9 +22,17 @@ export class DisplayChartComponent implements OnChanges {
   stationData: Station;
   errorMsg: string = '';
 
+  // lineChart
+  public lineChartData: Array<any>;
+  public lineChartLabels: Array<any>;
+
+  public lineChartOptions: any;
+  public lineChartColours: Array<any>;
+  public lineChartLegend: boolean;
+  public lineChartType: string;
+
   constructor(private _dataStationService: DataStationService,
               private _dataTemperatureService: DataTemperatureService, private _dataHumidityService: DataHumidityService) {
-    console.log('Configured');
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -35,14 +44,17 @@ export class DisplayChartComponent implements OnChanges {
     //   log.push(`${propName} changed from ${from} to ${to}`);
     // }
     // console.log(log.join(', '));
+    // this.refresh(this.config);
+  }
+
+  ngOnInit(): void {
+    this.clear();
     this.refresh(this.config);
   }
 
   public refresh(config: DisplayOptions) {
     this.errorMsg = '';
-
     this.station = config.stationId;
-
     this.getStationInformation(this.station);
 
     if (config.showTemp) {
@@ -58,44 +70,44 @@ export class DisplayChartComponent implements OnChanges {
     }
   }
 
-  // lineChart
-  public lineChartData: Array<any> = [{data: [0], label: 'temp'}];
-  public lineChartLabels: Array<any> = ['any'];
+  private clear() : void {
+    this.lineChartData = [{data: [0], label: 'temp'}];
+    this.lineChartLabels = ['a', 'b', 'c'];
 
-  public lineChartOptions: any = {
-    animation: false,
-    responsive: true,
-    maintainAspectRatio: false
-  };
-  public lineChartColours: Array<any> = [
-    { // RegalRed(0xcc3366) 204, 51, 102
-      backgroundColor: 'rgba(204,51,102,0.2)',
-      borderColor: 'rgba(204,51,102,1)',
-      pointBackgroundColor: 'rgba(204,51,102,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(204,51,102,1)'
-    },
-    { // LightBlue(0x009cce) 00, 156, 206
-      backgroundColor: 'rgba(0,159,206,0.2)',
-      borderColor: 'rgba(0,159,206,1)',
-      pointBackgroundColor: 'rgba(0,159,206,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0,159,206,0.8)'
-    },
-    { // MossGreen(0x008000) 0, 128, 0
-      backgroundColor: 'rgba(0,128,0,0.2)',
-      borderColor: 'rgba(0,128,0,1)',
-      pointBackgroundColor: 'rgba(0,128,0,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0,128,0,0.8)'
-    }
-  ];
-  public lineChartLegend: boolean = true;
-  public lineChartType: string = 'line';
-
+    this.lineChartOptions = {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false
+    };
+    this.lineChartColours = [
+      { // RegalRed(0xcc3366) 204, 51, 102
+        backgroundColor: 'rgba(204,51,102,0.2)',
+        borderColor: 'rgba(204,51,102,1)',
+        pointBackgroundColor: 'rgba(204,51,102,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(204,51,102,1)'
+      },
+      { // LightBlue(0x009cce) 00, 156, 206
+        backgroundColor: 'rgba(0,159,206,0.2)',
+        borderColor: 'rgba(0,159,206,1)',
+        pointBackgroundColor: 'rgba(0,159,206,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(0,159,206,0.8)'
+      },
+      { // MossGreen(0x008000) 0, 128, 0
+        backgroundColor: 'rgba(0,128,0,0.2)',
+        borderColor: 'rgba(0,128,0,1)',
+        pointBackgroundColor: 'rgba(0,128,0,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(0,128,0,0.8)'
+      }
+    ];
+    this.lineChartLegend = true;
+    this.lineChartType = 'line';
+  }
   //...
 
   private getTemperaturesToday(station: number, add: boolean, option: number): void {
@@ -215,8 +227,8 @@ export class DisplayChartComponent implements OnChanges {
   }
 
   private getStationInformation(station: number): void {
-    this._dataStationService
-      .GetStation(station)
+      this._dataStationService
+      .getStation(station)
       .subscribe((data: Station) => this.stationData = data,
         error => {
           console.log(error)
@@ -251,7 +263,7 @@ export class DisplayChartComponent implements OnChanges {
   }
 
   private updateChartData(chartData: Measurement[], description: string, add: boolean): void {
-    let _lineChartLabels: Array<any> = new Array(chartData.length);
+//    let _lineChartLabels: Array<any> = new Array(chartData.length);
     let _lineChartData: any = {
       data: new Array(chartData.length),
       label: ' ' + description
@@ -259,10 +271,10 @@ export class DisplayChartComponent implements OnChanges {
 
     for (let j = 0; j < chartData.length; j++) {
       _lineChartData.data[j] = chartData[j].value;
-      _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
+      this.lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
     }
 
-    this.lineChartLabels = _lineChartLabels;
+//    this.lineChartLabels = _lineChartLabels;
 
     if (add) {
       this.lineChartData.push(_lineChartData);

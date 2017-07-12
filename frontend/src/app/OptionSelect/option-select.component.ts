@@ -2,12 +2,17 @@
  * Created by S.King on 22/07/2016.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {OnChanges} from '@angular/core';
+import {SimpleChanges} from '@angular/core';
 import {DataStationService} from '../services/station.services';
-import {Configuration} from '../configuration';
+import {Configuration} from '../models/configuration';
 import {Station} from '../models/Station';
 import {Option} from '../models/Option';
 import {DisplayOptions} from '../models/DisplayOptions';
+import {DisplayAllStations} from '../DisplayAllStations/display-all-stations.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'options-component',
@@ -15,20 +20,46 @@ import {DisplayOptions} from '../models/DisplayOptions';
   templateUrl: './option-select.component.html',
 })
 
-export class DisplayOptionsComponent {
+export class OptionSelectComponent implements OnChanges, OnInit {
+  now = DisplayAllStations.getFormattedDate();
   title = 'display options';
+  errorMsg: string = '';
   options: Option[];
-  stationData: Station[];
+  stationData: Station;
   config: DisplayOptions;
 
-  constructor(private _dataStationService: DataStationService, public _configuration: Configuration) {
+  constructor(private dataStationService: DataStationService, public _configuration: Configuration, private route: ActivatedRoute) {
     this.options = _configuration.display;
     this.config = _configuration.currentState;
-    this.refresh();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+  }
+
+  ngOnInit(): void {
+    let stationId: number;
+
+    this.route.paramMap
+      .switchMap((params: ParamMap) => {
+        stationId = +params.get('id');
+        return this.dataStationService.getStation(stationId);
+      })
+      .subscribe((data: Station) => this.stationData = data);
+
+    this.config.stationId = stationId;
+    this.now = DisplayAllStations.getFormattedDate();
+  }
+
+  private getName(): String {
+    if (this.stationData) {
+      return this.stationData.name;
+    }
+
+    return null;
   }
 
   public refresh(): void {
-    this.getStationInformation();
+    this.now = DisplayAllStations.getFormattedDate();
   }
 
   public onSelectTemp(): void {
@@ -66,16 +97,5 @@ export class DisplayOptionsComponent {
   public onSelectStation(newValue): void {
     console.log('onSelectStation ' + newValue);
     this.config = new DisplayOptions(this.config.displayId, newValue, this.config.showTemp, this.config.showHumidity, this.config.showHeatIndex);
-  }
-
-  private getStationInformation(): void {
-    this._dataStationService
-      .GetAllStations()
-      .subscribe((data: Station[]) => this.stationData = data,
-        error => console.log(error),
-        () => {
-          console.log('Get all station data complete');
-        }
-      );
   }
 }

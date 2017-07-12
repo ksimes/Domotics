@@ -1,23 +1,32 @@
 import {NgModule} from '@angular/core';
 
-import {DisplayAllStations} from './app.component';
+import {DomoticsComponent} from './app.component';
 import {BrowserModule} from '@angular/platform-browser';
-import {DataSensorTypeService} from './services/sensortype.services';
-import {DataStationService} from './services/station.services';
 import {HttpModule} from '@angular/http';
 import {DisplayStationComponent} from './DisplayStation/display-station.component';
+import {DisplayAllStations} from './DisplayAllStations/display-all-stations.component';
+import {OptionSelectComponent} from './OptionSelect/option-select.component';
+import {AppRoutingModule} from './app-routing.module';
+import {DisplayChartComponent} from './DisplayChartComponent/DisplayChartComponent';
+import {ChartsModule} from 'ng2-charts';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
+    DomoticsComponent,
     DisplayAllStations,
-    DisplayStationComponent
-  ],
+    DisplayStationComponent,
+    OptionSelectComponent,
+    DisplayChartComponent
+   ],
   imports: [
     BrowserModule,
     HttpModule,
+    FormsModule,
+    AppRoutingModule,
+    ChartsModule
   ],
-  providers: [DataSensorTypeService, DataStationService],
-  bootstrap: [DisplayAllStations]
+  providers: [],
+  bootstrap: [DomoticsComponent]
 })
-export class AppModule {
-}
+export class DomoticsModule { }

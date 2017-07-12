@@ -1,31 +1,37 @@
 import {Component} from '@angular/core';
+import {OnInit} from '@angular/core';
 import {DataStationService} from '../services/station.services';
-import {Configuration} from '../configuration';
+import {Configuration} from '../models/configuration';
 import {DisplayOptions} from '../models/DisplayOptions';
 import {Option} from '../models/Option';
 import {Station} from '../models/Station';
 import {DataSensorTypeService} from '../services/sensortype.services';
 import {SensorType} from '../models/SensorType';
+import * as moment from 'moment';
 
 @Component({
   selector: 'display-all-stations',
-  templateUrl: './DisplayAllStations.component.html',
-  styleUrls: ['./DisplayAllStations.component.css'],
+  templateUrl: './display-all-stations.component.html',
+  styleUrls: ['./display-all-stations.component.css'],
   providers: [Configuration, DataStationService, DataSensorTypeService],
 })
 
-export class DisplayAllStations {
+export class DisplayAllStations implements OnInit {
+  title = 'Domotics';
+  now = DisplayAllStations.getFormattedDate();
   errorMsg: string = '';
   timeStamp: string = '';
   config: DisplayOptions;
   stationData: Station[];
   sensorData: SensorType[];
   options: Option[];
-  title = 'Domotics';
 
   constructor(private _dataStationService: DataStationService, private _dataSensorService: DataSensorTypeService, public _configuration: Configuration) {
     this.options = _configuration.display;
     this.config = _configuration.currentState;
+  }
+
+  ngOnInit(): void {
     this.refresh();
   }
 
@@ -33,6 +39,7 @@ export class DisplayAllStations {
     this.errorMsg = '';
     this.getSensorInformation();
     this.getStationInformation();
+    this.now = DisplayAllStations.getFormattedDate();
   }
 
   private getSensorInformation(): void {
@@ -46,17 +53,16 @@ export class DisplayAllStations {
   }
 
   private getStationInformation(): void {
-    this._dataStationService
-      .GetAllStations()
+    this._dataStationService.getAllStations()
       .subscribe((data: Station[]) => this.stationData = data,
-        error => console.log(error),
-        () => {
-          console.log('Get all station data complete');
-        }
-      );
+      error => console.log(error),
+      () => {
+        console.log('Get all station data complete');
+      }
+    );
   }
 
-  public getSensor(selectedSensorType: number): String {
+  public getSensorName(selectedSensorType: number): String {
 
     if (this.sensorData) {
 
@@ -68,7 +74,10 @@ export class DisplayAllStations {
 
 
   public filteredByType(selectedSensorType: number): Station[] {
+    console.log('data1 ' + this.stationData);
+
     if (this.stationData && this.stationData.length > 1) {
+      console.log('data2 ' + this.stationData);
 
       return this.stationData.filter((station) =>
         station.sensorType == selectedSensorType
@@ -76,5 +85,11 @@ export class DisplayAllStations {
     }
 
     return this.stationData;
+  }
+
+  public static getFormattedDate(): string {
+    let date: Date = new Date();
+    // console.log('date   ' + date);
+    return moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a')
   }
 }

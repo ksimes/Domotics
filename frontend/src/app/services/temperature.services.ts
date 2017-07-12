@@ -5,8 +5,8 @@ import "rxjs/add/operator/catch";
 import 'rxjs/add/observable/throw';
 import {Observable} from "rxjs/Observable";
 import {Measurement} from "../models/Measurement";
-import {Configuration} from "../configuration";
-import {Utilities} from "../utilities";
+import {Configuration} from "../models/configuration";
+import {Utilities} from "../services/utilities";
 
 @Injectable()
 export class DataTemperatureService {
