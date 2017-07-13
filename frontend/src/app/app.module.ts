@@ -7,7 +7,7 @@ import {DisplayStationComponent} from './DisplayStation/display-station.componen
 import {DisplayAllStations} from './DisplayAllStations/display-all-stations.component';
 import {OptionSelectComponent} from './OptionSelect/option-select.component';
 import {AppRoutingModule} from './app-routing.module';
-import {DisplayChartComponent} from './DisplayChartComponent/DisplayChartComponent';
+import {DisplayChartComponent} from './DisplayChartComponent/display-chart.component';
 import {ChartsModule} from 'ng2-charts';
 import {FormsModule} from '@angular/forms';
 

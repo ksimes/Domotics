@@ -55,11 +55,11 @@ export class DisplayAllStations implements OnInit {
   private getStationInformation(): void {
     this._dataStationService.getAllStations()
       .subscribe((data: Station[]) => this.stationData = data,
-      error => console.log(error),
-      () => {
-        console.log('Get all station data complete');
-      }
-    );
+        error => console.log(error),
+        () => {
+          console.log('Get all station data complete');
+        }
+      );
   }
 
   public getSensorName(selectedSensorType: number): String {
@@ -74,11 +74,7 @@ export class DisplayAllStations implements OnInit {
 
 
   public filteredByType(selectedSensorType: number): Station[] {
-    console.log('data1 ' + this.stationData);
-
     if (this.stationData && this.stationData.length > 1) {
-      console.log('data2 ' + this.stationData);
-
       return this.stationData.filter((station) =>
         station.sensorType == selectedSensorType
       );

@@ -11,6 +11,7 @@ import * as moment from 'moment';
   selector: '[display-station]',
   providers: [DataStationService, DataHeatIndexService, DataTemperatureService, DataHumidityService],
   templateUrl: './display-station.component.html',
+  styleUrls: ['./display-station.component.css'],
 })
 
 export class DisplayStationComponent {

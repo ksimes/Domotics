@@ -1,4 +1,5 @@
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {OnInit} from '@angular/core';
 import {DataStationService} from '../services/station.services';
 import {DataTemperatureService} from '../services/temperature.services';
 import {DataHumidityService} from '../services/humidity.services';
@@ -6,12 +7,14 @@ import {Measurement} from '../models/Measurement';
 import {Station} from '../models/Station';
 import {Configuration} from '../models/configuration';
 import {DisplayOptions} from '../models/DisplayOptions';
-import {OnInit} from '@angular/core';
+import Chart from 'chart.js';
+
 
 @Component({
   selector: 'display-chart',
   providers: [DataStationService, DataTemperatureService, DataHumidityService, Configuration],
-  templateUrl: './DisplayChart.Component.html',
+  templateUrl: './display-chart.component.html',
+  styleUrls: ['./display-chart.component.css'],
 })
 
 export class DisplayChartComponent implements OnChanges, OnInit {
@@ -24,7 +27,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
 
   // lineChart
   public lineChartData: Array<any>;
-  public lineChartLabels: Array<any>;
+  // public lineChartLabels: Array<any>;
 
   public lineChartOptions: any;
   public lineChartColours: Array<any>;
@@ -44,18 +47,20 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     //   log.push(`${propName} changed from ${from} to ${to}`);
     // }
     // console.log(log.join(', '));
-    // this.refresh(this.config);
+    this.clear();
+    this.refresh(this.config);
   }
 
   ngOnInit(): void {
-    this.clear();
-    this.refresh(this.config);
+    this.globalClear();
   }
 
   public refresh(config: DisplayOptions) {
     this.errorMsg = '';
     this.station = config.stationId;
     this.getStationInformation(this.station);
+
+    console.log('display Id  = ' + config.displayId);
 
     if (config.showTemp) {
       this.getTemperaturesToday(this.station, false, config.displayId);
@@ -70,15 +75,13 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     }
   }
 
-  private clear() : void {
-    this.lineChartData = [{data: [0], label: 'temp'}];
-    this.lineChartLabels = ['a', 'b', 'c'];
-
+  private globalClear(): void {
     this.lineChartOptions = {
       animation: false,
       responsive: true,
       maintainAspectRatio: false
     };
+
     this.lineChartColours = [
       { // RegalRed(0xcc3366) 204, 51, 102
         backgroundColor: 'rgba(204,51,102,0.2)',
@@ -105,13 +108,81 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         pointHoverBorderColor: 'rgba(0,128,0,0.8)'
       }
     ];
+
     this.lineChartLegend = true;
     this.lineChartType = 'line';
   }
+
+  private clear(): void {
+    this.lineChartData = [{data: [0], label: 'temp'}];
+    // this.lineChartLabels = [];
+  }
+
+  private updateChartData(chartData: Measurement[], description: string, add: boolean): void {
+    let _lineChartLabels: Array<any> = new Array(chartData.length);
+
+    let _lineChartData: any = {
+      data: new Array(chartData.length),
+      label: ' ' + description,
+      backgroundColor: this.lineChartColours[0].backgroundColor,
+      borderColor: this.lineChartColours[0].borderColor,
+      pointBackgroundColor: this.lineChartColours[0].pointBackgroundColor,
+      pointBorderColor: this.lineChartColours[0].pointBorderColor,
+      pointHoverBackgroundColor: this.lineChartColours[0].pointHoverBackgroundColor,
+      pointHoverBorderColor: this.lineChartColours[0].pointHoverBorderColor
+    };
+
+    for (let j = 0; j < chartData.length; j++) {
+      _lineChartData.data[j] = chartData[j].value;
+      _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
+    }
+
+    if (add) {
+      this.lineChartData.push(_lineChartData);
+    }
+    else {
+      this.lineChartData = [_lineChartData];
+    }
+
+    // scales: {
+    //   xAxes: [{
+    //     display: true,
+    //     scaleLabel: {
+    //       display: true,
+    //       labelString: 'Month'
+    //     }
+    //   }],
+    //     yAxes: [{
+    //     display: true,
+    //     scaleLabel: {
+    //       display: true,
+    //       labelString: 'Value'
+    //     }
+    //   }]
+    // }
+
+
+
+    let ctx = document.getElementById('chart');
+    let ci = new Chart(ctx, {
+      type: this.lineChartType,
+      data: {
+        labels: _lineChartLabels,
+        datasets: this.lineChartData,
+      },
+      legend: this.lineChartLegend,
+      options: this.lineChartOptions
+    });
+
+    // and render the chart
+    ci.update();
+  }
+
+
   //...
 
   private getTemperaturesToday(station: number, add: boolean, option: number): void {
-    var func: any;
+    let func: any;
 
     option = +option;
 
@@ -153,7 +224,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         console.log(error);
         this.errorMsg = error;
         this.lineChartData = [{data: [0], label: 'temp'}];
-        this.lineChartLabels = ['any'];
+        // this.lineChartLabels = ['any'];
       },
       () => {
       }
@@ -161,7 +232,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   }
 
   private getHumidityToday(station: number, add: boolean, option: number): void {
-    var func: any;
+    let func: any;
 
     option = +option;
 
@@ -198,13 +269,13 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         func = this._dataHumidityService.GetStationHumiditiesToday(station);
     }
 
-    console.log('Adding Humidity')
+    console.log('Adding Humidity');
     func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Humidity', add),
       error => {
         console.log(error);
         this.errorMsg = error;
         this.lineChartData = [{data: [0], label: 'temp'}];
-        this.lineChartLabels = ['any'];
+        // this.lineChartLabels = [];
       },
       () => {
       }
@@ -219,7 +290,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
           console.log(error);
           this.errorMsg = error;
           this.lineChartData = [{data: [0], label: 'temp'}];
-          this.lineChartLabels = ['any'];
+          // this.lineChartLabels = [];
         },
         () => {
         }
@@ -227,14 +298,14 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   }
 
   private getStationInformation(station: number): void {
-      this._dataStationService
+    this._dataStationService
       .getStation(station)
       .subscribe((data: Station) => this.stationData = data,
         error => {
-          console.log(error)
+          console.log(error);
           this.errorMsg = error;
           this.lineChartData = [{data: [0], label: 'temp'}];
-          this.lineChartLabels = ['any'];
+          // this.lineChartLabels = ['any'];
         },
         () => {
           console.log('Get data complete for station ' + station);
@@ -260,28 +331,6 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     }
 
     return result;
-  }
-
-  private updateChartData(chartData: Measurement[], description: string, add: boolean): void {
-//    let _lineChartLabels: Array<any> = new Array(chartData.length);
-    let _lineChartData: any = {
-      data: new Array(chartData.length),
-      label: ' ' + description
-    };
-
-    for (let j = 0; j < chartData.length; j++) {
-      _lineChartData.data[j] = chartData[j].value;
-      this.lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
-    }
-
-//    this.lineChartLabels = _lineChartLabels;
-
-    if (add) {
-      this.lineChartData.push(_lineChartData);
-    }
-    else {
-      this.lineChartData = [_lineChartData];
-    }
   }
 
   // events
