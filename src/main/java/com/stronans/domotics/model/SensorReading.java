@@ -1,5 +1,8 @@
 package com.stronans.domotics.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Default model of data gathered from a measurement sersor. Note that there is not time associated with this model as
  * most sensors do not provide this. Original designed for what comes in from the DHT22/ESP8622 station. Changed so that
@@ -22,7 +25,14 @@ public class SensorReading {
     public SensorReading() {
     }
 
-    public SensorReading(long stationId, double value1, double value2, double value3, int sampleRate, int sensorType) {
+    @JsonCreator
+    public SensorReading(
+            @JsonProperty("stationId") long stationId,
+            @JsonProperty("temperatureValue") double value1,
+            @JsonProperty("humidityValue") double value2,
+            @JsonProperty("humitureValue") double value3,
+            @JsonProperty("sampleRate") int sampleRate,
+            @JsonProperty("sensorType") int sensorType) {
         this.stationId = stationId;
         this.value1 = value1;
         this.value2 = value2;

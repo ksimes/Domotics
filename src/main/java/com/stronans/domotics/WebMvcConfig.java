@@ -2,6 +2,7 @@ package com.stronans.domotics;
 
 import com.stronans.domotics.interceptors.ExecuteTimeInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -14,5 +15,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ExecuteTimeInterceptor());
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/*").allowedOrigins("http://localhost:4200");
     }
 }

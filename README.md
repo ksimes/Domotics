@@ -23,7 +23,7 @@ Open a command window and run:
 
 The start script is setup to transpile so that any changes to .ts files will be recompiled
 
-posit is pre-defined so can run `http://localhost:4200`
+port is pre-defined so can run `http://localhost:4200`
 
 Alternatively you can configure the default HTTP host and port used by the development server with command-line options :
 
