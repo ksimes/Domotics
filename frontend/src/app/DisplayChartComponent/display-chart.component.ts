@@ -24,6 +24,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   station: number = 1;
   stationData: Station;
   errorMsg: string = '';
+  displayChart: Chart = null;
 
   // lineChart
   public lineChartData: Array<any>;
@@ -79,7 +80,23 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     this.lineChartOptions = {
       animation: false,
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time & Date'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Temperature °C'
+          }
+        }]
+      }
     };
 
     this.lineChartColours = [
@@ -137,6 +154,8 @@ export class DisplayChartComponent implements OnChanges, OnInit {
       _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
     }
 
+    // this.lineChartLabels = _lineChartLabels
+
     if (add) {
       this.lineChartData.push(_lineChartData);
     }
@@ -144,27 +163,13 @@ export class DisplayChartComponent implements OnChanges, OnInit {
       this.lineChartData = [_lineChartData];
     }
 
-    // scales: {
-    //   xAxes: [{
-    //     display: true,
-    //     scaleLabel: {
-    //       display: true,
-    //       labelString: 'Month'
-    //     }
-    //   }],
-    //     yAxes: [{
-    //     display: true,
-    //     scaleLabel: {
-    //       display: true,
-    //       labelString: 'Value'
-    //     }
-    //   }]
-    // }
-
-
-
     let ctx = document.getElementById('chart');
-    let ci = new Chart(ctx, {
+
+    if (this.displayChart != null) {
+      this.displayChart.destroy();
+    }
+
+    this.displayChart = new Chart(ctx, {
       type: this.lineChartType,
       data: {
         labels: _lineChartLabels,
@@ -175,7 +180,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     });
 
     // and render the chart
-    ci.update();
+    this.displayChart.update();
   }
 
 
@@ -221,8 +226,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
 
     func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Temperature', add),
       error => {
-        console.log(error);
-        this.errorMsg = error;
+        this.errorMsg = this.handleError(error);
         this.lineChartData = [{data: [0], label: 'temp'}];
         // this.lineChartLabels = ['any'];
       },
@@ -272,8 +276,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     console.log('Adding Humidity');
     func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Humidity', add),
       error => {
-        console.log(error);
-        this.errorMsg = error;
+        this.errorMsg = this.handleError(error);
         this.lineChartData = [{data: [0], label: 'temp'}];
         // this.lineChartLabels = [];
       },
@@ -287,9 +290,8 @@ export class DisplayChartComponent implements OnChanges, OnInit {
       .GetStationHumiditiesToday(station)
       .subscribe((data: Measurement[]) => this.updateChartData(data, 'Heat Index', add),
         error => {
-          console.log(error);
-          this.errorMsg = error;
-          this.lineChartData = [{data: [0], label: 'temp'}];
+          this.errorMsg = this.handleError(error);
+          this.lineChartData = [{data: [0], label: 'Heat Index'}];
           // this.lineChartLabels = [];
         },
         () => {
@@ -302,8 +304,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
       .getStation(station)
       .subscribe((data: Station) => this.stationData = data,
         error => {
-          console.log(error);
-          this.errorMsg = error;
+          this.errorMsg = this.handleError(error);
           this.lineChartData = [{data: [0], label: 'temp'}];
           // this.lineChartLabels = ['any'];
         },
@@ -341,5 +342,18 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   public chartHovered(e: any): void {
     console.log('Hover');
     console.log(e.active[0]._index);
+  }
+
+  private handleError(error: any): string {
+    let errMsg = "No data available for this period";
+    if (error.status != 416) {
+      let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+      console.log(' ' + error.status + ' : ' + errMsg);     // log to console
+    } else {
+      console.log(error);
+    }
+
+    return errMsg;
   }
 }

@@ -50,7 +50,7 @@ export class OptionSelectComponent implements OnChanges, OnInit {
     this.now = DisplayAllStations.getFormattedDate();
   }
 
-  private getName(): String {
+  public getName(): String {
     if (this.stationData) {
       return this.stationData.name;
     }

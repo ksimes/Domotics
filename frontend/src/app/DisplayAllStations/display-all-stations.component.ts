@@ -88,4 +88,17 @@ export class DisplayAllStations implements OnInit {
     // console.log('date   ' + date);
     return moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a')
   }
+
+  private handleError(error: any): string {
+    let errMsg = "No data available for this period";
+    if (error.status != 416) {
+      let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+      console.log(' ' + error.status + ' : ' + errMsg);     // log to console
+    } else {
+      console.log(error);
+    }
+
+    return errMsg;
+  }
 }

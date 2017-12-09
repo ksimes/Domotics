@@ -5,12 +5,12 @@ export class Utilities {
   }
 
   public static getFormattedTodayDate():string {
-    var d = new Date();
+    let d = new Date();
     return (Utilities.getFormattedDate(d));
   }
 
   public static getFormattedDateNow():string {
-    var d = new Date();
+    let d = new Date();
     return (Utilities.getFormattedDate(d));
   }
 
@@ -19,15 +19,15 @@ export class Utilities {
   }
 
   public static getFormattedHoursAgo(back:number):string {
-    var d = new Date();
+    let d = new Date();
     d.setHours(d.getHours() - back);
     return (Utilities.getFormattedDate(d));
   }
 
   public static getFormattedDate(date:Date):string {
-    var m = date.getMonth();
+    let m = date.getMonth();
     m++;
-    var day = date.getDate();
+    let day = date.getDate();
     return ('' + date.getFullYear() + Utilities.pad(m) + Utilities.pad(day) + Utilities.pad(date.getHours()) + Utilities.pad(date.getMinutes()) + Utilities.pad(date.getSeconds()));
   }
 }
