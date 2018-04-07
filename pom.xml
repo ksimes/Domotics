@@ -6,7 +6,7 @@
     <groupId>com.stronans</groupId>
     <artifactId>domotics</artifactId>
     <packaging>jar</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>domotics</name>
     <url>http://maven.apache.org</url>
 
@@ -85,6 +85,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.5.2.RELEASE</version>
                 <configuration>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <fork>true</fork>
                     <mainClass>com.stronans.domotics.Application</mainClass>
                 </configuration>

@@ -12,6 +12,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AddHeaderInterceptor} from "./services/interceptor.service";
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {AddHeaderInterceptor} from "./services/interceptor.service";
     DisplayAllStations,
     DisplayStationComponent,
     OptionSelectComponent,
-    DisplayChartComponent
+    DisplayChartComponent,
+    PageNotFoundComponent
    ],
   imports: [
     BrowserModule,
