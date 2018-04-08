@@ -1,6 +1,6 @@
 application:
   title: Domotics
-  version: 1.0.0
+  version: \@pom.version\@
 
 # Log4j2 configuration
 logging:
