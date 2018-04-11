@@ -1,4 +1,4 @@
 export class Measurement {
-    constructor(public id:number, public stationId:number, public value:number, public timestamp:string){
+  constructor(public id: string, public stationId: string, public value: number, public timeStamp: string) {
     }
 }

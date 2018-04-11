@@ -35,7 +35,7 @@ export class Configuration {
 
   public currentState:DisplayOptions = {
     displayId: 1,
-    stationId: 1,
+    stationId: '1',
     showTemp: true,
     showHumidity: false,
     showHeatIndex: false

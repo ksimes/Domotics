@@ -19,25 +19,25 @@ public interface MeasurementServiceInterface {
     List<Measurement> find();
 
     // Find all values by station
-    List<Measurement> find(long stationId);
+    List<Measurement> find(String stationId);
 
     // Find all values by station, start date stamp and end datestamp
-    List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate);
+    List<Measurement> find(String stationId, DateInfo startDate, DateInfo endDate);
 
     // Find all values in DB by start date stamp and end datestamp
     List<Measurement> find(DateInfo startDate, DateInfo endDate);
 
     // Find the latest value in DB by station
-    Measurement findLatest(long stationId);
+    Measurement findLatest(String stationId);
 
     // Count all values in DB
     Long count();
 
     // Count all values in DB by station
-    Long count(long stationId);
+    Long count(String stationId);
 
     // Count all values by station, start date stamp and end datestamp
-    Long count(long stationId, DateInfo startDate, DateInfo endDate);
+    Long count(String stationId, DateInfo startDate, DateInfo endDate);
 
     // Count all values by start date stamp and end datestamp in DB
     Long count(DateInfo startDate, DateInfo endDate);

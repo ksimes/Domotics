@@ -30,7 +30,7 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<List<Measurement>> getValuesByStation(MeasurementServiceInterface service, long stationId) {
+    ResponseEntity<List<Measurement>> getValuesByStation(MeasurementServiceInterface service, String stationId) {
         List<Measurement> measurements = service.find(stationId);
 
         if (measurements.isEmpty()) {
@@ -39,12 +39,12 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<Long> getCountByStation(MeasurementServiceInterface service, long stationId) {
+    ResponseEntity<Long> getCountByStation(MeasurementServiceInterface service, String stationId) {
         Long measurementCount = service.count(stationId);
         return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<List<Measurement>> getValuesByRange(MeasurementServiceInterface service, long stationId,
+    ResponseEntity<List<Measurement>> getValuesByRange(MeasurementServiceInterface service, String stationId,
                                                        String startDateString,
                                                        String endDateString) {
         DateInfo startDate = DateInfo.getUndefined();
@@ -69,7 +69,7 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurements, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<Long> getCountByRange(MeasurementServiceInterface service, long stationId,
+    ResponseEntity<Long> getCountByRange(MeasurementServiceInterface service, String stationId,
                                          String startDateString,
                                          String endDateString) {
         DateInfo startDate = DateInfo.getUndefined();
@@ -91,12 +91,12 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<Measurement> getTempValueLatest(MeasurementServiceInterface service, long stationId) {
+    ResponseEntity<Measurement> getTempValueLatest(MeasurementServiceInterface service, String stationId) {
 
         Measurement measurement = service.findLatest(stationId);
 
         if (measurement == null) {
-            return new ResponseEntity<>(measurement, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
         }
 
         return new ResponseEntity<>(measurement, WebUtilities.header(), HttpStatus.OK);

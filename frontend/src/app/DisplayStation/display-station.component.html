@@ -1,4 +1,4 @@
-<td><b><a [routerLink]="['/options', station.id]" aria-label="Station details" >{{station.name}}</a></b></td>
+<td><b><a [routerLink]="['/options', station._key]" aria-label="Station details">{{station.name}}</a></b></td>
 <td>{{station.description}}</td>
 <td [ngClass]="{'red': timeStamp == 'More than 30 minutes ago'}">{{timeStamp}}</td>
 <td>{{temperature.value}}&deg;</td>

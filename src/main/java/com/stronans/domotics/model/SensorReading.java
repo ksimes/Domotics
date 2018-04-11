@@ -15,24 +15,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 public class SensorReading {
-    private long stationId;
+    private String stationId;
     private double value1;
     private double value2;
     private double value3;
     private int sampleRate;
-    private int sensorType;
+    private String sensorType;
 
     public SensorReading() {
     }
 
     @JsonCreator
     public SensorReading(
-            @JsonProperty("stationId") long stationId,
+            @JsonProperty("stationId") String stationId,
             @JsonProperty("temperatureValue") double value1,
             @JsonProperty("humidityValue") double value2,
             @JsonProperty("humitureValue") double value3,
             @JsonProperty("sampleRate") int sampleRate,
-            @JsonProperty("sensorType") int sensorType) {
+            @JsonProperty("sensorType") String sensorType) {
         this.stationId = stationId;
         this.value1 = value1;
         this.value2 = value2;
@@ -41,11 +41,11 @@ public class SensorReading {
         this.sensorType = sensorType;
     }
 
-    public long getStationId() {
+    public String getStationId() {
         return stationId;
     }
 
-    public void setStationId(long stationId) {
+    public void setStationId(String stationId) {
         this.stationId = stationId;
     }
 
@@ -81,11 +81,11 @@ public class SensorReading {
         this.sampleRate = sampleRate;
     }
 
-    public int getSensorType() {
+    public String getSensorType() {
         return sensorType;
     }
 
-    public void setSensorType(int sensorType) {
+    public void setSensorType(String sensorType) {
         this.sensorType = sensorType;
     }
 }

@@ -17,8 +17,12 @@ import java.util.List;
 public class HeatIndexService implements MeasurementServiceInterface {
     private static final Logger logger = Logger.getLogger(HeatIndexService.class);
 
-    @Autowired
     private HeatIndexDAO heatIndexDAO;
+
+    @Autowired
+    public HeatIndexService(HeatIndexDAO heatIndexDAO) {
+        this.heatIndexDAO = heatIndexDAO;
+    }
 
     @Override
     public Measurement saveMeasurement(Measurement heatIndex) {
@@ -37,42 +41,42 @@ public class HeatIndexService implements MeasurementServiceInterface {
     }
 
     @Override
-    public List<Measurement> find(long stationId) {
+    public List<Measurement> find(String stationId) {
         return heatIndexDAO.getList(stationId);
     }
 
     @Override
-    public List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate) {
+    public List<Measurement> find(String stationId, DateInfo startDate, DateInfo endDate) {
         return heatIndexDAO.getList(stationId, startDate, endDate);
     }
 
     @Override
     public List<Measurement> find(DateInfo startDate, DateInfo endDate) {
-        return heatIndexDAO.getList(0, startDate, endDate);
+        return heatIndexDAO.getList(null, startDate, endDate);
     }
 
     @Override
-    public Measurement findLatest(long stationId) {
+    public Measurement findLatest(String stationId) {
         return heatIndexDAO.getLatest(stationId);
     }
 
     @Override
     public Long count() {
-        return null;
+        return heatIndexDAO.getItemCount();
     }
 
     @Override
-    public Long count(long stationId) {
-        return null;
+    public Long count(String stationId) {
+        return heatIndexDAO.getItemCount(stationId);
     }
 
     @Override
-    public Long count(long stationId, DateInfo startDate, DateInfo endDate) {
-        return null;
+    public Long count(String stationId, DateInfo startDate, DateInfo endDate) {
+        return heatIndexDAO.getItemCount(stationId, startDate, endDate);
     }
 
     @Override
     public Long count(DateInfo startDate, DateInfo endDate) {
-        return null;
+        return heatIndexDAO.getItemCount(null, startDate, endDate);
     }
 }

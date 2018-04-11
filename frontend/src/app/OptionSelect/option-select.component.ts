@@ -37,11 +37,11 @@ export class OptionSelectComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    let stationId: number;
+    let stationId: string;
 
     this.route.paramMap
       .switchMap((params: ParamMap) => {
-        stationId = +params.get('id');
+        stationId = params.get('id');
         return this.dataStationService.getStation(stationId);
       })
       .subscribe((data: Station) => this.stationData = data);

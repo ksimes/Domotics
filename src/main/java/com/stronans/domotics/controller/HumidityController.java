@@ -34,13 +34,13 @@ public class HumidityController extends MeasurementController {
     //------------------- Retrieve All Humidities for a given Station --------------------------------------------------------
 
     @RequestMapping(value = "/{station}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHumidityValuesByStation(@PathVariable("station") long stationId) {
+    public ResponseEntity<List<Measurement>> getHumidityValuesByStation(@PathVariable("station") String stationId) {
         return getValuesByStation(humidityService, stationId);
     }
 
     //------------------- Retrieve Humidities for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") String stationId,
                                                                       @PathVariable("startDate") String startDateString,
                                                                       @PathVariable("endDate") String endDateString) {
 
@@ -49,7 +49,7 @@ public class HumidityController extends MeasurementController {
 
     //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
     @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getHumidityValuesByRange(@PathVariable("station") String stationId,
                                                                       @PathVariable("startDate") String startDateString) {
 
         return getValuesByRange(humidityService, stationId, startDateString, "0");
@@ -57,7 +57,7 @@ public class HumidityController extends MeasurementController {
 
     //------------------- Retrieve latest Humidity for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Measurement> getHumidityValueLatest(@PathVariable("station") long stationId) {
+    public ResponseEntity<Measurement> getHumidityValueLatest(@PathVariable("station") String stationId) {
         return getTempValueLatest(humidityService, stationId);
     }
 }

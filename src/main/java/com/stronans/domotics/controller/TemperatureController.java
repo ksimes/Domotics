@@ -33,13 +33,13 @@ public class TemperatureController extends MeasurementController {
 
     //------------------- Retrieve All Temperatures for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getTempValuesByStation(@PathVariable("station") long stationId) {
+    public ResponseEntity<List<Measurement>> getTempValuesByStation(@PathVariable("station") String stationId) {
         return getValuesByStation(temperatureService, stationId);
     }
 
     //------------------- Retrieve Temperatures for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") String stationId,
                                                                   @PathVariable("startDate") String startDateString,
                                                                   @PathVariable("endDate") String endDateString) {
 
@@ -48,7 +48,7 @@ public class TemperatureController extends MeasurementController {
 
     //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
     @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getTempValuesByRange(@PathVariable("station") String stationId,
                                                                   @PathVariable("startDate") String startDateString) {
 
         return getValuesByRange(temperatureService, stationId, startDateString, "0");
@@ -56,7 +56,7 @@ public class TemperatureController extends MeasurementController {
 
     //------------------- Retrieve latest temperature for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Measurement> getTempValueLatest(@PathVariable("station") long stationId) {
+    public ResponseEntity<Measurement> getTempValueLatest(@PathVariable("station") String stationId) {
         return getTempValueLatest(temperatureService, stationId);
     }
 
@@ -68,23 +68,23 @@ public class TemperatureController extends MeasurementController {
 
     //------------------- Retrieve count of all Temperatures for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> countTempValuesByStation(@PathVariable("station") long stationId) {
+    public ResponseEntity<Long> countTempValuesByStation(@PathVariable("station") String stationId) {
         return getCountByStation(temperatureService, stationId);
     }
 
     //------------------- Retrieve count of Temperatures for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/count/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") long stationId,
-                                                                  @PathVariable("startDate") String startDateString,
-                                                                  @PathVariable("endDate") String endDateString) {
+    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") String stationId,
+                                                       @PathVariable("startDate") String startDateString,
+                                                       @PathVariable("endDate") String endDateString) {
 
         return getCountByRange(temperatureService, stationId, startDateString, endDateString);
     }
 
     //------------------- Retrieve Temperatures for a given Station for a given date --------------------------------------------------------
     @RequestMapping(value = "/{station}/count/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") long stationId,
-                                                                  @PathVariable("startDate") String startDateString) {
+    public ResponseEntity<Long> countTempValuesByRange(@PathVariable("station") String stationId,
+                                                       @PathVariable("startDate") String startDateString) {
 
         return getCountByRange(temperatureService, stationId, startDateString, "0");
     }

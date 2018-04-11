@@ -16,6 +16,9 @@ public class DateInfo {
     private static final String UNIVERSAL_FORMAT = "yyyyMMddHHmmssSSSS";
     private static final String SHORT_UNIVERSAL_FORMAT = "yyyyMMddHHmmss";
 
+    private static final String ISO8601_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
+
     private Calendar calendar = null;
     private boolean notDefined = false;
     private DateInfoContent content = DateInfoContent.DATE_AND_TIME;
@@ -166,6 +169,45 @@ public class DateInfo {
         return !notDefined;
     }
 
+    static private DateInfo fromformattedString(String dateTimeInfo, String formatLong, String formatShort) {
+        DateInfo result = DateInfo.getUndefined();
+        Date date = null;
+
+        try {
+            SimpleDateFormat dt = new SimpleDateFormat(formatLong);
+            date = dt.parse(dateTimeInfo);
+        } catch (ParseException pe) {
+            try {
+                SimpleDateFormat dt = new SimpleDateFormat(formatShort);
+                date = dt.parse(dateTimeInfo);
+            } catch (ParseException pe2) {
+                date = null;
+            }
+        }
+
+        if (date != null) {
+            return DateInfo.fromLong(date.getTime());
+        }
+
+        return result;
+    }
+
+    static public DateInfo fromISOTimestampString(String dateTimeInfo) {
+        return fromformattedString(dateTimeInfo, ISO8601_TIMESTAMP_FORMAT, ISO8601_DATE_FORMAT);
+    }
+
+    static public String toISOTimestampString(DateInfo timeInfo) {
+        return timeInfo.format(ISO8601_TIMESTAMP_FORMAT);
+    }
+
+    public String ISOTimestamp() {
+        return format(ISO8601_TIMESTAMP_FORMAT);
+    }
+
+    public String ISODate() {
+        return format(ISO8601_DATE_FORMAT);
+    }
+
     /**
      * Formats the dateTime in this instance into a displayable string. If undefined then returns a blank string.
      *
@@ -312,26 +354,7 @@ public class DateInfo {
     }
 
     static public DateInfo fromUniversalString(String dateTimeInfo) {
-        DateInfo result = DateInfo.getUndefined();
-        Date date = null;
-
-        try {
-            SimpleDateFormat dt = new SimpleDateFormat(UNIVERSAL_FORMAT);
-            date = dt.parse(dateTimeInfo);
-        } catch (ParseException pe) {
-            try {
-                SimpleDateFormat dt = new SimpleDateFormat(SHORT_UNIVERSAL_FORMAT);
-                date = dt.parse(dateTimeInfo);
-            } catch (ParseException pe2) {
-                date = null;
-            }
-        }
-
-        if (date != null) {
-            return DateInfo.fromLong(date.getTime());
-        }
-
-        return result;
+        return fromformattedString(dateTimeInfo, UNIVERSAL_FORMAT, SHORT_UNIVERSAL_FORMAT);
     }
 
     static public boolean isUniversalString(String dateTimeInfo) {

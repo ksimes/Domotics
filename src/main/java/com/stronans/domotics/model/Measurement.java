@@ -10,15 +10,15 @@ import com.stronans.domotics.utilities.DateInfo;
  * Created by S.King on 03/07/2016.
  */
 public final class Measurement {
-    private Long id;
-    private final long stationId;
+    private String id;
+    private final String stationId;
     private final double value;
     private final DateInfo timeStamp;
     private final int sampleRate;
     private final boolean status;
-    private final int sensorType;
+    private final String sensorType;
 
-    public Measurement(Long id, long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType, boolean status) {
+    public Measurement(String id, String stationId, double value, DateInfo timeStamp, int sampleRate, String sensorType, boolean status) {
         this.id = id;
         this.stationId = stationId;
         this.timeStamp = timeStamp;
@@ -29,28 +29,28 @@ public final class Measurement {
     }
 
     @JsonCreator
-    public Measurement(Long id, long stationId, double value, String timeStamp, int sampleRate, int sensorType) {
-        this(id, stationId, value, DateInfo.fromUniversalString(timeStamp), sampleRate, sensorType, true);
+    public Measurement(String id, String stationId, double value, String timeStamp, int sampleRate, String sensorType) {
+        this(id, stationId, value, DateInfo.fromISOTimestampString(timeStamp), sampleRate, sensorType, true);
     }
 
-    public Measurement(Long id, long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType) {
+    public Measurement(String id, String stationId, double value, DateInfo timeStamp, int sampleRate, String sensorType) {
         this(id, stationId, value, timeStamp, sampleRate, sensorType, true);
     }
 
-    public Measurement(long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType) {
+    public Measurement(String stationId, double value, DateInfo timeStamp, int sampleRate, String sensorType) {
         this(null, stationId, value, timeStamp, sampleRate, sensorType);
     }
 
-    public Measurement setId(Long id) {
+    public Measurement setId(String id) {
         return new Measurement(id, this.stationId, this.value, this.timeStamp, this.sampleRate, this.sensorType);
     }
 
-    public Measurement setDummy(long stationId, DateInfo timeStamp) {
-        return new Measurement(null, stationId, 0.0, timeStamp, 0, 0, false);
+    public Measurement setDummy(String stationId, DateInfo timeStamp) {
+        return new Measurement(null, stationId, 0.0, timeStamp, 0, null, false);
     }
 
-    @JsonProperty("id")
-    public Long id() {
+    @JsonProperty("_key")
+    public String id() {
         return id;
     }
 
@@ -59,7 +59,7 @@ public final class Measurement {
         return value;
     }
 
-    @JsonProperty("timestamp")
+    @JsonProperty("timeStamp")
     public String timeStampString() {
         return DateInfo.toUniversalString(timeStamp);
     }
@@ -69,7 +69,7 @@ public final class Measurement {
     }
 
     @JsonProperty("stationId")
-    public long stationId() {
+    public String stationId() {
         return stationId;
     }
 
@@ -84,7 +84,7 @@ public final class Measurement {
     }
 
     @JsonProperty("sensorType")
-    public int sensorType() {
+    public String sensorType() {
         return sensorType;
     }
 }

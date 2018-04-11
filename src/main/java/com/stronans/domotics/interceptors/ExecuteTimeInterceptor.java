@@ -1,6 +1,6 @@
 package com.stronans.domotics.interceptors;
 
-/**
+/*
  * Intercepts http requests and records execution times for each request.
  *
  * Created by S.King on 24/09/2016.

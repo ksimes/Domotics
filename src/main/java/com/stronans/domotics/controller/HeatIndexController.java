@@ -33,13 +33,13 @@ public class HeatIndexController extends MeasurementController {
 
     //------------------- Retrieve All HeatIndices for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHeatIndexValuesByStation(@PathVariable("station") long stationId) {
+    public ResponseEntity<List<Measurement>> getHeatIndexValuesByStation(@PathVariable("station") String stationId) {
         return getValuesByStation(heatIndexService, stationId);
     }
 
     //------------------- Retrieve HeatIndices for a given Station by date range --------------------------------------------------------
     @RequestMapping(value = "/{station}/range/{startDate}/{endDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHeatIndexValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getHeatIndexValuesByRange(@PathVariable("station") String stationId,
                                                                        @PathVariable("startDate") String startDateString,
                                                                        @PathVariable("endDate") String endDateString) {
 
@@ -48,7 +48,7 @@ public class HeatIndexController extends MeasurementController {
 
     //------------------- Retrieve HeatIndices for a given Station for a given date --------------------------------------------------------
     @RequestMapping(value = "/{station}/date/{startDate}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Measurement>> getHeatIndexValuesByRange(@PathVariable("station") long stationId,
+    public ResponseEntity<List<Measurement>> getHeatIndexValuesByRange(@PathVariable("station") String stationId,
                                                                        @PathVariable("startDate") String startDateString) {
 
         return getValuesByRange(heatIndexService, stationId, startDateString, "0");
@@ -56,7 +56,7 @@ public class HeatIndexController extends MeasurementController {
 
     //------------------- Retrieve latest HeatIndex for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Measurement> getHeatIndexValueLatest(@PathVariable("station") long stationId) {
+    public ResponseEntity<Measurement> getHeatIndexValueLatest(@PathVariable("station") String stationId) {
         return getTempValueLatest(heatIndexService, stationId);
     }
 }

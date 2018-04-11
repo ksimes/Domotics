@@ -23,7 +23,7 @@ export class DataStationService {
     return this._http.get<Station[]>(this.actionUrl + this.configuration.Station);
   };
 
-  public getStation = (station: number): Observable<Station> => {
+  public getStation = (station: string): Observable<Station> => {
     return this._http.get<Station>(this.actionUrl + this.configuration.Station + station);
   };
 }

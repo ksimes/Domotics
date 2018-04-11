@@ -21,7 +21,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   @Input('config')
   config: DisplayOptions;
 
-  station: number = 1;
+  station: string = '1';
   stationData: Station;
   errorMsg: string = '';
   displayChart: Chart = null;
@@ -151,7 +151,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
 
     for (let j = 0; j < chartData.length; j++) {
       _lineChartData.data[j] = chartData[j].value;
-      _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timestamp);
+      _lineChartLabels[j] = DisplayChartComponent.showTime(chartData[j].timeStamp);
     }
 
     // this.lineChartLabels = _lineChartLabels
@@ -186,7 +186,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
 
   //...
 
-  private getTemperaturesToday(station: number, add: boolean, option: number): void {
+  private getTemperaturesToday(station: string, add: boolean, option: number): void {
     let func: any;
 
     option = +option;
@@ -235,7 +235,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     );
   }
 
-  private getHumidityToday(station: number, add: boolean, option: number): void {
+  private getHumidityToday(station: string, add: boolean, option: number): void {
     let func: any;
 
     option = +option;
@@ -285,7 +285,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     );
   }
 
-  private getHeatIndexToday(station: number, add: boolean, option: number): void {
+  private getHeatIndexToday(station: string, add: boolean, option: number): void {
     this._dataHumidityService
       .GetStationHumiditiesToday(station)
       .subscribe((data: Measurement[]) => this.updateChartData(data, 'Heat Index', add),
@@ -299,7 +299,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
       );
   }
 
-  private getStationInformation(station: number): void {
+  private getStationInformation(station: string): void {
     this._dataStationService
       .getStation(station)
       .subscribe((data: Station) => this.stationData = data,

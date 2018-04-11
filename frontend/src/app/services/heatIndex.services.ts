@@ -27,27 +27,27 @@ export class DataHeatIndexService {
     return this.GetData(this.heatIndexUrl);
   };
 
-  public GetStationHeatIndices = (station:number):Observable<Measurement[]> => {
+  public GetStationHeatIndices = (station: string): Observable<Measurement[]> => {
     return this.GetData(this.heatIndexUrl + station);
   };
 
-  public GetLatestStationHeatIndex = (station:number):Observable<Measurement> => {
+  public GetLatestStationHeatIndex = (station: string): Observable<Measurement> => {
     return this._http.get<Measurement>(this.heatIndexUrl + station + this.configuration.Latest);
   };
 
-  public GetStationHeatIndicesToday = (station:number):Observable<Measurement[]> => {
+  public GetStationHeatIndicesToday = (station: string): Observable<Measurement[]> => {
     return this.GetData(this.heatIndexUrl + station + this.configuration.Date + Utilities.getFormattedTodayDate());
   };
 
-  public GetStationHeatIndicesInLastHour = (station:number):Observable<Measurement[]> => {
+  public GetStationHeatIndicesInLastHour = (station: string): Observable<Measurement[]> => {
     return this.GetStationHeatIndicesInLastXHours(station, 1)
   };
 
-  public GetStationHeatIndicesInLastXHours = (station:number, hours : number):Observable<Measurement[]> => {
+  public GetStationHeatIndicesInLastXHours = (station: string, hours: number): Observable<Measurement[]> => {
     return this._http.get<Measurement[]>(this.heatIndexUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow());
   };
 
-  public GetStationHeatIndicesInLastDays = (station:number, days : number):Observable<Measurement[]> => {
+  public GetStationHeatIndicesInLastDays = (station: string, days: number): Observable<Measurement[]> => {
     let hours = days * 24;
     return this.GetStationHeatIndicesInLastXHours(station, hours)
   };

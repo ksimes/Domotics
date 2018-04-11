@@ -6,7 +6,7 @@ import com.stronans.domotics.utilities.DateInfo;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by S.King on 07/07/2016.
@@ -28,7 +28,7 @@ public class ConnectorTest {
 
     @Test
     public void add() throws Exception {
-        Measurement measurement = new Measurement(10, 24.635, DateInfo.fromUniversalString("20160707205620"), 300, 1);
+        Measurement measurement = new Measurement("1", 24.635, DateInfo.fromUniversalString("20160707205620"), 300, "1");
         measurement = connector.add(measurement);
 
         assertNotNull(measurement.id());

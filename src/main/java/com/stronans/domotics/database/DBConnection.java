@@ -1,12 +1,11 @@
 package com.stronans.domotics.database;
 
+import com.arangodb.ArangoDB;
+import com.arangodb.ArangoDBException;
+import com.arangodb.ArangoDatabase;
 import org.apache.log4j.Logger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 /**
  * Creates and serves out JDBC connection to MySQL DB.
@@ -18,7 +17,7 @@ import java.sql.SQLException;
 public final class DBConnection {
     private static final Logger logger = Logger.getLogger(DBConnection.class);
 
-    private Connection connection = null;
+    private ArangoDatabase ardb = null;
     private String host;
     private int port = 3306;
     private String dbName;
@@ -26,33 +25,29 @@ public final class DBConnection {
     private String userPassword;
 
     private void establishConnection() {
-        String connectionString = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
+        ArangoDB arangoDB;
 
         try {
-            connection = DriverManager.getConnection(connectionString, userName, userPassword);
+            arangoDB = new ArangoDB.Builder().host(host, port).user(userName).password(userPassword).maxConnections(4).build();
+            ardb = arangoDB.db(dbName);
+            logger.info("Made connection to database with url [" + ardb.toString() + "]");
 
-            logger.info("Made connection to database with url [" + connectionString + "]");
-
-        } catch (SQLException e) {
-            logger.error("Connection to database [" + connectionString +
-                    "] using credentials - " + userName + "/" + userPassword + " failed.", e);
+        } catch (ArangoDBException ex) {
+            logger.error("Connection to database [" + ardb.toString() +
+                    "] using credentials - " + userName + "/" + userPassword + " failed.");
         }
     }
 
-    public Connection getConnection() {
-        if (connection == null) {
+    public ArangoDatabase getConnection() {
+        if (ardb == null) {
             establishConnection();
         }
 
-        return connection;
+        return ardb;
     }
 
-    public String getFullTableName(String tableName) {
-        return dbName + "." + tableName;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setConnection(ArangoDatabase ardb) {
+        this.ardb = ardb;
     }
 
     public void setHost(String host) {
