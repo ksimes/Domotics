@@ -35,3 +35,12 @@ com:
 build:
   version: \@pom.version\@
   date: \@timestamp\@
+
+caching:
+  specs:
+    - cacheName: stationList
+      maxsize: 10
+      ttl: 10h
+    - cacheName: sensorList
+      maxsize: 10
+      ttl: 10h

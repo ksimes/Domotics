@@ -8,6 +8,7 @@ import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.model.SensorType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class SensorTypeDAO {
         return resultSet;
     }
 
+    @Cacheable("sensorList")
     public List<SensorType> getList() {
         return getList(0);
     }
