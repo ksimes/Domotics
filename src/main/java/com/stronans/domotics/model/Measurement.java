@@ -1,5 +1,7 @@
 package com.stronans.domotics.model;
 
+import com.arangodb.velocypack.annotations.Expose;
+import com.arangodb.velocypack.annotations.SerializedName;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stronans.domotics.utilities.DateInfo;
@@ -8,20 +10,27 @@ import com.stronans.domotics.utilities.DateInfo;
  * Immutable model of measurement value from a specific station.
  * This model will suit all current measurements taken.
  * Created by S.King on 03/07/2016.
+ * Restructured for ArangoDB by S.King on 13/04/2018.
  */
 public final class Measurement {
     private String id;
     private final String stationId;
     private final double value;
-    private final DateInfo timeStamp;
+    @Expose(serialize = false, deserialize = true)
+    private final DateInfo timeStamp;           // Excuded from Arango Java driver so as to not serialise down to DB.
+    @SerializedName("timeStamp")
+    private final String timeStampData;         // Set for transfer down to Arango as ISO date format. Not otherwise used.
+
     private final int sampleRate;
-    private final boolean status;
+    @Expose(serialize = false, deserialize = true)
+    private final boolean status;           // Status only used by UI to check if values should be shown or used as display padding
     private final String sensorType;
 
     public Measurement(String id, String stationId, double value, DateInfo timeStamp, int sampleRate, String sensorType, boolean status) {
         this.id = id;
         this.stationId = stationId;
         this.timeStamp = timeStamp;
+        this.timeStampData = timeStamp.ISOTimestamp();
         this.value = value;
         this.sampleRate = sampleRate;
         this.status = status;
