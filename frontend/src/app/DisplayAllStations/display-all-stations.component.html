@@ -1,9 +1,12 @@
-<h2>{{_configuration.applicationName}} at St Ronans as at {{now}}</h2>
 <div>
+  <a class="active" href="#home"><h2>{{_configuration.applicationName}} at St Ronans</h2></a>
+  <h3>At {{now}}</h3>
   <input (click)="refresh()" type="button" aria-label="Refresh button" value="Refresh display"/>
+</div>
+<div>
   <p></p>
 
-  <h3>{{getSensorName(0)}} sensors in the house</h3>
+  <h3>{{getSensorName('0')}} sensors in the house</h3>
   <p></p>
   <table summary="This table shows the current state of all working stations in the house.">
     <tr>
@@ -14,10 +17,10 @@
       <th>Humidity %</th>
       <th>Heat Index</th>
     </tr>
-    <tr display-station [station]="station" *ngFor="let station of filteredByType(1)"></tr>
+    <tr display-station [station]="station" *ngFor="let station of filteredByType('1')"></tr>
   </table>
 
-  <h3>{{getSensorName(1)}} sensors in the house</h3>
+  <h3>{{getSensorName('1')}} sensors in the house</h3>
   <p></p>
   <table summary="This table shows the current state of all working stations in the house.">
     <tr>
@@ -28,6 +31,6 @@
       <th>Humidity %</th>
       <th>Heat Index</th>
     </tr>
-    <tr display-station [station]="station" *ngFor="let station of filteredByType(2)"></tr>
+    <tr display-station [station]="station" *ngFor="let station of filteredByType('2')"></tr>
   </table>
 </div>

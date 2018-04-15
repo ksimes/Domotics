@@ -62,7 +62,7 @@ export class DisplayAllStations implements OnInit {
       );
   }
 
-  public getSensorName(selectedSensorType: number): String {
+  public getSensorName(selectedSensorType: string): String {
 
     if (this.sensorData) {
 
@@ -73,10 +73,10 @@ export class DisplayAllStations implements OnInit {
   }
 
 
-  public filteredByType(selectedSensorType: number): Station[] {
+  public filteredByType(selectedSensorType: string): Station[] {
     if (this.stationData && this.stationData.length > 1) {
       return this.stationData.filter((station) =>
-        station.sensorType == selectedSensorType
+        station.sensorType === selectedSensorType
       );
     }
 
