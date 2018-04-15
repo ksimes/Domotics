@@ -14,6 +14,8 @@ logging:
 # Spring actuator endpoints
 management:
   context-path: /domotic/api/
+  security:
+    enabled: false
 
 # Tomcat public facing port for all uri
 server:
@@ -23,18 +25,18 @@ server:
 com:
   stronans:
     domotics:
-      host: localhost
+      host: 192.168.1.50
       port: 8529
       dbName: domotics
-      userName: simon
-      userPassword: '[pz2d3$J]'
+      userName: measure
+      userPassword: measure
 
 
 #      host: 192.168.1.50
 
 build:
-  version: \@pom.version\@
-  date: \@timestamp\@
+  version: @pom.version@
+  date: @timestamp@
 
 caching:
   specs:
