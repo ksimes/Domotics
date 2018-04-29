@@ -19,9 +19,9 @@ export class DisplayStationComponent {
   @Input('station')
   station: Station;
 
-  temperature: Measurement = new Measurement(1, 1, 0.0, '2016');
-  humidity: Measurement = new Measurement(1, 1, 0.0, '2016');
-  heatIndex: Measurement = new Measurement(1, 1, 0.0, '2016');
+  temperature: Measurement = new Measurement('1', '1', 0.0, '2016');
+  humidity: Measurement = new Measurement('1', '1', 0.0, '2016');
+  heatIndex: Measurement = new Measurement('1', '1', 0.0, '2016');
 
   errorMsg: string = '';
   timeStamp: string = '';
@@ -32,12 +32,13 @@ export class DisplayStationComponent {
   }
 
   private static processTimeStamp(data: Measurement): string {
-    let year: number = +data.timestamp.substr(0, 4);
-    let month: number = +data.timestamp.substr(4, 2);
-    let day: number = +data.timestamp.substr(6, 2);
-    let hour: number = +data.timestamp.substr(8, 2);
-    let minute: number = +data.timestamp.substr(10, 2);
-    let second: number = +data.timestamp.substr(12, 2);
+
+    let year: number = +data.timeStamp.substr(0, 4);
+    let month: number = +data.timeStamp.substr(4, 2);
+    let day: number = +data.timeStamp.substr(6, 2);
+    let hour: number = +data.timeStamp.substr(8, 2);
+    let minute: number = +data.timeStamp.substr(10, 2);
+    let second: number = +data.timeStamp.substr(12, 2);
 
     let date: Date = new Date(year, month - 1, day, hour, minute, second);
 
@@ -69,12 +70,12 @@ export class DisplayStationComponent {
   public refresh(station: Station) {
     this.errorMsg = '';
 
-    this.getLatestTemperature(station.id);
-    this.getLatestHumidity(station.id);
-    this.getLatestHeatIndex(station.id);
+    this.getLatestTemperature(station._key);
+    this.getLatestHumidity(station._key);
+    this.getLatestHeatIndex(station._key);
   }
 
-  private getLatestTemperature(station: number): void {
+  private getLatestTemperature(station: string): void {
     this._dataTemperatureService.GetLatestStationTemperature(station).subscribe((data: Measurement) => this.temperature = data,
       error => {
         this.errorMsg = this.handleError(error);
@@ -85,7 +86,7 @@ export class DisplayStationComponent {
     );
   }
 
-  private getLatestHumidity(station: number): void {
+  private getLatestHumidity(station: string): void {
     this._dataHumidityService.GetLatestStationHumidity(station).subscribe((data: Measurement) => this.humidity = data,
       error => {
         this.errorMsg = this.handleError(error);
@@ -95,7 +96,7 @@ export class DisplayStationComponent {
     );
   }
 
-  private getLatestHeatIndex(station: number): void {
+  private getLatestHeatIndex(station: string): void {
     this._dataHeatIndexService.GetLatestStationHeatIndex(station).subscribe((data: Measurement) => this.heatIndex = data,
       error => {
         this.errorMsg = this.handleError(error);

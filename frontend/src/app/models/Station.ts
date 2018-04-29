@@ -1,4 +1,4 @@
 export class Station {
-  constructor(public id:number, public stationId:number, public name:string, public description:string, public sensorType:number) {
+  constructor(public _key: string, public stationId: string, public name: string, public description: string, public sensorType: string) {
   }
 }

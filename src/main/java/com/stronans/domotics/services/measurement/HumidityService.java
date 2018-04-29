@@ -17,8 +17,12 @@ import java.util.List;
 public class HumidityService implements MeasurementServiceInterface {
     private static final Logger logger = Logger.getLogger(HumidityService.class);
 
-    @Autowired
     private HumidityDAO humidityDAO;
+
+    @Autowired
+    public HumidityService(HumidityDAO humidityDAO) {
+        this.humidityDAO = humidityDAO;
+    }
 
     @Override
     public Measurement saveMeasurement(Measurement humidity) {
@@ -37,42 +41,42 @@ public class HumidityService implements MeasurementServiceInterface {
     }
 
     @Override
-    public List<Measurement> find(long stationId) {
+    public List<Measurement> find(String stationId) {
         return humidityDAO.getList(stationId);
     }
 
     @Override
-    public List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate) {
+    public List<Measurement> find(String stationId, DateInfo startDate, DateInfo endDate) {
         return humidityDAO.getList(stationId, startDate, endDate);
     }
 
     @Override
     public List<Measurement> find(DateInfo startDate, DateInfo endDate) {
-        return humidityDAO.getList(0, startDate, endDate);
+        return humidityDAO.getList(null, startDate, endDate);
     }
 
     @Override
-    public Measurement findLatest(long stationId) {
+    public Measurement findLatest(String stationId) {
         return humidityDAO.getLatest(stationId);
     }
 
     @Override
     public Long count() {
-        return null;
+        return humidityDAO.getItemCount();
     }
 
     @Override
-    public Long count(long stationId) {
-        return null;
+    public Long count(String stationId) {
+        return humidityDAO.getItemCount(stationId);
     }
 
     @Override
-    public Long count(long stationId, DateInfo startDate, DateInfo endDate) {
-        return null;
+    public Long count(String stationId, DateInfo startDate, DateInfo endDate) {
+        return humidityDAO.getItemCount(stationId, startDate, endDate);
     }
 
     @Override
     public Long count(DateInfo startDate, DateInfo endDate) {
-        return null;
+        return humidityDAO.getItemCount(null, startDate, endDate);
     }
 }

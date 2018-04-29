@@ -41,22 +41,22 @@ public class TemperatureService implements MeasurementServiceInterface {
     }
 
     @Override
-    public List<Measurement> find(long stationId) {
+    public List<Measurement> find(String stationId) {
         return temperatureDAO.getList(stationId);
     }
 
     @Override
-    public List<Measurement> find(long stationId, DateInfo startDate, DateInfo endDate) {
+    public List<Measurement> find(String stationId, DateInfo startDate, DateInfo endDate) {
         return temperatureDAO.getList(stationId, startDate, endDate);
     }
 
     @Override
     public List<Measurement> find(DateInfo startDate, DateInfo endDate) {
-        return temperatureDAO.getList(0, startDate, endDate);
+        return temperatureDAO.getList(null, startDate, endDate);
     }
 
     @Override
-    public Measurement findLatest(long stationId) {
+    public Measurement findLatest(String stationId) {
         return temperatureDAO.getLatest(stationId);
     }
 
@@ -66,17 +66,17 @@ public class TemperatureService implements MeasurementServiceInterface {
     }
 
     @Override
-    public Long count(long stationId) {
+    public Long count(String stationId) {
         return temperatureDAO.getItemCount(stationId);
     }
 
     @Override
-    public Long count(long stationId, DateInfo startDate, DateInfo endDate) {
+    public Long count(String stationId, DateInfo startDate, DateInfo endDate) {
         return temperatureDAO.getItemCount(stationId, startDate, endDate);
     }
 
     @Override
     public Long count(DateInfo startDate, DateInfo endDate) {
-        return temperatureDAO.getItemCount(0, startDate, endDate);
+        return temperatureDAO.getItemCount(null, startDate, endDate);
     }
 }

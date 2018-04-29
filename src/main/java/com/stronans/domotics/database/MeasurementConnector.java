@@ -1,42 +1,46 @@
 package com.stronans.domotics.database;
 
+import com.arangodb.ArangoCollection;
+import com.arangodb.ArangoCursor;
+import com.arangodb.ArangoDBException;
+import com.arangodb.ArangoDatabase;
+import com.arangodb.entity.DocumentCreateEntity;
+import com.arangodb.velocypack.VPackSlice;
+import com.arangodb.velocypack.exception.VPackException;
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Processes data to and from any of the current measurement tables.
- * These are tables for Temperature, Humidity and HeatIndex (humiture)
- * As these tables all share a common table structure they can all be accessed using this class.
+ * These are collections for Temperature, Humidity and HeatIndex (humiture)
+ * As these collections all share a common structure they can all be accessed using this class.
  * <p>
  * Created by S.King on 07/07/2016.
+ * Extensively restructured for arangoDB by S.King on 10/04/2018.
  */
-@Component
 public abstract class MeasurementConnector implements MeasurementConnectorInterface {
     private static final Logger logger = Logger.getLogger(MeasurementConnector.class);
-    private static final String ANSI_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private static final String ANSI_DATE_FORMAT = "yyyy-MM-dd";
 
-    /**
-     * Used in the update statement which has a different order/number of parameters than the select
-     */
-    private static final int STATION_ID = 1;
-    private static final int VALUE = 2;
-    private static final int TIMESTAMP = 3;
-    private static final int SAMPLERATE = 4;
-    private static final int SENSORTYPE = 5;
+    private ArangoDatabase database;
+    private ArangoCollection collection;
+    private String queryPart1;
+    private String queryPart2;
+    private String countQueryPart1;
+    private String countQueryPart2;
 
-    protected Connection connection = null;
-    protected PreparedStatement addStatement;
-    protected String query;
-    protected String countQuery;
+    public MeasurementConnector(DBConnection dbConnection, String collectionName) {
+        database = dbConnection.getConnection();
+        collection = database.collection(collectionName);
+        database = dbConnection.getConnection();
 
-    public MeasurementConnector() {
+        queryPart1 = "FOR m IN " + collectionName;
+        queryPart2 = " return m";
+        countQueryPart1 = "FOR doc IN " + collectionName;
+        countQueryPart2 = " COLLECT WITH COUNT INTO length RETURN length";
     }
 
     /**
@@ -49,84 +53,89 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
     public Measurement add(Measurement measurement) {
 
         try {
-            addStatement.clearParameters();
-            addStatement.setLong(STATION_ID, measurement.stationId());
-            addStatement.setDouble(VALUE, measurement.value());
+            final DocumentCreateEntity<Measurement> doc = collection.insertDocument(measurement);
 
-            Timestamp timeStamp = new Timestamp(measurement.timeStamp().getMilliseconds());
-            addStatement.setTimestamp(TIMESTAMP, timeStamp);
-            addStatement.setInt(SAMPLERATE, measurement.sampleRate());
-            addStatement.setInt(SENSORTYPE, measurement.sensorType());
-            addStatement.executeUpdate();
-
-            logger.debug("Query : " + addStatement.toString());
-
-            ResultSet rs = addStatement.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                measurement = measurement.setId(rs.getLong(1));
+            if (doc != null && doc.getKey() != null) {
+                measurement = measurement.setId(doc.getKey());
             }
-        } catch (SQLException ex) {
-            logger.error("Problem executing add prepared statement with params : " + measurement, ex);
+        } catch (ArangoDBException ae) {
+            logger.error("Problem inserting into collection with params : " + measurement, ae);
+        } catch (Exception ex) {
+            logger.error("Unknown problem executing Query statement ", ex);
         }
 
         return measurement;
     }
 
-    private String clauseConnector(boolean whereClauseStarted) {
-        String result = " WHERE ";
+    public List<Measurement> getList() {
+        return getList(null, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
+    }
 
-        if (whereClauseStarted) {
-            result = " AND ";
+    public List<Measurement> getList(String stationId) {
+        return getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), false);
+    }
+
+    public List<Measurement> getList(String stationId, DateInfo startDate, DateInfo endDate) {
+        return getList(stationId, startDate, endDate, false);
+    }
+
+    public Measurement getLatest(String stationId) {
+        List<Measurement> list = getList(stationId, DateInfo.getUndefined(), DateInfo.getUndefined(), true);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
         }
-
-        return result;
     }
 
     private String quote(DateInfo dateToQuote) {
-        return "\"" + dateToQuote.format(ANSI_TIMESTAMP_FORMAT) + "\"";
+        return "'" + dateToQuote.ISOTimestamp() + "'";
     }
 
     private String quoteDay(DateInfo dateToQuote) {
-        return "\"" + dateToQuote.format(ANSI_DATE_FORMAT) + "\"";
+        return "'" + dateToQuote.ISODate() + "'";
     }
 
-    private String addDates(String preparedQuery, DateInfo startDate, DateInfo endDate, boolean whereStarted) {
+    private String addDates(String preparedQuery, DateInfo startDate, DateInfo endDate) {
         // If both dates are defined then they should be fully defined with date and time.
         if (startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " timestamp >= " + quote(startDate) +
-                    " AND timestamp <= " + quote(endDate) + " ";
+            preparedQuery += "Filter m.timeStamp >= " + quote(startDate) +
+                    " and m.timestamp <= " + quote(endDate) + " ";
 
         } else if (startDate.isDefined() && !endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) = " + quoteDay(startDate) + " ";
+            preparedQuery += "Filter Date(m.timeStamp) = " + quoteDay(startDate) + " ";
         } else if (!startDate.isDefined() && endDate.isDefined()) {
-            preparedQuery += clauseConnector(whereStarted) + " Date(timestamp) < " + quoteDay(endDate) + " ";
+            preparedQuery += "Filter Date(m.timeStamp) < " + quoteDay(endDate) + " ";
         }
 
         return preparedQuery;
     }
 
     @Override
-    public List<Measurement> getList(long stationId, DateInfo startDate, DateInfo endDate, boolean latest) {
+    public List<Measurement> getList(String stationId, DateInfo startDate, DateInfo endDate, boolean latest) {
 
-        boolean whereStarted = false;
+        String preparedQuery = queryPart1;
 
-        String preparedQuery = query;
-
-        if (stationId > 0) {
-            preparedQuery += clauseConnector(false) + " StationId = " + stationId;
-            whereStarted = true;
+        if (stationId != null) {
+            preparedQuery += " Filter m.stationId == '" + stationId + "'";
         }
 
-        preparedQuery = addDates(preparedQuery, startDate, endDate, whereStarted);
+        preparedQuery = addDates(preparedQuery, startDate, endDate);
 
-        // Get the latest value sampled (with station Id gives current value for that room.
+        // Get the latest value sampled (with station Id gives current value for that room).
         if (latest) {
-            preparedQuery += " ORDER BY timestamp DESC Limit 1";
+            preparedQuery += " sort m.timeStamp DESC ";
+            preparedQuery += " Limit 1 ";
+        } else {
+            preparedQuery += " sort m.timeStamp ASC ";
         }
+
+
+        preparedQuery += queryPart2;
 
         logger.debug("Query : " + preparedQuery);
 
-        List<DatabaseResult> dbResultSet = getResultsAsList(preparedQuery);
+        List<Measurement> dbResultSet = getResultsAsList(preparedQuery);
 
         return getFillValues(dbResultSet);
     }
@@ -137,23 +146,29 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
      * @param query SQL query formed by other parts of this class
      * @return list of database result objects
      */
-    private List<DatabaseResult> getResultsAsList(String query) {
-        List<DatabaseResult> resultSet = new ArrayList<>();
+    private List<Measurement> getResultsAsList(String query) {
+        List<Measurement> resultSet = new ArrayList<>();
 
         try {
-            Statement queryStatement = connection.createStatement();
-            ResultSet rs = queryStatement.executeQuery(query);
-            if (rs != null) {
-                while (rs.next()) {
-                    DateInfo timeStamp = DateInfo.fromLong(rs.getTimestamp(4).getTime());
-                    DatabaseResult result = new DatabaseResult(rs.getLong(1), rs.getLong(2),
-                            rs.getDouble(3), timeStamp, rs.getInt(5), rs.getInt(6));
-                    resultSet.add(result);
-                }
-            }
-            queryStatement.close();
-        } catch (SQLException ex) {
-            logger.error("Problem executing Query all statement ", ex);
+            ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
+            cursor.forEachRemaining(aDocument -> {
+                logger.trace("aDocument : " + aDocument);
+                Measurement measurement = new Measurement(aDocument.get("_key").getAsString(),
+                        aDocument.get("stationId").getAsString(),
+                        aDocument.get("value").getAsDouble(),
+                        DateInfo.fromISOTimestampString(aDocument.get("timeStamp").getAsString()),
+                        aDocument.get("sampleRate").getAsInt(),
+                        aDocument.get("sensorType").getAsString(),
+                        true
+                );
+                resultSet.add(measurement);
+            });
+        } catch (ArangoDBException ae) {
+            logger.error("Arango problem executing Query statement on collection", ae);
+        } catch (VPackException vpe) {
+            logger.error("VPack problem getting data from collection", vpe);
+        } catch (Exception ex) {
+            logger.error("Unknown problem executing Query statement ", ex);
         }
 
         return resultSet;
@@ -166,10 +181,10 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
      * @param databaseResults The data as taken from the database
      * @return a list of measurements but real and added for analysis.
      */
-    private List<Measurement> getFillValues(List<DatabaseResult> databaseResults) {
+    private List<Measurement> getFillValues(List<Measurement> databaseResults) {
         List<Measurement> resultSet = new ArrayList<>();
 
-        for (DatabaseResult dbResultSet : databaseResults) {
+        for (Measurement dbResultSet : databaseResults) {
             Measurement measurement = new Measurement(dbResultSet.id(), dbResultSet.stationId(),
                     dbResultSet.value(), dbResultSet.timeStamp(), dbResultSet.sampleRate(), dbResultSet.sensorType(), true);
             resultSet.add(measurement);
@@ -179,19 +194,18 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
     }
 
     @Override
-    public Long getCount(long stationId, DateInfo startDate, DateInfo endDate) {
+    public Long getCount(String stationId, DateInfo startDate, DateInfo endDate) {
 
         Long result;
-        boolean whereStarted = false;
+        String preparedQuery = countQueryPart1;
 
-        String preparedQuery = countQuery;
-
-        if (stationId > 0) {
-            preparedQuery += clauseConnector(false) + " StationId = " + stationId;
-            whereStarted = true;
+        if (stationId != null) {
+            preparedQuery += " FILTER doc.stationId == '" + stationId + "'";
         }
 
-        preparedQuery = addDates(preparedQuery, startDate, endDate, whereStarted);
+        preparedQuery = addDates(preparedQuery, startDate, endDate);
+
+        preparedQuery += countQueryPart2;
 
         logger.debug("Query : " + preparedQuery);
 
@@ -200,64 +214,32 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
         return result;
     }
 
+    private static Long result = 0L;
+
     private Long getCountResult(String query) {
-        Long result = 0L;
 
         try {
-            Statement queryStatement = connection.createStatement();
-            ResultSet rs = queryStatement.executeQuery(query);
-            if (rs != null) {
-                if (rs.next()) {
-                    result = rs.getLong(1);
-                }
-            }
-            queryStatement.close();
-        } catch (SQLException ex) {
+            ArangoCursor<Long[]> cursor = database.query(query, null, null, Long[].class);
+            cursor.forEachRemaining(count -> {
+                result = count[0];
+            });
+
+        } catch (ArangoDBException ex) {
             logger.error("Problem executing Query all statement ", ex);
         }
 
         return result;
     }
 
-    private final class DatabaseResult {
-        private final Long id;
-        private final long stationId;
-        private final double value;
-        private final DateInfo timeStamp;
-        private final int sampleRate;
-        private final int sensorType;
+    public Long getItemCount() {
+        return getCount(null, DateInfo.getUndefined(), DateInfo.getUndefined());
+    }
 
-        DatabaseResult(Long id, long stationId, double value, DateInfo timeStamp, int sampleRate, int sensorType) {
-            this.id = id;
-            this.stationId = stationId;
-            this.timeStamp = timeStamp;
-            this.value = value;
-            this.sampleRate = sampleRate;
-            this.sensorType = sensorType;
-        }
+    public Long getItemCount(String stationId) {
+        return getCount(stationId, DateInfo.getUndefined(), DateInfo.getUndefined());
+    }
 
-        Long id() {
-            return id;
-        }
-
-        double value() {
-            return value;
-        }
-
-        DateInfo timeStamp() {
-            return timeStamp;
-        }
-
-        long stationId() {
-            return stationId;
-        }
-
-        int sampleRate() {
-            return sampleRate;
-        }
-
-        int sensorType() {
-            return sensorType;
-        }
+    public Long getItemCount(String stationId, DateInfo startDate, DateInfo endDate) {
+        return getCount(stationId, startDate, endDate);
     }
 }

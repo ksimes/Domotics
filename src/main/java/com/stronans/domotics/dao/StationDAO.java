@@ -1,45 +1,47 @@
 package com.stronans.domotics.dao;
 
+import com.arangodb.ArangoCursor;
+import com.arangodb.ArangoDBException;
+import com.arangodb.ArangoDatabase;
+import com.arangodb.velocypack.VPackSlice;
 import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.model.Station;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Handles the connection to the Station connector to draw back station data from the DB.
  * Created by S.King on 14/07/2016.
+ * Restructured for ArangoDB by S.King on 10/04/2018.
  */
 @Repository
 public class StationDAO {
     private final Logger logger = Logger.getLogger(this.getClass());
 
-    private Connection connection = null;
+    private ArangoDatabase database;
     private String query;
 
     @Autowired
-    private void StationDAO(DBConnection dbConnection) {
-        connection = dbConnection.getConnection();
-
+    public StationDAO(DBConnection dbConnection) {
+        database = dbConnection.getConnection();
         String tableName = "stations";
-        String workingTable = dbConnection.getFullTableName(tableName);
-
-        query = "SELECT * FROM " + workingTable;
+        query = "for s in " + tableName;
     }
 
-    public List<Station> getList(long stationId) {
+    private List<Station> getList(long stationId) {
         String preparedQuery = query;
 
         if (stationId > 0) {
-            preparedQuery += " WHERE id = " + stationId;
+            preparedQuery += " Filter s._key == '" + stationId + "'";
         }
+
+        preparedQuery += " sort s.name ASC";
+        preparedQuery += " return s";
 
         logger.debug("Query : " + preparedQuery);
 
@@ -50,20 +52,22 @@ public class StationDAO {
         List<Station> resultSet = new ArrayList<>();
 
         try {
-            Statement queryStatement = connection.createStatement();
-            ResultSet rs = queryStatement.executeQuery(query);
-            if (rs != null) {
-                while (rs.next()) {
-                    Station station = new Station(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-                    resultSet.add(station);
-                }
-            }
-        } catch (SQLException ex) {
+            ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
+            cursor.forEachRemaining(aStation -> {
+                Station station = new Station(aStation.get("_key").getAsString(),
+                        aStation.get("name").getAsString(),
+                        aStation.get("description").getAsString(),
+                        aStation.get("type").getAsString());
+                resultSet.add(station);
+            });
+        } catch (ArangoDBException ex) {
             logger.error("Problem executing Query all statement ", ex);
         }
+
         return resultSet;
     }
 
+    @Cacheable("stationList")
     public List<Station> getList() {
         return getList(0);
     }

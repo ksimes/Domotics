@@ -9,21 +9,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class Station
 {
-    private final long stationId;
+    private final String stationId;
     private final String name;
     private final String description;
-    private final int sensorType;
+    private final String sensorType;
 
     @JsonCreator
-    public Station(long stationId, String name, String description, int sensorType) {
+    public Station(String stationId, String name, String description, String sensorType) {
         this.stationId = stationId;
         this.name = name;
         this.description = description;
         this.sensorType = sensorType;
     }
 
-    @JsonProperty("id")
-    public long StationId() {
+    @JsonProperty("_key")
+    public String StationId() {
         return stationId;
     }
 
@@ -38,7 +38,7 @@ public final class Station
     }
 
     @JsonProperty("sensorType")
-    public int sensorType() {
+    public String sensorType() {
         return sensorType;
     }
 }

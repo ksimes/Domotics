@@ -8,19 +8,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Created by S.King on 06/08/2016.
  */
 public final class SensorType {
-    private final long id;
+    private final String id;
     private final String name;
     private final String description;
 
     @JsonCreator
-    public SensorType(long sensorId, String name, String description) {
+    public SensorType(String sensorId, String name, String description) {
         this.id = sensorId;
         this.name = name;
         this.description = description;
     }
 
     @JsonProperty("id")
-    public long sensorId() {
+    public String sensorId() {
         return id;
     }
 

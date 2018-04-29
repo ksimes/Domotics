@@ -12,7 +12,7 @@ public interface MeasurementConnectorInterface {
 
     Measurement add(Measurement measurement);
 
-    List<Measurement> getList(long stationId, DateInfo startDate, DateInfo endDate, boolean latest);
+    List<Measurement> getList(String stationId, DateInfo startDate, DateInfo endDate, boolean latest);
 
-    Long getCount(long stationId, DateInfo startDate, DateInfo endDate);
+    Long getCount(String stationId, DateInfo startDate, DateInfo endDate);
 }

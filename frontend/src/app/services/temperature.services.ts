@@ -5,7 +5,7 @@ import 'rxjs/add/observable/throw';
 import {Observable} from "rxjs/Observable";
 import {Measurement} from "../models/Measurement";
 import {Configuration} from "../models/configuration";
-import {Utilities} from "../services/utilities";
+import {Utilities} from "./utilities";
 import {HttpClient} from "@angular/common/http";
 
 
@@ -28,28 +28,28 @@ export class DataTemperatureService {
     return this.GetData(this.temperatureUrl);
   };
 
-  public GetStationTemperatures = (station: number): Observable<Measurement[]> => {
+  public GetStationTemperatures = (station: string): Observable<Measurement[]> => {
     return this.GetData(this.temperatureUrl + station);
   };
 
-  public GetLatestStationTemperature = (station: number): Observable<Measurement> => {
+  public GetLatestStationTemperature = (station: string): Observable<Measurement> => {
     return this._http.get<Measurement>(this.temperatureUrl + station + this.configuration.Latest);
   };
 
-  public GetStationTemperaturesToday = (station: number): Observable<Measurement[]> => {
+  public GetStationTemperaturesToday = (station: string): Observable<Measurement[]> => {
     return this.GetData(this.temperatureUrl + station + this.configuration.Date + Utilities.getFormattedTodayDate());
   };
 
-  public GetStationTemperaturesInLastHour = (station: number): Observable<Measurement[]> => {
+  public GetStationTemperaturesInLastHour = (station: string): Observable<Measurement[]> => {
     return this.GetStationTemperaturesInLastXHours(station, 1)
   };
 
-  public GetStationTemperaturesInLastDays = (station: number, days: number): Observable<Measurement[]> => {
+  public GetStationTemperaturesInLastDays = (station: string, days: number): Observable<Measurement[]> => {
     let hours = days * 24;
     return this.GetStationTemperaturesInLastXHours(station, hours)
   };
 
-  public GetStationTemperaturesInLastXHours = (station: number, hours: number): Observable<Measurement[]> => {
+  public GetStationTemperaturesInLastXHours = (station: string, hours: number): Observable<Measurement[]> => {
     return this.GetData(this.temperatureUrl + station + this.configuration.Range + Utilities.getFormattedHoursAgo(hours) + "/" + Utilities.getFormattedDateNow());
   };
 
