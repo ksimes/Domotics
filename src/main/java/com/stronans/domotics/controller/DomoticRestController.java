@@ -48,7 +48,7 @@ public class DomoticRestController {
                 + " Sensor Type: " + sensorReading.getSensorType()
                 + " at " + current);
 
-        cacheService.saveMeasurement(sensorReading);
+        cacheService.saveMeasurement(sensorReading, current);
 
         temperatureService.saveMeasurement(new Measurement(sensorReading.getStationId(), sensorReading.getValue1(), current,
                 sensorReading.getSampleRate(), sensorReading.getSensorType()));

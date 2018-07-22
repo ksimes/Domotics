@@ -4,10 +4,13 @@ import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDBException;
 import com.arangodb.ArangoDatabase;
-import com.arangodb.entity.DocumentCreateEntity;
 import com.arangodb.velocypack.VPackSlice;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stronans.domotics.database.DBConnection;
+import com.stronans.domotics.model.SensorCache;
 import com.stronans.domotics.model.SensorReading;
+import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,7 +48,7 @@ public class CacheDAO {
 
     }
 
-    public List<SensorReading> getList() {
+    public List<SensorCache> getList() {
         String preparedQuery = query;
 
         logger.debug("Query : " + preparedQuery);
@@ -53,20 +56,22 @@ public class CacheDAO {
         return getResultsAsList(preparedQuery);
     }
 
-    private List<SensorReading> getResultsAsList(String query) {
-        List<SensorReading> resultSet = new ArrayList<>();
+    private List<SensorCache> getResultsAsList(String query) {
+        List<SensorCache> resultSet = new ArrayList<>();
 
         try {
             ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
             cursor.forEachRemaining(aReading -> {
-                SensorReading sensorReading = new SensorReading(aReading.get("stationId").getAsString(),
+                SensorCache sensorItem = new SensorCache(aReading.get("stationId").getAsString(),
+                        aReading.get("name").getAsString(),
+                        aReading.get("description").getAsString(),
                         aReading.get("temperatureValue").getAsDouble(),
                         aReading.get("humidityValue").getAsDouble(),
                         aReading.get("humitureValue").getAsDouble(),
                         aReading.get("sampleRate").getAsInt(),
                         aReading.get("sensorType").getAsString()
                 );
-                resultSet.add(sensorReading);
+                resultSet.add(sensorItem);
             });
         } catch (ArangoDBException ex) {
             logger.error("Problem executing Query all statement ", ex);
@@ -75,14 +80,22 @@ public class CacheDAO {
         return resultSet;
     }
 
-    public SensorReading update(SensorReading readingToCache) {
-        DocumentCreateEntity<SensorReading> doc;
+    public SensorReading update(SensorReading readingToCache, DateInfo current) {
+
+        CacheStore cacheStore = new CacheStore(readingToCache.getStationId(),
+                current.ISOTimestamp(),
+                readingToCache.getValue1(),
+                readingToCache.getValue2(),
+                readingToCache.getValue3(),
+                readingToCache.getSampleRate(),
+                readingToCache.getSensorType()
+        );
 
         try {
-            if (collection.documentExists(readingToCache.getStationId())) {
-                collection.insertDocument(readingToCache);
+            if (collection.documentExists(cacheStore.stationId())) {
+                collection.insertDocument(cacheStore);
             } else {
-                collection.updateDocument(readingToCache.getStationId(), readingToCache);
+                collection.updateDocument(cacheStore.stationId(), cacheStore);
             }
         } catch (ArangoDBException ae) {
             logger.error("Problem inserting/updating collection with params : " + readingToCache, ae);
@@ -91,5 +104,61 @@ public class CacheDAO {
         }
 
         return readingToCache;
+    }
+
+    private class CacheStore {
+        private final String stationId;
+        private final String timeStamp;
+        private final double value1;
+        private final double value2;
+        private final double value3;
+        private final int sampleRate;
+        private final String sensorType;
+
+        @JsonCreator
+        public CacheStore(
+                @JsonProperty("stationId") String stationId,
+                @JsonProperty("timeStamp") String timeStamp,
+                @JsonProperty("temperatureValue") double value1,
+                @JsonProperty("humidityValue") double value2,
+                @JsonProperty("humitureValue") double value3,
+                @JsonProperty("sampleRate") int sampleRate,
+                @JsonProperty("sensorType") String sensorType) {
+            this.stationId = stationId;
+            this.timeStamp = timeStamp;
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+            this.sampleRate = sampleRate;
+            this.sensorType = sensorType;
+        }
+
+        public String sensorType() {
+            return sensorType;
+        }
+
+        public String stationId() {
+            return stationId;
+        }
+
+        public String timeStamp() {
+            return timeStamp;
+        }
+
+        public double value1() {
+            return value1;
+        }
+
+        public double value2() {
+            return value2;
+        }
+
+        public double value3() {
+            return value3;
+        }
+
+        public int sampleRate() {
+            return sampleRate;
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.stronans.domotics.services.displaycache;
 
 import com.stronans.domotics.dao.CacheDAO;
+import com.stronans.domotics.model.SensorCache;
 import com.stronans.domotics.model.SensorReading;
+import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,12 @@ public class CacheService {
         this.cacheDAO = cacheDAO;
     }
 
-    public SensorReading saveMeasurement(SensorReading readingToCache) {
-        readingToCache = cacheDAO.update(readingToCache);
+    public SensorReading saveMeasurement(SensorReading readingToCache, DateInfo current) {
+        readingToCache = cacheDAO.update(readingToCache, current);
         return readingToCache;
     }
 
-    public List<SensorReading> find() {
+    public List<SensorCache> findAll() {
         return cacheDAO.getList();
     }
 }
