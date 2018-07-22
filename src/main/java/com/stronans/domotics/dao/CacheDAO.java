@@ -40,6 +40,7 @@ public class CacheDAO {
                 "FILTER s._key == c._key " +
                 "sort s.name " +
                 "RETURN { stationId: s._key, name: s.name, description: s.description, " +
+                "timeStamp: c.timeStamp, " +
                 "temperatureValue: c.temperatureValue, " +
                 "humidityValue: c.humidityValue, " +
                 "humitureValue: c.humitureValue, " +
@@ -63,6 +64,7 @@ public class CacheDAO {
             ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
             cursor.forEachRemaining(aReading -> {
                 SensorCache sensorItem = new SensorCache(aReading.get("stationId").getAsString(),
+                        aReading.get("timeStamp").getAsString(),
                         aReading.get("name").getAsString(),
                         aReading.get("description").getAsString(),
                         aReading.get("temperatureValue").getAsDouble(),

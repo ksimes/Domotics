@@ -12,12 +12,14 @@ public final class SensorCache {
     private final String sensorType;
     private final String name;
     private final String description;
+    private final String timeStamp;
 
     @JsonCreator
     public SensorCache(
             @JsonProperty("stationId") String stationId,
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
+            @JsonProperty("timeStamp") String timeStamp,
             @JsonProperty("temperatureValue") double value1,
             @JsonProperty("humidityValue") double value2,
             @JsonProperty("humitureValue") double value3,
@@ -26,6 +28,7 @@ public final class SensorCache {
         this.name = name;
         this.description = description;
         this.stationId = stationId;
+        this.timeStamp = timeStamp;
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
