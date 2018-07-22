@@ -36,7 +36,7 @@ public class StationController {
     public ResponseEntity<Station> getStationName(@PathVariable("stationId") long stationId) {
         Station station = stationService.find(stationId);
         if (station == null) {
-            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE); // returns 416 or maybe "406 - Not Acceptable"
+            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.NO_CONTENT); // returns 204 - No Content
         } else {
             return new ResponseEntity<>(station, WebUtilities.header(), HttpStatus.OK);
         }

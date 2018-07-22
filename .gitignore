@@ -8,7 +8,6 @@ project/project
 /node_modules
 typings
 /libraries
-/mysql
 database/README.txt
 database/SensorTypes.sql
 database/old/
@@ -20,7 +19,6 @@ documents/IoTPresentation/
 documents/Presentation/
 documents/pi4j-savage-devoxx.pdf
 logs/
-scripts/
 arduino/domotics-NodeMcu-0.9/access.h
 arduino/domotics-NodeMcu-1.0/access.h
 arduino/domotics3/access.h
@@ -56,3 +54,10 @@ frontend/src/app/services/station.services.js.map
 frontend/src/app/services/temperature.services.js
 frontend/src/app/services/temperature.services.js.map
 temp_public/
+database/ListOfStations2.sql
+database/Migration to Arrango/
+documents/package-lock.json
+mysql/
+scripts/nohup.out
+scripts/wifirefresh.sh
+src/main/resources/public/

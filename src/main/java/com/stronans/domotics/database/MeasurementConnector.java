@@ -35,7 +35,6 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
     public MeasurementConnector(DBConnection dbConnection, String collectionName) {
         database = dbConnection.getConnection();
         collection = database.collection(collectionName);
-        database = dbConnection.getConnection();
 
         queryPart1 = "FOR m IN " + collectionName;
         queryPart2 = " return m";

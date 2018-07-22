@@ -2,6 +2,7 @@ package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
 import com.stronans.domotics.model.SensorReading;
+import com.stronans.domotics.services.displaycache.CacheService;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
 import com.stronans.domotics.utilities.DateInfo;
 import com.stronans.domotics.utilities.WebUtilities;
@@ -32,6 +33,8 @@ public class DomoticRestController {
     private MeasurementServiceInterface humidityService;        //Service which will do all data retrieval/manipulation work
     @Resource(name = "HeatIndexService")
     private MeasurementServiceInterface heatIndexService;      //Service which will do all data retrieval/manipulation work
+    @Resource
+    private CacheService cacheService;
 
     //------------------- Create a Measurement in DB --------------------------------------------------------
     @RequestMapping(value = "/reading/", method = RequestMethod.POST, consumes = "application/json")
@@ -44,6 +47,8 @@ public class DomoticRestController {
                 + " Sample Rate: " + sensorReading.getSampleRate()
                 + " Sensor Type: " + sensorReading.getSensorType()
                 + " at " + current);
+
+        cacheService.saveMeasurement(sensorReading);
 
         temperatureService.saveMeasurement(new Measurement(sensorReading.getStationId(), sensorReading.getValue1(), current,
                 sensorReading.getSampleRate(), sensorReading.getSensorType()));

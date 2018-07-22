@@ -5,19 +5,20 @@ Domestic Robotics is an interesting way of merging hobby electronics and program
 
 This is an early cut of this project. Started on 3rd July 2016. Revised for Angular2/4 on July 2017.
 
-To Build final
+To Build for deployment
 ==============
 
-`ng build --prod`
-
-Copy everything from `dist` folder to your `public` folder under `resources`
+Open a bash command window and run:
 
 `mvn package`
 
-To run
+will produce a integrated jar which contains both the web front end in production mode and 
+the Java back end, including the endpoint for recieving sensor values from sensor stations.
+
+To run locally
 ======
 
-Open a command window and run:
+Open a bash command window and run:
 
 `ng serve`
 
@@ -31,10 +32,10 @@ Alternatively you can configure the default HTTP host and port used by the devel
 
 Run Java project from inside IntelliJ IDE to start REST interface.
 
-Use browser to connect to `http://localhost:31000/` 
-to see inital chart.
+Use browser to connect to `http://localhost:4200/domotics` 
+to see inital table of sensor stations.
 
-`http://localhost:31000/api/health` 
+`http://localhost:4200/api/health` 
 for all Actuator REST endpoints.
 
 can also build final combined jar using Build final instructions above and then:

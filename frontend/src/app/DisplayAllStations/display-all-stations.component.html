@@ -2,35 +2,52 @@
   <a class="active" href="#home"><h2>{{_configuration.applicationName}} at St Ronans</h2></a>
   <h3>At {{now}}</h3>
   <input (click)="refresh()" type="button" aria-label="Refresh button" value="Refresh display"/>
+  <input (click)="onGridReady()" type="button" aria-label="Refresh grid" value="Refresh grid"/>
 </div>
+
 <div>
   <p></p>
 
   <h3>{{getSensorName('0')}} sensors in the house</h3>
   <p></p>
-  <table summary="This table shows the current state of all working stations in the house.">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Last result gathered</th>
-      <th>Temperature &deg;C</th>
-      <th>Humidity %</th>
-      <th>Heat Index</th>
-    </tr>
-    <tr display-station [station]="station" *ngFor="let station of filteredByType('1')"></tr>
-  </table>
+
+  <ag-grid-angular
+    #agGrid0
+    onGridReady={this.onGridReady}
+    class='ag-theme-blue'
+    [gridOptions]="gridOptions"
+    [enableSorting]="true"
+    [enableColResize]="true"
+    [enableFilter]="true"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    rowSelection='single'
+  ></ag-grid-angular>
 
   <h3>{{getSensorName('1')}} sensors in the house</h3>
   <p></p>
+
   <table summary="This table shows the current state of all working stations in the house.">
     <tr>
       <th>Name</th>
       <th>Description</th>
-      <th>Last result gathered</th>
       <th>Temperature &deg;C</th>
       <th>Humidity %</th>
       <th>Heat Index</th>
+      <th>Last result gathered</th>
     </tr>
-    <tr display-station [station]="station" *ngFor="let station of filteredByType('2')"></tr>
+    <!--<tr display-station [station]="station" *ngFor="let station of filteredByType('1')"></tr>-->
+  </table>
+
+  <table summary="This table shows the current state of all working stations in the house.">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Temperature &deg;C</th>
+      <th>Humidity %</th>
+      <th>Heat Index</th>
+      <th>Last result gathered</th>
+    </tr>
+    <!--<tr display-station [station]="station" *ngFor="let station of filteredByType('2')"></tr>-->
   </table>
 </div>

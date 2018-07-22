@@ -1,4 +1,4 @@
-import {Component, Input, SimpleChange} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DataStationService} from '../services/station.services';
 import {DataTemperatureService} from '../services/temperature.services';
 import {DataHumidityService} from '../services/humidity.services';
@@ -29,26 +29,34 @@ export class DisplayStationComponent {
   constructor(private _dataTemperatureService: DataTemperatureService,
               private _dataHumidityService: DataHumidityService,
               private _dataHeatIndexService: DataHeatIndexService) {
+    this.setToZeros();
   }
 
-  private static processTimeStamp(data: Measurement): string {
+  private setToZeros() {
+    this.temperature = new Measurement('1', '1', 0.0, '2016');
+    this.humidity = new Measurement('1', '1', 0.0, '2016');
+    this.heatIndex = new Measurement('1', '1', 0.0, '2016');
+  }
 
-    let year: number = +data.timeStamp.substr(0, 4);
-    let month: number = +data.timeStamp.substr(4, 2);
-    let day: number = +data.timeStamp.substr(6, 2);
-    let hour: number = +data.timeStamp.substr(8, 2);
-    let minute: number = +data.timeStamp.substr(10, 2);
-    let second: number = +data.timeStamp.substr(12, 2);
+  private processTimeStamp(data: Measurement): string {
 
-    let date: Date = new Date(year, month - 1, day, hour, minute, second);
+    const year: number = +data.timeStamp.substr(0, 4);
+    const month: number = +data.timeStamp.substr(4, 2);
+    const day: number = +data.timeStamp.substr(6, 2);
+    const hour: number = +data.timeStamp.substr(8, 2);
+    const minute: number = +data.timeStamp.substr(10, 2);
+    const second: number = +data.timeStamp.substr(12, 2);
 
-    let timestamp: Moment = moment(date);
+    const date: Date = new Date(year, month - 1, day, hour, minute, second);
+
+    const timestamp: Moment = moment(date);
     let result: string;
 
-    console.log('Difference:  ' + timestamp.diff(moment(), 'minutes'));
+    // console.log('Difference:  ' + timestamp.diff(moment(), 'minutes'));
 
     if (Math.abs(timestamp.diff(moment(), 'minutes')) > 30) {
       result = 'More than 30 minutes ago';
+      this.setToZeros();
     }
     else {
       result = moment(date).format('ddd, MMM Do YYYY, HH:mm:ss');
@@ -57,17 +65,15 @@ export class DisplayStationComponent {
     return result;
   }
 
-  private static showTime(timeStamp: string): string {
-    return timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ':' + timeStamp.substr(12, 2);
-  }
+  // private static showTime(timeStamp: string): string {
+  //   return timeStamp.substr(8, 2) + ':' + timeStamp.substr(10, 2) + ':' + timeStamp.substr(12, 2);
+  // }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  ngOnChanges() {
     this.refresh(this.station);
   }
 
-  //...
-
-  public refresh(station: Station) {
+  private refresh(station: Station) {
     this.errorMsg = '';
 
     this.getLatestTemperature(station._key);
@@ -78,10 +84,10 @@ export class DisplayStationComponent {
   private getLatestTemperature(station: string): void {
     this._dataTemperatureService.GetLatestStationTemperature(station).subscribe((data: Measurement) => this.temperature = data,
       error => {
-        this.errorMsg = this.handleError(error);
+        this.errorMsg = DisplayStationComponent.handleError(error);
       },
       () => {
-        this.timeStamp = DisplayStationComponent.processTimeStamp(this.temperature);
+        this.timeStamp = this.processTimeStamp(this.temperature);
       }
     );
   }
@@ -89,7 +95,7 @@ export class DisplayStationComponent {
   private getLatestHumidity(station: string): void {
     this._dataHumidityService.GetLatestStationHumidity(station).subscribe((data: Measurement) => this.humidity = data,
       error => {
-        this.errorMsg = this.handleError(error);
+        this.errorMsg = DisplayStationComponent.handleError(error);
       },
       () => {
       }
@@ -99,16 +105,16 @@ export class DisplayStationComponent {
   private getLatestHeatIndex(station: string): void {
     this._dataHeatIndexService.GetLatestStationHeatIndex(station).subscribe((data: Measurement) => this.heatIndex = data,
       error => {
-        this.errorMsg = this.handleError(error);
+        this.errorMsg = DisplayStationComponent.handleError(error);
       },
       () => {
       }
     );
   }
 
-  private handleError(error: any): string {
+  private static handleError(error: any): string {
     let errMsg = "No data available for this period";
-    if (error.status != 416) {
+    if (error.status != 204) {
       let errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
       console.log(' ' + error.status + ' : ' + errMsg);     // log to console

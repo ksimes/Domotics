@@ -13,7 +13,15 @@ import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AddHeaderInterceptor} from "./services/interceptor.service";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-
+import {AgGridModule} from 'ag-grid-angular';
+import {DataHumidityService} from "./services/humidity.services";
+import {DataHeatIndexService} from "./services/heatIndex.services";
+import {DataTemperatureService} from "./services/temperature.services";
+import {DataStationService} from "./services/station.services";
+import {Configuration} from "./models/configuration";
+import {WarningComponent} from './DisplayAllStations/components/warning/warning.component';
+import {LinkToComponent} from './DisplayAllStations/components/link-to/link-to.component';
+import {DegreesComponent} from './DisplayAllStations/components/degrees/degrees.component';
 
 @NgModule({
   declarations: [
@@ -22,21 +30,28 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     DisplayStationComponent,
     OptionSelectComponent,
     DisplayChartComponent,
-    PageNotFoundComponent
-   ],
+    PageNotFoundComponent,
+    WarningComponent,
+    LinkToComponent,
+    DegreesComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
+    AgGridModule.withComponents([WarningComponent]),
     ChartsModule
   ],
   // providers: [],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AddHeaderInterceptor,
-    multi: true,
-  }],
+  providers: [DataStationService, DataHeatIndexService, DataTemperatureService, DataHumidityService,
+    Configuration,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddHeaderInterceptor,
+      multi: true,
+    }],
   bootstrap: [DomoticsComponent]
 })
-export class DomoticsModule { }
+export class DomoticsModule {
+}

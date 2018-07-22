@@ -28,8 +28,10 @@ extern "C" {
 ** 13  "Downstairs toilet"
 ** 14  "Front porch"
 ** 15  "Utility Room"
+** 17  "Loft 1"
+** 18  "Loft 2"
 **/
-const int station = 7;    // Which monitoring station is this.
+const int station = 3;    // Which monitoring station is this.
 
 /**
 **  1  Measures temperature, humidity and heatindex for a given location (DHT 22)

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Default model of data gathered from a measurement sersor. Note that there is not time associated with this model as
+ * Default model of data gathered from a measurement sensor. Note that there is no time associated with this model as
  * most sensors do not provide this. Original designed for what comes in from the DHT22/ESP8622 station. Changed so that
  * the values are anonymous so that there is no pre-defined bias to what the values represent.
  *
