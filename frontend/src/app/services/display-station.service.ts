@@ -5,11 +5,7 @@ import {DataHeatIndexService} from "./heatIndex.services";
 import {Measurement} from "../models/Measurement";
 import * as moment from 'moment';
 import {Moment} from "moment";
-import {StationDisplay} from "../models/station-display";
-import {Station} from "../models/Station";
-import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/forkJoin';
-import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class DisplayStationService {
@@ -17,38 +13,6 @@ export class DisplayStationService {
   constructor(private _dataTemperatureService: DataTemperatureService,
               private _dataHumidityService: DataHumidityService,
               private _dataHeatIndexService: DataHeatIndexService) {
-  }
-
-  public getStationData(station: Station): Observable<StationDisplay> {
-    const _returnValue: Subject<StationDisplay> = new Subject();
-    let result: StationDisplay = new StationDisplay(station);
-    const stationKey: string = station._key;
-    let readings = [];
-
-    readings.push(this._dataTemperatureService.GetLatestStationTemperature(stationKey));
-    readings.push(this._dataHumidityService.GetLatestStationHumidity(stationKey));
-    readings.push(this._dataHeatIndexService.GetLatestStationHeatIndex(stationKey));
-
-    Observable.forkJoin(readings).subscribe(([temperature, humidity, heatIndex]) => {
-
-      result.temperature = '-';
-      result.humidity = '-';
-      result.heatIndex = '-';
-
-      if (temperature) {
-        let temp = (temperature as Measurement);
-        result.timeStamp = DisplayStationService.processTimeStamp(temp);
-        if (!result.timeStamp.startsWith('More')) {
-          result.temperature = `${temp.value} \u00B0C`;
-          result.humidity = `${(humidity as Measurement).value}%`;
-          result.heatIndex = `${(heatIndex as Measurement).value}`;
-        }
-      }
-      _returnValue.next(result);
-      _returnValue.complete();
-    });
-
-    return _returnValue.asObservable();
   }
 
   private static processTimeStamp(data: Measurement): string {

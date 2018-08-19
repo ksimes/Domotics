@@ -16,6 +16,7 @@ export class Configuration {
   public HeatIndex:string = "/heatindex/";
   public Station:string = "/station/";
   public SensorType:string = "/sensortype/";
+  public SensorCache: string = "/sensorcache/";
 
   public Range:string = "/range/";
   public Date:string = "/date/";

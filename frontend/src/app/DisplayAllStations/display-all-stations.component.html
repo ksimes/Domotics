@@ -19,35 +19,24 @@
     [enableSorting]="true"
     [enableColResize]="true"
     [enableFilter]="true"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
+    [rowData]="rowData0"
+    [columnDefs]="columnDefs0"
     rowSelection='single'
   ></ag-grid-angular>
 
   <h3>{{getSensorName('1')}} sensors in the house</h3>
   <p></p>
+  <ag-grid-angular
+    #agGrid1
+    onGridReady={this.onGridReady}
+    class='ag-theme-blue'
+    [gridOptions]="gridOptions"
+    [enableSorting]="true"
+    [enableColResize]="true"
+    [enableFilter]="true"
+    [rowData]="rowData1"
+    [columnDefs]="columnDefs1"
+    rowSelection='single'
+  ></ag-grid-angular>
 
-  <table summary="This table shows the current state of all working stations in the house.">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Temperature &deg;C</th>
-      <th>Humidity %</th>
-      <th>Heat Index</th>
-      <th>Last result gathered</th>
-    </tr>
-    <!--<tr display-station [station]="station" *ngFor="let station of filteredByType('1')"></tr>-->
-  </table>
-
-  <table summary="This table shows the current state of all working stations in the house.">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Temperature &deg;C</th>
-      <th>Humidity %</th>
-      <th>Heat Index</th>
-      <th>Last result gathered</th>
-    </tr>
-    <!--<tr display-station [station]="station" *ngFor="let station of filteredByType('2')"></tr>-->
-  </table>
 </div>

@@ -22,6 +22,7 @@ import {Configuration} from "./models/configuration";
 import {WarningComponent} from './DisplayAllStations/components/warning/warning.component';
 import {LinkToComponent} from './DisplayAllStations/components/link-to/link-to.component';
 import {DegreesComponent} from './DisplayAllStations/components/degrees/degrees.component';
+import {SensorCacheService} from "./services/sensorCache.services";
 
 @NgModule({
   declarations: [
@@ -40,11 +41,11 @@ import {DegreesComponent} from './DisplayAllStations/components/degrees/degrees.
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    AgGridModule.withComponents([WarningComponent]),
+    AgGridModule.withComponents([WarningComponent, LinkToComponent]),
     ChartsModule
   ],
   // providers: [],
-  providers: [DataStationService, DataHeatIndexService, DataTemperatureService, DataHumidityService,
+  providers: [DataStationService, DataHeatIndexService, DataTemperatureService, DataHumidityService, SensorCacheService,
     Configuration,
     {
       provide: HTTP_INTERCEPTORS,

@@ -18,11 +18,11 @@ export class DataSensorTypeService {
     this.configuration = _configuration;
   }
 
-  public GetAllSensorTypes = ():Observable<SensorType[]> => {
+  public getAllSensorTypes = (): Observable<SensorType[]> => {
     return this._http.get<SensorType[]>(this.actionUrl + this.configuration.SensorType);
   };
 
-  public GetSensorType = (sensorType:number):Observable<SensorType> => {
+  public getSensorType = (sensorType: number): Observable<SensorType> => {
     return this._http.get<SensorType>(this.actionUrl + this.configuration.SensorType + sensorType);
   };
 }

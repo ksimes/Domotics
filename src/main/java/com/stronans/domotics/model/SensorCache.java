@@ -20,9 +20,9 @@ public final class SensorCache {
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
             @JsonProperty("timeStamp") String timeStamp,
-            @JsonProperty("temperatureValue") double value1,
-            @JsonProperty("humidityValue") double value2,
-            @JsonProperty("humitureValue") double value3,
+            @JsonProperty("temperature") double value1,
+            @JsonProperty("humidity") double value2,
+            @JsonProperty("heatIndex") double value3,
             @JsonProperty("sampleRate") int sampleRate,
             @JsonProperty("sensorType") String sensorType) {
         this.name = name;
@@ -36,34 +36,47 @@ public final class SensorCache {
         this.sensorType = sensorType;
     }
 
-    public String Name() {
+    @JsonProperty("name")
+    public String name() {
         return name;
     }
 
-    public String Description() {
+    @JsonProperty("description")
+    public String description() {
         return description;
     }
 
+    @JsonProperty("timeStamp")
+    public String timeStamp() {
+        return timeStamp;
+    }
+
+    @JsonProperty("sensorType")
     public String sensorType() {
         return sensorType;
     }
 
+    @JsonProperty("stationId")
     public String stationId() {
         return stationId;
     }
 
+    @JsonProperty("temperature")
     public double value1() {
         return value1;
     }
 
+    @JsonProperty("humidity")
     public double value2() {
         return value2;
     }
 
+    @JsonProperty("heatIndex")
     public double value3() {
         return value3;
     }
 
+    @JsonProperty("sampleRate")
     public int sampleRate() {
         return sampleRate;
     }

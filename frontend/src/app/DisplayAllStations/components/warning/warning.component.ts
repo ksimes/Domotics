@@ -6,9 +6,9 @@ import {Component} from '@angular/core';
   styleUrls: ['./warning.component.css']
 })
 export class WarningComponent {
-  params: any;
+  timestamp: string;
 
   agInit(params: any): void {
-    this.params = params;
+    this.timestamp = params.value;
   }
 }

@@ -33,7 +33,7 @@ public class CacheDAO {
     @Autowired
     public CacheDAO(DBConnection dbConnection) {
         database = dbConnection.getConnection();
-        String collectionName = "sensorCache";
+        String collectionName = "sensorcache";
         collection = database.collection(collectionName);
         query = "FOR s IN stations " +
                 "FOR c IN sensorcache " +
@@ -44,7 +44,7 @@ public class CacheDAO {
                 "temperatureValue: c.temperatureValue, " +
                 "humidityValue: c.humidityValue, " +
                 "humitureValue: c.humitureValue, " +
-                "sampleRate: c.sampleRates, " +
+                "sampleRate: c.sampleRate, " +
                 "sensorType: s.type}";
 
     }
@@ -62,16 +62,16 @@ public class CacheDAO {
 
         try {
             ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
-            cursor.forEachRemaining(aReading -> {
-                SensorCache sensorItem = new SensorCache(aReading.get("stationId").getAsString(),
-                        aReading.get("timeStamp").getAsString(),
-                        aReading.get("name").getAsString(),
-                        aReading.get("description").getAsString(),
-                        aReading.get("temperatureValue").getAsDouble(),
-                        aReading.get("humidityValue").getAsDouble(),
-                        aReading.get("humitureValue").getAsDouble(),
-                        aReading.get("sampleRate").getAsInt(),
-                        aReading.get("sensorType").getAsString()
+            cursor.forEachRemaining(cacheRecord -> {
+                SensorCache sensorItem = new SensorCache(cacheRecord.get("stationId").getAsString(),
+                        cacheRecord.get("name").getAsString(),
+                        cacheRecord.get("description").getAsString(),
+                        cacheRecord.get("timeStamp").getAsString(),
+                        cacheRecord.get("temperatureValue").getAsDouble(),
+                        cacheRecord.get("humidityValue").getAsDouble(),
+                        cacheRecord.get("humitureValue").getAsDouble(),
+                        cacheRecord.get("sampleRate").getAsInt(),
+                        cacheRecord.get("sensorType").getAsString()
                 );
                 resultSet.add(sensorItem);
             });
@@ -94,7 +94,7 @@ public class CacheDAO {
         );
 
         try {
-            if (collection.documentExists(cacheStore.stationId())) {
+            if (!collection.documentExists(cacheStore.stationId())) {
                 collection.insertDocument(cacheStore);
             } else {
                 collection.updateDocument(cacheStore.stationId(), cacheStore);
@@ -109,11 +109,12 @@ public class CacheDAO {
     }
 
     private class CacheStore {
+        private final String _key;
         private final String stationId;
         private final String timeStamp;
-        private final double value1;
-        private final double value2;
-        private final double value3;
+        private final double temperatureValue;
+        private final double humidityValue;
+        private final double humitureValue;
         private final int sampleRate;
         private final String sensorType;
 
@@ -121,44 +122,57 @@ public class CacheDAO {
         public CacheStore(
                 @JsonProperty("stationId") String stationId,
                 @JsonProperty("timeStamp") String timeStamp,
-                @JsonProperty("temperatureValue") double value1,
-                @JsonProperty("humidityValue") double value2,
-                @JsonProperty("humitureValue") double value3,
+                @JsonProperty("temperatureValue") double temperatureValue,
+                @JsonProperty("humidityValue") double humidityValue,
+                @JsonProperty("humitureValue") double humitureValue,
                 @JsonProperty("sampleRate") int sampleRate,
                 @JsonProperty("sensorType") String sensorType) {
             this.stationId = stationId;
+            this._key = stationId;
             this.timeStamp = timeStamp;
-            this.value1 = value1;
-            this.value2 = value2;
-            this.value3 = value3;
+            this.temperatureValue = temperatureValue;
+            this.humidityValue = humidityValue;
+            this.humitureValue = humitureValue;
             this.sampleRate = sampleRate;
             this.sensorType = sensorType;
         }
 
+        @JsonProperty("_key")
+        public String _key() {
+            return _key;
+        }
+
+        @JsonProperty("sensorType")
         public String sensorType() {
             return sensorType;
         }
 
+        @JsonProperty("stationId")
         public String stationId() {
             return stationId;
         }
 
+        @JsonProperty("timeStamp")
         public String timeStamp() {
             return timeStamp;
         }
 
+        @JsonProperty("temperatureValue")
         public double value1() {
-            return value1;
+            return temperatureValue;
         }
 
+        @JsonProperty("humidityValue")
         public double value2() {
-            return value2;
+            return humidityValue;
         }
 
+        @JsonProperty("humitureValue")
         public double value3() {
-            return value3;
+            return humitureValue;
         }
 
+        @JsonProperty("sampleRate")
         public int sampleRate() {
             return sampleRate;
         }
