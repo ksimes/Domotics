@@ -1,35 +1,10 @@
 
-ag-grid-angular {
+ag-grid-angular.ag-theme-blue.temp {
   width: 100%;
-  height: 300px;
+  height: 455px;
 }
 
-/**
-table {
+ag-grid-angular.ag-theme-blue.plant {
   width: 100%;
-  border-spacing: 5px;
-  background-color: #f1f1c1;
+  height: 100px;
 }
-
-table, th, td {
-  border: 1px;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-}
-
-th {
-  text-align: left;
-  color: white;
-  background-color: black;
-}
-
-table tr:nth-child(even) {
-  background-color: #eee;
-}
-table tr:nth-child(odd) {
-  background-color: #fff;
-}
-**/
