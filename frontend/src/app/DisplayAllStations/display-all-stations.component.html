@@ -1,6 +1,6 @@
 <div>
-  <a class="active" href="#home"><h2>{{_configuration.applicationName}} at St Ronans</h2></a>
-  <h3>At {{now}}</h3>
+  <a class="active" href="#home"><h2>{{_configuration.applicationName}}</h2></a>
+  <h3>St Ronans sensor status at {{now}}</h3>
   <input (click)="refresh()" type="button" aria-label="Refresh button" value="Refresh display"/>
   <input (click)="onGridReady()" type="button" aria-label="Refresh grid" value="Refresh grid"/>
 </div>
@@ -8,7 +8,7 @@
 <div>
   <p></p>
 
-  <h3>{{getSensorName('0')}} sensors in the house</h3>
+  <h3>{{getSensorName('0')}} sensors</h3>
   <p></p>
 
   <ag-grid-angular
@@ -24,7 +24,7 @@
     rowSelection='single'
   ></ag-grid-angular>
 
-  <h3>{{getSensorName('1')}} sensors in the house</h3>
+  <h3>{{getSensorName('1')}} sensors</h3>
   <p></p>
   <ag-grid-angular
     #agGrid1

@@ -1,1 +1,2 @@
-<span [ngClass]="{'red': timestamp == 'More than 30 minutes ago'}">{{ timestamp }}</span>
+<span [class.warning]="timestamp === 'More than 30 minutes'"
+      [class.normal]="timestamp !== 'More than 30 minutes'">{{ timestamp }}</span>

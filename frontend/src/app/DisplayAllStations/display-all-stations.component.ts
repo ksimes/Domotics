@@ -7,8 +7,6 @@ import {DisplayOptions} from '../models/DisplayOptions';
 import {Option} from '../models/Option';
 import {DataSensorTypeService} from '../services/sensortype.services';
 import {SensorType} from '../models/SensorType';
-import * as moment from 'moment';
-import {Moment} from "moment";
 import {DisplayStationService} from "../services/display-station.service";
 import {CacheDisplay} from "../models/cache-display";
 import {GridOptions} from "ag-grid";
@@ -30,7 +28,7 @@ export class DisplayAllStations implements OnInit {
   @ViewChild('agGrid0') agGrid0: AgGridNg2;
   @ViewChild('agGrid1') agGrid1: AgGridNg2;
   title = 'Domotics';
-  now = DisplayAllStations.getFormattedDate();
+  now = DisplayStationService.getFormattedDate();
   errorMsg: string = '';
   timeStamp: string = '';
   config: DisplayOptions;
@@ -43,21 +41,21 @@ export class DisplayAllStations implements OnInit {
   private gridApi;
   public gridOptions: GridOptions;
 
+  // Temperature, humitity and heat index grid
   columnDefs0 = [
     {headerName: 'Name', field: 'station', cellRendererFramework: LinkToComponent},
     {headerName: 'Description', field: 'description'},
     {headerName: 'Temperature &deg;C', field: 'temperature'},
     {headerName: 'Humidity %', field: 'humidity'},
-    {headerName: 'Heat Index', field: 'heatIndex'},
+    {headerName: 'Heat Index &deg;C (feels like)', field: 'heatIndex'},
     {headerName: 'Last result gathered', field: 'timeStamp', cellRendererFramework: WarningComponent}
   ];
 
+  // Plant moisture.
   columnDefs1 = [
     {headerName: 'Name', field: 'station', cellRendererFramework: LinkToComponent},
     {headerName: 'Description', field: 'description'},
-    {headerName: 'Temperature &deg;C', field: 'temperature'},
     {headerName: 'Humidity %', field: 'humidity'},
-    {headerName: 'Heat Index', field: 'heatIndex'},
     {headerName: 'Last result gathered', field: 'timeStamp', cellRendererFramework: WarningComponent}
   ];
 
@@ -104,7 +102,7 @@ export class DisplayAllStations implements OnInit {
       this.agGrid1.api.refreshCells();
       this.agGrid1.api.sizeColumnsToFit();
     });
-    this.now = DisplayAllStations.getFormattedDate();
+    this.now = DisplayStationService.getFormattedDate();
   }
 
   private getSensorInformation(): void {
@@ -127,35 +125,8 @@ export class DisplayAllStations implements OnInit {
       );
   }
 
-  private static processTimeStamp(timeStamp: string): string {
-
-    const year: number = +timeStamp.substr(0, 4);
-    const month: number = +timeStamp.substr(5, 2);
-    const day: number = +timeStamp.substr(8, 2);
-    const hour: number = +timeStamp.substr(11, 2);
-    const minute: number = +timeStamp.substr(14, 2);
-    const second: number = +timeStamp.substr(17, 2);
-
-    const date: Date = new Date(year, month - 1, day, hour, minute, second);
-
-    const timestamp: Moment = moment(date);
-    let result: string;
-
-    // console.log('Difference:  ' + timestamp.diff(moment(), 'minutes'));
-
-    if (Math.abs(timestamp.diff(moment(), 'minutes')) > 30) {
-      result = 'More than 30 minutes ago';
-    }
-    else {
-      result = moment(date).format('ddd, MMM Do YYYY, HH:mm:ss');
-    }
-
-    return result;
-  }
-
-
   private getStationCacheInformation(selectedSensorType: string): Promise<CacheDisplay[]> {
-    return new Promise<CacheDisplay[]>((resolve, reject) => {
+    return new Promise<CacheDisplay[]>((resolve) => {
       let stations: SensorCache[] = [];
       let finalData: CacheDisplay[] = [];
 
@@ -170,11 +141,11 @@ export class DisplayAllStations implements OnInit {
               result.humidity = '-';
               result.heatIndex = '-';
 
-              result.timeStamp = DisplayAllStations.processTimeStamp(datum.timeStamp);
+              result.timeStamp = DisplayStationService.processTimeStamp(datum.timeStamp);
               if (!result.timeStamp.startsWith('More')) {
                 result.temperature = `${datum.temperature} \u00B0C`;
                 result.humidity = `${datum.humidity}%`;
-                result.heatIndex = `${datum.heatIndex}`;
+                result.heatIndex = `${datum.heatIndex} \u00B0C`;
               }
 
               finalData.push(result);
@@ -192,24 +163,5 @@ export class DisplayAllStations implements OnInit {
       return this.sensorData[selectedSensorType].name;
     }
     return null;
-  }
-
-  public static getFormattedDate(): string {
-    let date: Date = new Date();
-    // console.log('date   ' + date);
-    return moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a')
-  }
-
-  private handleError(error: any): string {
-    let errMsg = "No data available for this period";
-    if (error.status != 416) {
-      let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-      console.log(' ' + error.status + ' : ' + errMsg);     // log to console
-    } else {
-      console.log(error);
-    }
-
-    return errMsg;
   }
 }

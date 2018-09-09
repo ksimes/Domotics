@@ -10,5 +10,9 @@ export class WarningComponent {
 
   agInit(params: any): void {
     this.timestamp = params.value;
+
+    // if(this.timestamp == 'More than 30 minutes ago') {
+    //   .id.class = 'warning'
+    // }
   }
 }

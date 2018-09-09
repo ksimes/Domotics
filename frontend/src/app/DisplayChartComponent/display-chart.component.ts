@@ -135,18 +135,18 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     // this.lineChartLabels = [];
   }
 
-  private updateChartData(chartData: Measurement[], description: string, add: boolean): void {
+  private updateChartData(chartData: Measurement[], description: string, add: boolean, colour: number): void {
     let _lineChartLabels: Array<any> = new Array(chartData.length);
 
     let _lineChartData: any = {
       data: new Array(chartData.length),
       label: ' ' + description,
-      backgroundColor: this.lineChartColours[0].backgroundColor,
-      borderColor: this.lineChartColours[0].borderColor,
-      pointBackgroundColor: this.lineChartColours[0].pointBackgroundColor,
-      pointBorderColor: this.lineChartColours[0].pointBorderColor,
-      pointHoverBackgroundColor: this.lineChartColours[0].pointHoverBackgroundColor,
-      pointHoverBorderColor: this.lineChartColours[0].pointHoverBorderColor
+      backgroundColor: this.lineChartColours[colour].backgroundColor,
+      borderColor: this.lineChartColours[colour].borderColor,
+      pointBackgroundColor: this.lineChartColours[colour].pointBackgroundColor,
+      pointBorderColor: this.lineChartColours[colour].pointBorderColor,
+      pointHoverBackgroundColor: this.lineChartColours[colour].pointHoverBackgroundColor,
+      pointHoverBorderColor: this.lineChartColours[colour].pointHoverBorderColor
     };
 
     for (let j = 0; j < chartData.length; j++) {
@@ -213,7 +213,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         break;
 
       case 6:
-        func = this._dataTemperatureService.GetStationTemperaturesToday(station);
+        func = this._dataTemperatureService.GetStationTemperaturesInLastDays(station, 1);
         break;
 
       case 7:
@@ -224,10 +224,10 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         func = this._dataTemperatureService.GetStationTemperaturesToday(station);
     }
 
-    func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Temperature', add),
+    func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Temperature', add, 0),
       error => {
         this.errorMsg = this.handleError(error);
-        this.lineChartData = [{data: [0], label: 'temp'}];
+        this.lineChartData = [{data: [0], label: 'Temperature'}];
         // this.lineChartLabels = ['any'];
       },
       () => {
@@ -262,7 +262,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         break;
 
       case 6:
-        func = this._dataHumidityService.GetStationHumiditiesToday(station);
+        func = this._dataHumidityService.GetStationHumiditiesInLastDays(station, 1);
         break;
 
       case 7:
@@ -274,10 +274,10 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     }
 
     console.log('Adding Humidity');
-    func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Humidity', add),
+    func.subscribe((data: Measurement[]) => this.updateChartData(data, 'Humidity', add, 1),
       error => {
         this.errorMsg = this.handleError(error);
-        this.lineChartData = [{data: [0], label: 'temp'}];
+        this.lineChartData = [{data: [0], label: 'Humidity'}];
         // this.lineChartLabels = [];
       },
       () => {
@@ -288,7 +288,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   private getHeatIndexToday(station: string, add: boolean, option: number): void {
     this._dataHumidityService
       .GetStationHumiditiesToday(station)
-      .subscribe((data: Measurement[]) => this.updateChartData(data, 'Heat Index', add),
+      .subscribe((data: Measurement[]) => this.updateChartData(data, 'Heat Index', add, 2),
         error => {
           this.errorMsg = this.handleError(error);
           this.lineChartData = [{data: [0], label: 'Heat Index'}];

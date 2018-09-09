@@ -10,9 +10,9 @@ import {Configuration} from '../models/configuration';
 import {Station} from '../models/Station';
 import {Option} from '../models/Option';
 import {DisplayOptions} from '../models/DisplayOptions';
-import {DisplayAllStations} from '../DisplayAllStations/display-all-stations.component';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
+import {DisplayStationService} from "../services/display-station.service";
 
 @Component({
   selector: 'options-component',
@@ -21,7 +21,7 @@ import 'rxjs/add/operator/switchMap';
 })
 
 export class OptionSelectComponent implements OnChanges, OnInit {
-  now = DisplayAllStations.getFormattedDate();
+  now = DisplayStationService.getFormattedDate();
   title = 'display options';
   errorMsg: string = '';
   options: Option[];
@@ -47,7 +47,7 @@ export class OptionSelectComponent implements OnChanges, OnInit {
       .subscribe((data: Station) => this.stationData = data);
 
     this.config.stationId = stationId;
-    this.now = DisplayAllStations.getFormattedDate();
+    this.now = DisplayStationService.getFormattedDate();
   }
 
   public getName(): String {
@@ -59,7 +59,7 @@ export class OptionSelectComponent implements OnChanges, OnInit {
   }
 
   public refresh(): void {
-    this.now = DisplayAllStations.getFormattedDate();
+    this.now = DisplayStationService.getFormattedDate();
   }
 
   public onSelectTemp(): void {
