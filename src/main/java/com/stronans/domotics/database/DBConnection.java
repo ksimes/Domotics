@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 public final class DBConnection {
     private static final Logger logger = Logger.getLogger(DBConnection.class);
 
+    private ArangoDB arangoDB = null;
+
     private ArangoDatabase ardb = null;
     private String host;
     private int port = 3306;
@@ -25,8 +27,6 @@ public final class DBConnection {
     private String userPassword;
 
     private void establishConnection() {
-        ArangoDB arangoDB;
-
         try {
             arangoDB = new ArangoDB.Builder().host(host, port).user(userName).password(userPassword).maxConnections(4).build();
             ardb = arangoDB.db(dbName);
@@ -44,6 +44,14 @@ public final class DBConnection {
         }
 
         return ardb;
+    }
+
+    public ArangoDB getArangoDB() {
+        if (arangoDB == null) {
+            establishConnection();
+        }
+
+        return arangoDB;
     }
 
     public void setConnection(ArangoDatabase ardb) {

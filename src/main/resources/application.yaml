@@ -1,12 +1,12 @@
 application:
   title: Domotics
-  version: \@pom.version\@
+  version: @pom.version@
 
 # Log4j2 configuration
 logging:
   file: logs/logging.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+#    console: "%d %-5level %logger : %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     com.stronans.domotics: DEBUG

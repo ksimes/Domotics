@@ -1,23 +1,32 @@
 Domotics
 ========
 
-Domestic Robotics is an interesting way of merging hobby electronics and programming. This project contains both Arduino projects for small sensor stations and a backend REST server to capture these readings into a MySQL database and an Angular2 front end to display charts of the readings capture.
+Domestic Robotics is an interesting way of merging hobby electronics and programming. This project contains both Arduino projects for small sensor stations running on ESP8266 chipsets to draw information from DHT22 sensors 
+and a backend REST server to capture these readings into an Arango database as well as an Angular front end to display charts of the readings capture. 
 
-This is an early cut of this project. Started on 3rd July 2016. Revised for Angular2/4 on July 2017.
+It is planned to produce a heat map of the house showing over time (maybe using a slider) how heat is distributed over
+time.
 
-To Build final
+This is still early in this project. Started on 3rd July 2016. Revised for Angular2/4 on July 2017.
+Converted from MySQLDb to AngularDb in 2018 as I needed to learn more about Arango for work. 
+As in all these projects in this a Work in Progress and with all pet projects developed by professional programmers, there are no damn tests! Feel free to add some as they will almost certainly pick up issues in the UI.
+
+To Build for deployment
 ==============
 
-`ng build --prod`
-
-Copy everything from `dist` folder to your `public` folder under `resources`
+Open a Git bash command window and run:
 
 `mvn package`
 
-To run
+will produce a integrated jar which contains both the web front end in production mode and 
+the Java back end, including the endpoint for receiving sensor values from sensor stations.
+
+I need to include instructions of how to build one of the senor stations in the future.
+
+To run locally
 ======
 
-Open a command window and run:
+Open a bash command window and run:
 
 `ng serve`
 
@@ -31,10 +40,10 @@ Alternatively you can configure the default HTTP host and port used by the devel
 
 Run Java project from inside IntelliJ IDE to start REST interface.
 
-Use browser to connect to `http://localhost:31000/` 
-to see inital chart.
+Use browser to connect to `http://localhost:4200/domotics` 
+to see inital table of sensor stations.
 
-`http://localhost:31000/api/health` 
+`http://localhost:4200/api/health` 
 for all Actuator REST endpoints.
 
 can also build final combined jar using Build final instructions above and then:
@@ -45,11 +54,11 @@ can also build final combined jar using Build final instructions above and then:
 To rebuild 
 ==========
 
-Uses Maven to define dependencies and build process for project
+Uses Maven 3.3.3 to load dependencies and the build management for the project.
 
 For Front end:
 
-need nodeJS - 4.4.7 LTS
+need minimum nodeJS - 4.4.7 LTS
 
 Use Windows x64 msi installer
 
@@ -90,6 +99,6 @@ Spring v4.2.6.RELEASE
 
 Angular 2.0 RC4 Using TypeScript
 
-Apache Tomcat/8.0.33
+Arango DB Java Driver 3.3.0
 
-MySQL driver 5.1.39
+**Check the POM.xml for latest details.**

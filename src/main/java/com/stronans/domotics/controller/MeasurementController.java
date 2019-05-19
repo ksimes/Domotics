@@ -91,12 +91,12 @@ abstract class MeasurementController {
         return new ResponseEntity<>(measurementCount, WebUtilities.header(), HttpStatus.OK);
     }
 
-    ResponseEntity<Measurement> getTempValueLatest(MeasurementServiceInterface service, String stationId) {
+    ResponseEntity<Measurement> getLatestValue(MeasurementServiceInterface service, String stationId) {
 
         Measurement measurement = service.findLatest(stationId);
 
         if (measurement == null) {
-            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+            return new ResponseEntity<>(null, WebUtilities.header(), HttpStatus.NO_CONTENT); // returns 204 - No Content
         }
 
         return new ResponseEntity<>(measurement, WebUtilities.header(), HttpStatus.OK);

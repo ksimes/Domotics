@@ -57,6 +57,6 @@ public class HeatIndexController extends MeasurementController {
     //------------------- Retrieve latest HeatIndex for a given Station --------------------------------------------------------
     @RequestMapping(value = "/{station}/latest/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Measurement> getHeatIndexValueLatest(@PathVariable("station") String stationId) {
-        return getTempValueLatest(heatIndexService, stationId);
+        return getLatestValue(heatIndexService, stationId);
     }
 }

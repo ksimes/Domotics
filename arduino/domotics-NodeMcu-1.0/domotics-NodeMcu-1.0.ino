@@ -28,8 +28,10 @@ extern "C" {
 ** 13  "Downstairs toilet"
 ** 14  "Front porch"
 ** 15  "Utility Room"
+** 17  "Loft 1"
+** 18  "Loft 2"
 **/
-const int station = 7;    // Which monitoring station is this.
+const int station = 3;    // Which monitoring station is this.
 
 /**
 **  1  Measures temperature, humidity and heatindex for a given location (DHT 22)
@@ -72,6 +74,7 @@ static boolean connect()
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
+  WiFi.hostname("Station " + String(station));
   /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
      would try to act as both a client and an access-point and could cause
      network-issues with your other WiFi-devices on your WiFi-network.
@@ -171,7 +174,7 @@ void setup() {
   pinMode(DHTPINVCC, OUTPUT);
   digitalWrite(DHTPINVCC, LOW);
 
-  Serial.print("connecting to ");
+  Serial.print("Will connect to: ");
   Serial.println(host);
 }
 
@@ -191,6 +194,7 @@ void loop() {
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
   yield();
+  digitalWrite(DHTPINVCC, LOW);
 
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {
