@@ -43,8 +43,8 @@ export class DisplayAllStations implements OnInit {
 
   // Temperature, humitity and heat index grid
   columnDefs0 = [
-    {headerName: 'Name', field: 'station', cellRendererFramework: LinkToComponent},
-    {headerName: 'Description', field: 'description'},
+    {headerName: 'Station', field: 'station', cellRendererFramework: LinkToComponent},
+    {headerName: 'Location', field: 'description'},
     {headerName: 'Temperature &deg;C', field: 'temperature'},
     {headerName: 'Humidity %', field: 'humidity'},
     {headerName: 'Heat Index &deg;C (feels like)', field: 'heatIndex'},
@@ -53,8 +53,8 @@ export class DisplayAllStations implements OnInit {
 
   // Plant moisture.
   columnDefs1 = [
-    {headerName: 'Name', field: 'station', cellRendererFramework: LinkToComponent},
-    {headerName: 'Description', field: 'description'},
+    {headerName: 'Plant', field: 'station', cellRendererFramework: LinkToComponent},
+    {headerName: 'Location', field: 'description'},
     {headerName: 'Humidity %', field: 'humidity'},
     {headerName: 'Last result gathered', field: 'timeStamp', cellRendererFramework: WarningComponent}
   ];

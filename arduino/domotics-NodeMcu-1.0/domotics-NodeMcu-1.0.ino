@@ -74,6 +74,7 @@ static boolean connect()
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
+  WiFi.hostname("Station " + String(station));
   /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
      would try to act as both a client and an access-point and could cause
      network-issues with your other WiFi-devices on your WiFi-network.
@@ -173,7 +174,7 @@ void setup() {
   pinMode(DHTPINVCC, OUTPUT);
   digitalWrite(DHTPINVCC, LOW);
 
-  Serial.print("connecting to ");
+  Serial.print("Will connect to: ");
   Serial.println(host);
 }
 
@@ -193,6 +194,7 @@ void loop() {
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
   yield();
+  digitalWrite(DHTPINVCC, LOW);
 
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {

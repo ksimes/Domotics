@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Updated by S.King on 10/06/2017 to anonymous the measurement names.
  *
  */
-public class SensorReading {
+public class SensorMeasurement {
     private String stationId;
     private double value1;
     private double value2;
@@ -22,11 +22,11 @@ public class SensorReading {
     private int sampleRate;
     private String sensorType;
 
-    public SensorReading() {
+    public SensorMeasurement() {
     }
 
     @JsonCreator
-    public SensorReading(
+    public SensorMeasurement(
             @JsonProperty("stationId") String stationId,
             @JsonProperty("temperatureValue") double value1,
             @JsonProperty("humidityValue") double value2,

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stronans.domotics.database.DBConnection;
 import com.stronans.domotics.model.SensorCache;
-import com.stronans.domotics.model.SensorReading;
+import com.stronans.domotics.model.SensorMeasurement;
 import com.stronans.domotics.utilities.DateInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class CacheDAO {
         return resultSet;
     }
 
-    public SensorReading update(SensorReading readingToCache, DateInfo current) {
+    public SensorMeasurement update(SensorMeasurement readingToCache, DateInfo current) {
 
         CacheStore cacheStore = new CacheStore(readingToCache.getStationId(),
                 current.ISOTimestamp(),
