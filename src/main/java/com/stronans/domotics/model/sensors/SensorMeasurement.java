@@ -1,19 +1,20 @@
-package com.stronans.domotics.model;
+package com.stronans.domotics.model.sensors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 
 /**
- * Default model of data gathered from a measurement sensor. Note that there is no time associated with this model as
+ * Default model of data gathered from a measurements sensor. Note that there is no time associated with this model as
  * most sensors do not provide this. Original designed for what comes in from the DHT22/ESP8622 station. Changed so that
  * the values are anonymous so that there is no pre-defined bias to what the values represent.
- *
+ * <p>
  * This is a POJO so that the JSON can be set automagically by Spring Web
- *
+ * <p>
  * Created by S.King on 04/07/2016.
- * Updated by S.King on 10/06/2017 to anonymous the measurement names.
- *
+ * Updated by S.King on 10/06/2017 to anonymous the measurements names.
  */
+@Builder
 public class SensorMeasurement {
     private String stationId;
     private double value1;

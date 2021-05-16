@@ -25,10 +25,10 @@ public class ConnectorTest {
 
     @Test
     public void add() throws Exception {
-//        Measurement measurement = new Measurement("1", 24.635, DateInfo.fromUniversalString("20160707205620"), 300, "1");
-//        measurement = connector.add(measurement);
+//        Measurement measurements = new Measurement("1", 24.635, DateInfo.fromUniversalString("20160707205620"), 300, "1");
+//        measurements = connector.add(measurements);
 //
-//        assertNotNull(measurement.id());
+//        assertNotNull(measurements.id());
         assertTrue(true);
     }
 }

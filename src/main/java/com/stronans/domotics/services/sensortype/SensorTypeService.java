@@ -1,7 +1,7 @@
 package com.stronans.domotics.services.sensortype;
 
 import com.stronans.domotics.dao.SensorTypeDAO;
-import com.stronans.domotics.model.SensorType;
+import com.stronans.domotics.model.sensors.SensorType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

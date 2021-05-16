@@ -1,6 +1,6 @@
 package com.stronans.domotics.controller;
 
-import com.stronans.domotics.model.SensorCache;
+import com.stronans.domotics.model.sensors.SensorCache;
 import com.stronans.domotics.services.displaycache.CacheService;
 import com.stronans.domotics.utilities.WebUtilities;
 import org.springframework.beans.factory.annotation.Autowired;

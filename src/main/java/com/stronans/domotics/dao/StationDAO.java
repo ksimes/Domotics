@@ -54,7 +54,9 @@ public class StationDAO {
         try {
             ArangoCursor<VPackSlice> cursor = database.query(query, null, null, VPackSlice.class);
             cursor.forEachRemaining(aStation -> {
-                Station station = new Station(aStation.get("_key").getAsString(),
+                Station station = new Station(aStation.get("id").getAsString(),
+                        aStation.get("cluster").getAsString(),
+                        aStation.get("address").getAsInt(),
                         aStation.get("name").getAsString(),
                         aStation.get("description").getAsString(),
                         aStation.get("type").getAsString());

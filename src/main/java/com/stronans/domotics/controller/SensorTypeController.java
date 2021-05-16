@@ -1,6 +1,6 @@
 package com.stronans.domotics.controller;
 
-import com.stronans.domotics.model.SensorType;
+import com.stronans.domotics.model.sensors.SensorType;
 import com.stronans.domotics.services.sensortype.SensorTypeService;
 import com.stronans.domotics.utilities.WebUtilities;
 import org.springframework.beans.factory.annotation.Autowired;

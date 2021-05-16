@@ -1,7 +1,7 @@
 package com.stronans.domotics.controller;
 
 import com.stronans.domotics.model.Measurement;
-import com.stronans.domotics.model.SensorMeasurement;
+import com.stronans.domotics.model.sensors.SensorMeasurement;
 import com.stronans.domotics.services.displaycache.CacheService;
 import com.stronans.domotics.services.measurement.MeasurementServiceInterface;
 import com.stronans.domotics.utilities.DateInfo;

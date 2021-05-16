@@ -1,4 +1,4 @@
-package com.stronans.domotics.model;
+package com.stronans.domotics.model.sensors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

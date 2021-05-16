@@ -8,9 +8,11 @@ import com.arangodb.velocypack.VPackSlice;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stronans.domotics.database.DBConnection;
-import com.stronans.domotics.model.SensorCache;
-import com.stronans.domotics.model.SensorMeasurement;
+import com.stronans.domotics.model.sensors.SensorCache;
+import com.stronans.domotics.model.sensors.SensorMeasurement;
+import com.stronans.domotics.model.sensors.SensorReadingSingleEntry;
 import com.stronans.domotics.utilities.DateInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,6 +25,7 @@ import java.util.List;
  * Created by S.King on 21/07/2018.
  */
 @Repository
+@Slf4j
 public class CacheDAO {
     private final Logger logger = Logger.getLogger(this.getClass());
 
@@ -106,6 +109,23 @@ public class CacheDAO {
         }
 
         return readingToCache;
+    }
+
+    public SensorReadingSingleEntry updateNew(SensorReadingSingleEntry readingToStore) {
+
+        try {
+            if (!collection.documentExists(readingToStore.get_key())) {
+                collection.insertDocument(readingToStore);
+            } else {
+                collection.updateDocument(readingToStore.get_key(), readingToStore);
+            }
+        } catch (ArangoDBException ae) {
+            log.error("Problem inserting/updating collection with params : {} ", readingToStore, ae);
+        } catch (Exception ex) {
+            logger.error("Unknown problem executing cache update ", ex);
+        }
+
+        return readingToStore;
     }
 
     private class CacheStore {

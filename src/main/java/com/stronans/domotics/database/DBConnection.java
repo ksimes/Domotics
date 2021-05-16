@@ -3,7 +3,8 @@ package com.stronans.domotics.database;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDBException;
 import com.arangodb.ArangoDatabase;
-import org.apache.log4j.Logger;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +12,14 @@ import org.springframework.stereotype.Component;
  * Creates and serves out JDBC connection to MySQL DB.
  * <p>
  * Created by S.King on 09/07/2016.
+ * Updated by S.King on 24/12/2020.
  */
 @Component
 @ConfigurationProperties("com.stronans.domotics")
+@Slf4j
+@Setter
 public final class DBConnection {
-    private static final Logger logger = Logger.getLogger(DBConnection.class);
-
     private ArangoDB arangoDB = null;
-
     private ArangoDatabase ardb = null;
     private String host;
     private int port = 3306;
@@ -30,11 +31,11 @@ public final class DBConnection {
         try {
             arangoDB = new ArangoDB.Builder().host(host, port).user(userName).password(userPassword).maxConnections(4).build();
             ardb = arangoDB.db(dbName);
-            logger.info("Made connection to database with url [" + ardb.toString() + "]");
+            log.info("Made connection to database {} with url [{}:{}]", dbName, host, port);
 
         } catch (ArangoDBException ex) {
-            logger.error("Connection to database [" + ardb.toString() +
-                    "] using credentials - " + userName + "/" + userPassword + " failed.");
+            log.error("Connection to database {} with url [{}:{}] using credentials - {}/{} failed.",
+                    dbName, host, port, userName, userPassword);
         }
     }
 
@@ -52,29 +53,5 @@ public final class DBConnection {
         }
 
         return arangoDB;
-    }
-
-    public void setConnection(ArangoDatabase ardb) {
-        this.ardb = ardb;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public void setDbName(String dbName) {
-        this.dbName = dbName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
     }
 }

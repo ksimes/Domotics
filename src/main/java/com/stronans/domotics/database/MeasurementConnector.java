@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Processes data to and from any of the current measurement tables.
+ * Processes data to and from any of the current measurements tables.
  * These are collections for Temperature, Humidity and HeatIndex (humiture)
  * As these collections all share a common structure they can all be accessed using this class.
  * <p>
@@ -219,9 +219,7 @@ public abstract class MeasurementConnector implements MeasurementConnectorInterf
 
         try {
             ArangoCursor<Long[]> cursor = database.query(query, null, null, Long[].class);
-            cursor.forEachRemaining(count -> {
-                result = count[0];
-            });
+            cursor.forEachRemaining(count -> result = count[0]);
 
         } catch (ArangoDBException ex) {
             logger.error("Problem executing Query all statement ", ex);

@@ -28,6 +28,7 @@ public class ExecuteTimeInterceptor implements HandlerInterceptor {
         if (logger.isDebugEnabled()) {
             UUID uuid = UUID.randomUUID();
             logger.debug("Request: " + request.getRequestURL() + "  id: " + uuid);
+//            logger.debug("Request body: " + request..getRequestURL() + "  id: " + uuid);
 
             long startTime = System.currentTimeMillis();
             request.setAttribute("startTime", startTime);
